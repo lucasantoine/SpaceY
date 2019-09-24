@@ -1,4 +1,4 @@
-package fr.spacey.models;
+package fr.spacey.models.entitites;
 
 public abstract class Entity {
 	
