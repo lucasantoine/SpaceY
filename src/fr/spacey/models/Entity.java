@@ -1,6 +1,6 @@
 package fr.spacey.models;
 
-public abstract class Entities {
+public abstract class Entity {
 	
 	
 	
