@@ -1,37 +1,35 @@
 package fr.spacey.utils;
 
-import java.util.Vector;
-
 /**
  * Position dans l'espace avec deux coordonnées x et y
  * @author Benoit
  */
-public class Position {
+public class Velocity {
 	
-	private int x, y;
+	private double x, y;
 
-	public Position(int x, int y) {
+	public Velocity(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 	
-	public void setX(int x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public void setY(int y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 
-	public boolean equals(Position obj) {
+	public boolean equals(Velocity obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
