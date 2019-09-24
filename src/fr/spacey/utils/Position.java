@@ -5,21 +5,30 @@ package fr.spacey.utils;
  * @author Benoit
  */
 public class Position {
-	
-	private int x, y;
 
-	public Position(int x, int y) {
+	private double x, y;
+
+	public Position(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
+	
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
 
 	public boolean equals(Position obj) {
 		if (this == obj)
@@ -34,7 +43,7 @@ public class Position {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
