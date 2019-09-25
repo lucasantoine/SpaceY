@@ -10,12 +10,20 @@ public class EntityController {
 	
 	private List<Entity> entities;
 	
-	public EntityController(Entity entity) {
+	public EntityController() {
 		this.entities = new ArrayList<Entity>();
+	}
+	
+	public EntityController(List<Entity> ents) {
+		this.entities = ents;
 	}
 	
 	public void registerAll(Observer view) {
 		for(Entity entity : entities)
 			entity.addObserver(view);
+	}
+	
+	public List<Entity> getEntities() {
+		return entities;
 	}
 }
