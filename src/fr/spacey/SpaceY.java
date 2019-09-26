@@ -44,12 +44,33 @@ public class SpaceY extends Application {
 		renderThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while(SpaceY.isRunning) {
-					Platform.runLater(sv);
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+				
+				int fps = 120;
+				double timePerTick = 1000 / fps;
+				double delta = 0;
+				long now = 0;
+				long lastTime = System.currentTimeMillis();
+				long timer = 0;
+				int ticks = 0;
+				
+				while(isRunning) {
+					//System.out.println(now+" "+delta+" "+timer+" "+lastTime+" "+ticks);
+					
+					now = System.currentTimeMillis();
+					delta += (now - lastTime) / timePerTick;
+					timer += now - lastTime;
+					lastTime = now;
+					
+					if(delta >= 1) {
+						Platform.runLater(sv);
+						ticks++;
+						delta--;
+					}
+					
+					if(timer >= 1000) {
+						//System.out.println("Ticks and Frames: " + ticks);
+						ticks = 0;
+						timer = 0;
 					}
 				}
 			}
