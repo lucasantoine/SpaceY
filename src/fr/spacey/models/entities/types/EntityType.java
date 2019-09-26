@@ -5,7 +5,7 @@ import fr.spacey.exceptions.TypeUnknownException;
 public enum EntityType {
 
 	FIXE("Fixe"),
-	SIMULE("Simulé" ),
+	SIMULE("Simul\u00E9"),
 	ELLIPSE("Ellipse"),
 	CERCLE("Cercle"),
 	VAISEAU("Vaisseau");

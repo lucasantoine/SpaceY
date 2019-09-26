@@ -1,9 +1,14 @@
 package fr.spacey;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.spacey.controller.SpaceController;
+import fr.spacey.models.entities.EntityModel;
 import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.models.entities.types.Fixe;
 import fr.spacey.models.entities.types.Simule;
+import fr.spacey.utils.AstroParser;
 import fr.spacey.utils.Position;
 import fr.spacey.utils.Velocity;
 import fr.spacey.view.SpaceView;
@@ -16,16 +21,18 @@ public class SpaceY extends Application {
 	private static SpaceY instance;
 	public boolean isRunning;
 	public double dt;
+	public double gravite;
+	public double rayon;
+	public double fa;
 
 	private Thread renderThread;
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		/* ENTITIES */
-		// TODO LE LECTEUR DE FICHIER
-		Fixe soleil = new Fixe("Soleil", EntityType.FIXE, 100, new Position(0,0));
-		Simule asteroid = new Simule("Astéroïd", EntityType.SIMULE, 30, new Position(-80,-120), new Velocity(0.2,0.1));
-
+		
+		List<EntityModel> entities = AstroParser.loadAstroFile("res/exemple.astro");
+		
 		/* MODELES */
 
 		/* CONTROLEURS */
@@ -36,8 +43,11 @@ public class SpaceY extends Application {
 		sc.setView(sv);
 		
 		/* START */
-		sc.addEntityModel(soleil, sv);
-		sc.addEntityModel(asteroid, sv);
+		//sc.addEntityModel(soleil, sv);
+		//sc.addEntityModel(asteroid, sv);
+		for (EntityModel entityModel : entities) {
+			sc.addEntityModel(entityModel, sv);
+		}
 
 		sv.start(stage);
 		isRunning = true;
