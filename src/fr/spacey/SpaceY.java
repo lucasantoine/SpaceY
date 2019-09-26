@@ -13,11 +13,9 @@ import javafx.stage.Stage;
 
 public class SpaceY extends Application {
 
-	public static boolean isRunning;
-
-	public static void main(String[] args) {
-		Application.launch(args);
-	}
+	private static SpaceY instance;
+	public boolean isRunning;
+	public double dt;
 
 	private Thread renderThread;
 
@@ -42,7 +40,8 @@ public class SpaceY extends Application {
 		sc.addEntityModel(asteroid, sv);
 
 		sv.start(stage);
-		SpaceY.isRunning = true;
+		isRunning = true;
+		dt = 1;
 
 		renderThread = new Thread(new Runnable() {
 			@Override
@@ -70,8 +69,8 @@ public class SpaceY extends Application {
 						delta--;
 					}
 					
-					if(timer >= 1000) {
-						System.out.println("Ticks and Frames: " + ticks+"");
+					if(timer >= dt*1000) {
+						System.out.println("Application gravitationelle (dt="+dt+")");
 						ticks = 0;
 						timer = 0;
 					}
@@ -80,5 +79,17 @@ public class SpaceY extends Application {
 		});
 		renderThread.setDaemon(true);
 		renderThread.start();
+	}
+	
+	public static SpaceY getInstance() {
+		if(instance == null) {
+			instance = new SpaceY();
+		}
+		return instance;
+	}
+	
+	public static void main(String[] args) {
+		Application.launch(args);
+		getInstance();
 	}
 }
