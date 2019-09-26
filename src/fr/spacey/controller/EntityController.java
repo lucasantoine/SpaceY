@@ -8,15 +8,16 @@ public class EntityController {
 	
 	private EntityModel em;
 	
-	public EntityController(EntityModel em) {
+	public EntityController(EntityModel em, Observer observer) {
 		this.em = em;
+		register(observer);
 	}
 	
 	public void register(Observer view) {
 		em.addObserver(view);
 	}
 	
-	public EntityModel getEntity() {
+	public EntityModel getEntityModel() {
 		return this.em;
 	}
 }

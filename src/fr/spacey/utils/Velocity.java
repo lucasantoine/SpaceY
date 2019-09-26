@@ -8,7 +8,7 @@ public class Velocity {
 	
 	private double x, y;
 
-	public Velocity(int x, int y) {
+	public Velocity(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

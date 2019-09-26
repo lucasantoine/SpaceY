@@ -15,8 +15,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-public class SpaceView implements Observer, Runnable {
+/**
+ * 
+ * @author ItsPower
+ *
+ */
+public class SpaceView implements Observer {
 
 	private SpaceController sc;
 	
@@ -72,29 +76,18 @@ public class SpaceView implements Observer, Runnable {
 		});
 	}
 	
-	@Override
-	public void update(Observable obs, Object obj) {
-		
-	}
-	
-	public void move(float x, float y) {
-		xOffset += x;
-		yOffset += y;
-		checkOffScreen();
-	}
-	
-	private void checkOffScreen() {}
-	
-	@Override
-	public void run() {
+	void setwall() {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 		
+	}
+	
+	@Override
+	public void update(Observable obs, Object obj) {
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
-		
-		for(EntityController ec : sc.getEntities()) {
-			EntityModel e = ec.getEntity();
+		{
+			EntityModel e = (EntityModel) obs;
 			
 			gc.setFill(Color.AQUA);
 			gc.fillOval(e.getPos().getX()+xOffset-e.getMasse()/2, e.getPos().getY()+yOffset-e.getMasse()/2, 
@@ -109,12 +102,26 @@ public class SpaceView implements Observer, Runnable {
 		gc.fillText("x: "+(xOffset-width/2), 0, 15);
 		gc.fillText("y: "+(yOffset-height/2), 0, 35);
 	}
-
+	
+	public void move(float x, float y) {
+		xOffset += x;
+		yOffset += y;
+		checkOffScreen();
+	}
+	
+	private void checkOffScreen() {}
+	
 	public void start(Stage s) {
 		s.setTitle("SpaceY");
 		s.setScene(scene);
 		s.setResizable(true);
 		s.setFullScreen(false);
 		s.show();
+	}
+
+	public void printBackground() {
+		gc.setTransform(1, 0, 0, 1, 0, 0);
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 	}
 }

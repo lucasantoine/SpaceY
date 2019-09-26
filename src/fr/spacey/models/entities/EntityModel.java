@@ -55,4 +55,11 @@ public abstract class EntityModel extends Observable {
 	public void setMasse(double masse) {
 		this.masse = masse;
 	}
+
+	public void updatePosition() {
+		pos.setY(pos.getY()+vel.getX());
+		pos.setX(pos.getX()+vel.getY());
+		setChanged();
+		notifyObservers();
+	}
 }

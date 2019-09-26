@@ -5,6 +5,7 @@ import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.models.entities.types.Fixe;
 import fr.spacey.models.entities.types.Simule;
 import fr.spacey.utils.Position;
+import fr.spacey.utils.Velocity;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -25,19 +26,21 @@ public class SpaceY extends Application {
 		/* ENTITIES */
 		// TODO LE LECTEUR DE FICHIER
 		Fixe soleil = new Fixe("Soleil", EntityType.FIXE, 100, new Position(0,0));
-		Simule asteroid = new Simule("Astéroïd", EntityType.SIMULE, 30, new Position(-80,-120), Fixe.VELOCITY_FIXE);
+		Simule asteroid = new Simule("Astéroïd", EntityType.SIMULE, 30, new Position(-80,-120), new Velocity(0.2,0.1));
 
 		/* MODELES */
 
 		/* CONTROLEURS */
 		SpaceController sc = new SpaceController();
-		sc.addEntityModel(soleil);
-		sc.addEntityModel(asteroid);
-
+		
 		/* VUES */
 		SpaceView sv = new SpaceView(sc);
-
+		sc.setView(sv);
+		
 		/* START */
+		sc.addEntityModel(soleil, sv);
+		sc.addEntityModel(asteroid, sv);
+
 		sv.start(stage);
 		SpaceY.isRunning = true;
 
@@ -62,13 +65,13 @@ public class SpaceY extends Application {
 					lastTime = now;
 					
 					if(delta >= 1) {
-						Platform.runLater(sv);
+						Platform.runLater(sc);
 						ticks++;
 						delta--;
 					}
 					
 					if(timer >= 1000) {
-						//System.out.println("Ticks and Frames: " + ticks);
+						System.out.println("Ticks and Frames: " + ticks+"");
 						ticks = 0;
 						timer = 0;
 					}
