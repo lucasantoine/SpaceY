@@ -1,29 +1,22 @@
 package fr.spacey.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observer;
 
-import fr.spacey.models.entitites.Entity;
+import fr.spacey.models.entities.EntityModel;
 
 public class EntityController {
 	
-	private List<Entity> entities;
+	private EntityModel em;
 	
-	public EntityController() {
-		this.entities = new ArrayList<Entity>();
+	public EntityController(EntityModel em) {
+		this.em = em;
 	}
 	
-	public EntityController(List<Entity> ents) {
-		this.entities = ents;
+	public void register(Observer view) {
+		em.addObserver(view);
 	}
 	
-	public void registerAll(Observer view) {
-		for(Entity entity : entities)
-			entity.addObserver(view);
-	}
-	
-	public List<Entity> getEntities() {
-		return entities;
+	public EntityModel getEntity() {
+		return this.em;
 	}
 }

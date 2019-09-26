@@ -1,12 +1,12 @@
-package fr.spacey.models.entitites;
+package fr.spacey.models.entities;
 
 import java.util.Observable;
 
-import fr.spacey.models.entities.EntityType;
+import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.utils.Position;
 import fr.spacey.utils.Velocity;
 
-public abstract class Entity extends Observable {
+public abstract class EntityModel extends Observable {
 	
 	/* NE PAS OUBLIER setChanged() et notifyObservers() */
 	
@@ -16,7 +16,7 @@ public abstract class Entity extends Observable {
 	private Position pos;
 	private Velocity vel;
 	
-	public Entity(String name, EntityType type, double masse, Position pos, Velocity vel) {
+	public EntityModel(String name, EntityType type, double masse, Position pos, Velocity vel) {
 		this.TYPE = type;
 		this.NAME = name;
 		this.masse = masse;

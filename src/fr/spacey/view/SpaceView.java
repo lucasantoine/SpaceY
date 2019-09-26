@@ -4,7 +4,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import fr.spacey.controller.EntityController;
-import fr.spacey.models.entitites.Entity;
+import fr.spacey.controller.SpaceController;
+import fr.spacey.models.entities.EntityModel;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -12,11 +13,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class SpaceView implements Observer {
+public class SpaceView implements Observer, Runnable {
 
-	private EntityController ec;
+	private SpaceController sc;
 	
 	/* VARIABLES GRAPHIQUES */
 	private Canvas can;
@@ -34,8 +36,9 @@ public class SpaceView implements Observer {
 	protected double startSceneY;
 	private double zoom;
 	
-	public SpaceView(EntityController ec) {
-		this.ec = ec;
+	public SpaceView(SpaceController sc) {
+		super();
+		this.sc = sc;
 		this.pane = new Pane();
 		this.scene = new Scene(pane);
 		this.width = 1280;
@@ -74,15 +77,25 @@ public class SpaceView implements Observer {
 		
 	}
 	
-	public void render() {
-		// Remise à zéro de l'écran
+	public void move(float x, float y) {
+		xOffset += x;
+		yOffset += y;
+		checkOffScreen();
+	}
+	
+	private void checkOffScreen() {}
+	
+	@Override
+	public void run() {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 		
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
 		
-		for(Entity e : ec.getEntities()) {
+		for(EntityController ec : sc.getEntities()) {
+			EntityModel e = ec.getEntity();
+			
 			gc.setFill(Color.AQUA);
 			gc.fillOval(e.getPos().getX()+xOffset-e.getMasse()/2, e.getPos().getY()+yOffset-e.getMasse()/2, 
 					e.getMasse(), e.getMasse());
@@ -91,15 +104,11 @@ public class SpaceView implements Observer {
 			gc.setLineWidth(3.0);
 			gc.strokeRect(e.getPos().getX()+xOffset, e.getPos().getY()+yOffset, 1, 1);
 		}
+		gc.setFont(new Font(20));
+		gc.setFill(Color.WHITE);
+		gc.fillText("x: "+(xOffset-width/2), 0, 15);
+		gc.fillText("y: "+(yOffset-height/2), 0, 35);
 	}
-	
-	public void move(float x, float y) {
-		xOffset += x;
-		yOffset += y;
-		checkOffScreen();
-	}
-	
-	private void checkOffScreen() {}
 
 	public void start(Stage s) {
 		s.setTitle("SpaceY");
