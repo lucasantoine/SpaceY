@@ -3,6 +3,7 @@ package fr.spacey.view;
 import java.util.Observable;
 import java.util.Observer;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.EntityController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
@@ -54,7 +55,7 @@ public class SpaceView implements Observer {
 		this.zoom = 1;
 		this.pane.getChildren().add(can);
 		
-		pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+		this.pane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
 				startDragX = e.getSceneX();
@@ -65,8 +66,10 @@ public class SpaceView implements Observer {
 		});
 
 		pane.setOnMouseDragged(e -> {
-			xOffset = startSceneX + e.getSceneX() - startDragX;
-			yOffset = startSceneY + e.getSceneY() - startDragY;
+			double newx = startSceneX + e.getSceneX() - startDragX;
+			double newy = startSceneY + e.getSceneY() - startDragY;
+			xOffset = newx;
+			yOffset = newy;
 		});
 		
 		pane.setOnScroll(e -> {
@@ -100,19 +103,10 @@ public class SpaceView implements Observer {
 		gc.setFont(new Font(20));
 		gc.setFill(Color.WHITE);
 		
-
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.fillText("x: "+(xOffset-width/2), 0 - gc.getTransform().getTx(), 15 -  gc.getTransform().getTy());
 		gc.fillText("y: "+(yOffset-height/2), 0 - gc.getTransform().getTx(), 35 -  gc.getTransform().getTy());
 	}
-	
-	public void move(float x, float y) {
-		xOffset += x;
-		yOffset += y;
-		checkOffScreen();
-	}
-	
-	private void checkOffScreen() {}
 	
 	public void start(Stage s) {
 		s.setTitle("SpaceY");

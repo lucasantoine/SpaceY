@@ -1,16 +1,10 @@
 package fr.spacey;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
-import fr.spacey.models.entities.types.EntityType;
-import fr.spacey.models.entities.types.Fixe;
-import fr.spacey.models.entities.types.Simule;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.Position;
-import fr.spacey.utils.Velocity;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -52,6 +46,7 @@ public class SpaceY extends Application {
 		sv.start(stage);
 		isRunning = true;
 		dt = 1;
+		rayon = 1000;
 
 		renderThread = new Thread(new Runnable() {
 			@Override
@@ -78,9 +73,9 @@ public class SpaceY extends Application {
 						ticks++;
 						delta--;
 					}
-					
+					 
 					if(timer >= dt*1000) {
-						System.out.println("Application gravitationelle (dt="+dt+")");
+						//System.out.println("Application gravitationelle (dt="+dt+")");
 						ticks = 0;
 						timer = 0;
 					}
