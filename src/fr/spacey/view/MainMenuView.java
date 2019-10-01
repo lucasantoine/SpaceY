@@ -5,11 +5,17 @@ import java.util.Observer;
 
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.models.menu.Star;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 public class MainMenuView implements Observer{
@@ -31,7 +37,36 @@ public class MainMenuView implements Observer{
 		this.canvas = new Canvas(width, height);
 		this.gc = canvas.getGraphicsContext2D();
 		
-		this.pane.getChildren().add(canvas);
+		Text title = new Text("S p a c e Y");
+		title.setFont(Font.font(100));
+		title.setStroke(Color.YELLOW);
+		title.setStrokeWidth(2);
+		title.setStrokeType(StrokeType.OUTSIDE);
+        title.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
+        title.setX(canvas.getWidth()/2);
+        title.setY(canvas.getHeight()/2);
+        
+		Text play = new Text("Jouer");
+		play.setFont(Font.font(60));
+		play.setFill(Color.YELLOW);
+		play.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
+		play.setX(canvas.getWidth()/2);
+		play.setY(canvas.getHeight()/2 - 300);
+		play.setOnMouseEntered(e -> { play.setText("> Jouer <"); });
+		play.setOnMouseExited(e -> { play.setText("Jouer"); });
+        
+		Text quit = new Text("Quitter");
+		quit.setFont(Font.font(60));
+		quit.setFill(Color.YELLOW);
+		quit.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
+		quit.setX(canvas.getWidth()/2);
+		quit.setY(canvas.getHeight()/2 - 500);
+		quit.setOnMouseEntered(e -> { quit.setText("> Quitter <"); });
+		quit.setOnMouseExited(e -> { quit.setText("Quitter"); });
+		
+        
+        scene.setCamera(new PerspectiveCamera());
+		this.pane.getChildren().addAll(canvas, title, play, quit);
 	}
 	
 	
@@ -49,14 +84,16 @@ public class MainMenuView implements Observer{
 		Star e = (Star) obs;
 		
 		gc.setFill(Color.WHITE);
+		gc.setGlobalAlpha(e.getOpacity());
 		gc.fillOval(e.getPosition().getX(), e.getPosition().getY(), e.getRayon(), e.getRayon());
+		gc.setGlobalAlpha(1);
+		
 	}
-
-
+	
 	public void printBackground() {
-		gc.setTransform(1, 0, 0, 1, 0, 0);
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		this.gc.setTransform(1, 0, 0, 1, 0, 0);
+		this.gc.setFill(Color.BLACK);
+		this.gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
 	
 	public int getWidth() {

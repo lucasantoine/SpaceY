@@ -27,16 +27,16 @@ public class MainMenuController implements Runnable{
 	public void setView(MainMenuView mmv) {
 		this.mmv = mmv;
 	}
-
+	
 	@Override
 	public void run() {
 		mmv.printBackground();
 		for(Star s : stars) {
-			if(s.getPosition().getX() <= mmv.getWidth()) s.reverseFactorX();
-			if(s.getPosition().getX() >= mmv.getWidth()) s.reverseFactorX();
-			if(s.getPosition().getY() <= mmv.getHeight()) s.reverseFactorY();
-			if(s.getPosition().getY() >= mmv.getHeight()) s.reverseFactorY();
-			
+			if(s.getPosition().getX() < 0) s.setFactorX(1);
+			if(s.getPosition().getX() > mmv.getWidth()) s.setFactorX(-1);
+			if(s.getPosition().getY() < 0) s.setFactorY(1);
+			if(s.getPosition().getY() > mmv.getHeight()) s.setFactorY(-1);
+			s.incPosition(); 
 		}
 	}
 
