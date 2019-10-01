@@ -10,7 +10,5 @@ public class Fixe extends EntityModel {
 	
 	public Fixe(String name, EntityType type, double masse, Position pos) {
 		super(name, type, masse, pos, VELOCITY_FIXE);
-	}
-	
-	
+	}	
 }

@@ -62,4 +62,8 @@ public abstract class EntityModel extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public void updateVelocity() {
+		
+	}
 }
