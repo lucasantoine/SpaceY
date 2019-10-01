@@ -1,16 +1,10 @@
 package fr.spacey;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
-import fr.spacey.models.entities.types.EntityType;
-import fr.spacey.models.entities.types.Fixe;
-import fr.spacey.models.entities.types.Simule;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.Position;
-import fr.spacey.utils.Velocity;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,7 +15,7 @@ public class SpaceY extends Application {
 	private static SpaceY instance;
 	public boolean isRunning;
 	public double dt;
-	public double gravite;
+	public static double gravite;
 	public double rayon;
 	public double fa;
 

@@ -4,11 +4,11 @@ package fr.spacey.utils;
  * Position dans l'espace avec deux coordonnées x et y
  * @author Benoit
  */
-public class Velocity {
+public class Vector {
 	
 	private double x, y;
 
-	public Velocity(double x, double y) {
+	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -29,7 +29,7 @@ public class Velocity {
 		this.y = y;
 	}
 
-	public boolean equals(Velocity obj) {
+	public boolean equals(Vector obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

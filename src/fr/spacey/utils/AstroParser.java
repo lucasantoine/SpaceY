@@ -45,7 +45,7 @@ public class AstroParser {
 									name, // Name
 									entityType, // EntityType
 									Double.valueOf(values[2].split("=")[1]), // Masse
-									new Position( // Position
+									new Vector( // Position
 											Integer.valueOf(values[3].split("=")[1]), // Pos X
 											Integer.valueOf(values[4].split("=")[1])) // Pos Y
 									));
@@ -55,10 +55,10 @@ public class AstroParser {
 									name, // name
 									entityType, // EntityType
 									Double.valueOf(values[2].split("=")[1]), // masse
-									new Position( // Position
+									new Vector( // Position
 											Integer.valueOf(values[3].split("=")[1]), // Pos X
 											Integer.valueOf(values[4].split("=")[1])), // Pos Y
-									new Velocity( // Velocity
+									new Vector( // Velocity
 											Double.valueOf(values[5].split("=")[1]), // Velocity X
 											Double.valueOf(values[6].split("=")[1])) // Velocity Y
 									));
@@ -68,10 +68,10 @@ public class AstroParser {
 									name, // name
 									entityType, // EntityType
 									Double.valueOf(values[2].split("=")[1]), // masse
-									new Position( // Position 
+									new Vector( // Position 
 											Integer.valueOf(values[3].split("=")[1]), // Pos X
 											Integer.valueOf(values[4].split("=")[1])), // Pos Y
-									new Velocity( // Velocity
+									new Vector( // Velocity
 											Double.valueOf(values[5].split("=")[1]), // Velocity X
 											Double.valueOf(values[6].split("=")[1])), // Velocity Y
 									Double.valueOf(values[7].split("=")[1]), // Propulseur principal
