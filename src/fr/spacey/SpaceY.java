@@ -96,8 +96,8 @@ public class SpaceY extends Application {
 		MainMenuController mmc = new MainMenuController();
 		MainMenuView mmv = new MainMenuView(mmc);
 		mmc.setView(mmv);
-		for (int i = 0; i < 500; i++) {
-			mmc.addStar(new Star(Math.random() * mmv.getWidth(), Math.random() * mmv.getHeight(), Math.random(), mmv.getWidth()), mmv);
+		for (int i = 0; i < 800; i++) {
+			mmc.addStar(new Star(Math.random() * mmv.getWidth(), Math.random() * mmv.getHeight(), Math.random(), mmv.getWidth(), mmv.getCanvas()), mmv);
 		}
 		mmv.start(stage);
 		
@@ -107,7 +107,7 @@ public class SpaceY extends Application {
 		@Override
 		public void run() {
 
-			int fps = 60;
+			int fps = 120;
 			double timePerTick = 1000 / fps;
 			double delta = 0;
 			long now = 0;

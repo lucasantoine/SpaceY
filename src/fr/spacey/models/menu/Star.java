@@ -4,6 +4,9 @@ import java.util.Observable;
 import java.util.Random;
 
 import fr.spacey.utils.Position;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class Star extends Observable{
 
@@ -15,12 +18,13 @@ public class Star extends Observable{
 	private double rayon;
 	private double opacity;
 	private int factorOpacity;
+	private Color color;
+	private double ostartx;
+	private double ostopx;
+	private double ostarty;
+	private double ostopy;
 	
-	public Star() {
-		this(new Position(0, 0), 0.3, 10);
-	}
-	
-	public Star(Position pos, double inc, double z) {
+	public Star(Position pos, double inc, double z, Canvas canvas) {
 		this.pos = pos;
 		this.factorX = Math.random() < 0.5 ? 1 : -1;
 		this.factorY = Math.random() > 0.5 ? 1 : -1;
@@ -28,11 +32,38 @@ public class Star extends Observable{
 		this.rayon = Math.random() * 5;
 		this.opacity = Math.random();
 		this.factorOpacity = -1;
-		this.z = new Random().nextInt((int)z);
+		this.z = Math.random() * z;
+		this.color = (Math.random() < 0.5 ? Color.LIGHTSKYBLUE : Color.WHITE);
+		switch (new Random().nextInt(4)) {
+		case 0:
+			this.ostartx = canvas.getWidth()/2.0;
+			this.ostopx = canvas.getWidth();
+			this.ostarty = canvas.getHeight()/2.0;
+			this.ostopy = 0;
+			break;
+		case 1:
+			this.ostartx = canvas.getWidth()/2.0;
+			this.ostopx = canvas.getWidth();
+			this.ostarty = canvas.getHeight()/2.0;
+			this.ostopy = canvas.getHeight();
+			break;
+		case 2:
+			this.ostartx = canvas.getWidth()/2.0;
+			this.ostopx = 0;
+			this.ostarty = canvas.getHeight()/2.0;
+			this.ostopy = canvas.getHeight();
+			break;
+		case 3:
+			this.ostartx = canvas.getWidth()/2.0;
+			this.ostopx = 0;
+			this.ostarty = canvas.getHeight()/2.0;
+			this.ostopy = -canvas.getHeight();
+			break;
+		}
 	}
-	
-	public Star(double x, double y, double inc, double z) {
-		this(new Position(x, y), inc, z);
+
+	public Star(double x, double y, double inc, double z, Canvas canvas) {
+		this(new Position(x, y), inc, z, canvas);
 	}
 	
 	public Position getPosition() {
@@ -55,6 +86,19 @@ public class Star extends Observable{
 		notifyObservers();
 		pos.setX(pos.getX() - x);
 		pos.setY(pos.getY() - y);
+	}
+	
+	public void update(boolean isstart) {
+		z-=1;
+		if(z < 1 && !isstart) {
+			z = 1280;
+			pos.setX(Math.random() * 1280);
+			pos.setY(Math.random() * 720);
+		}else if(isstart && z <= 0) {
+			z = 0;
+		}
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void incPosition() {
@@ -98,7 +142,29 @@ public class Star extends Observable{
 	}
 	
 	public void setZ(double z) {
+		setChanged();
+		notifyObservers();
 		this.z = z;
+	}
+
+	public Paint getColor() {
+		return color;
+	}
+	
+	public double getOstartx() {
+		return ostartx;
+	}
+
+	public double getOstopx() {
+		return ostopx;
+	}
+
+	public double getOstarty() {
+		return ostarty;
+	}
+
+	public double getOstopy() {
+		return ostopy;
 	}
 	
 }

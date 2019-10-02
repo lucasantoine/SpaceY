@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Observer;
 
 import fr.spacey.SpaceY;
-import fr.spacey.models.entities.EntityModel;
 import fr.spacey.models.menu.Star;
 import fr.spacey.view.MainMenuView;
+import javafx.scene.text.Font;
 
 public class MainMenuController implements Runnable{
 
@@ -37,19 +37,19 @@ public class MainMenuController implements Runnable{
 		if(!isStart) {
 			mmv.printBackground();
 			for(Star s : stars) {
-				if(s.getPosition().getX() < 0) s.setFactorX(1);
-				if(s.getPosition().getX() > mmv.getWidth()) s.setFactorX(-1);
-				if(s.getPosition().getY() < 0) s.setFactorY(1);
-				if(s.getPosition().getY() > mmv.getHeight()) s.setFactorY(-1);
-				s.incPosition(); 
+				s.update(isStart);
 			}
 		}else {
+			//mmv.printBackground();
 			for(Star s : stars) {
-				s.setFactorX(1); s.setFactorY(1);
-				s.addPosition(0.1, -0.1);
-				s.setOpacity(s.getOpacity() - 0.0001);
-				s.setZ(s.getZ() - 1);
+				s.update(isStart);
 			}
+//			mmv.title.setOpacity(mmv.title.getOpacity() - 0.1);
+//			mmv.play.setOpacity(mmv.play.getOpacity() - 0.1);
+//			mmv.quit.setOpacity(mmv.quit.getOpacity() - 0.1);
+			mmv.title.setVisible(false);
+			mmv.play.setVisible(false);
+			mmv.quit.setVisible(false);
 		}
 	}
 	
