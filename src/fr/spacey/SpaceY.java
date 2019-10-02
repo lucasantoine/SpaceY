@@ -107,7 +107,7 @@ public class SpaceY extends Application {
 		@Override
 		public void run() {
 
-			int fps = 15;
+			int fps = 60;
 			double timePerTick = 1000 / fps;
 			double delta = 0;
 			long now = 0;
@@ -128,6 +128,12 @@ public class SpaceY extends Application {
 				}
 				
 				if(timer >= dt*1000) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							mmc.updateStar();
+						}
+					});
 					ticks = 0;
 					timer = 0;
 				}

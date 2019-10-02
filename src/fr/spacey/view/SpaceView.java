@@ -102,8 +102,8 @@ public class SpaceView implements Observer {
 		
 
 		gc.setTransform(1, 0, 0, 1, 0, 0);
-		gc.fillText("x: "+(xOffset-width/2), 0 - gc.getTransform().getTx(), 15 -  gc.getTransform().getTy());
-		gc.fillText("y: "+(yOffset-height/2), 0 - gc.getTransform().getTx(), 35 -  gc.getTransform().getTy());
+		gc.fillText("x: "+(xOffset-width/2), 0, 15);
+		gc.fillText("y: "+(yOffset-height/2), 0, 35);
 	}
 	
 	public void move(float x, float y) {

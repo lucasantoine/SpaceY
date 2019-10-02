@@ -3,6 +3,7 @@ package fr.spacey.view;
 import java.util.Observable;
 import java.util.Observer;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.models.menu.Star;
 import javafx.scene.PerspectiveCamera;
@@ -46,15 +47,19 @@ public class MainMenuView implements Observer{
         title.setX(canvas.getWidth()/2);
         title.setY(canvas.getHeight()/2);
         
-		Text play = new Text("Jouer");
+		Text play = new Text("Create your world");
 		play.setFont(Font.font(60));
 		play.setFill(Color.YELLOW);
 		play.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
 		play.setX(canvas.getWidth()/2);
 		play.setY(canvas.getHeight()/2 - 300);
-		play.setOnMouseEntered(e -> { play.setText("> Jouer <"); });
-		play.setOnMouseExited(e -> { play.setText("Jouer"); });
+		play.setOnMouseEntered(e -> { play.setText("> Create your world <"); });
+		play.setOnMouseExited(e -> { play.setText("Create your world"); });
         
+		play.setOnMouseClicked(e -> {
+			mmc.isStart = true;
+		});
+		
 		Text quit = new Text("Quitter");
 		quit.setFont(Font.font(60));
 		quit.setFill(Color.YELLOW);
@@ -83,11 +88,12 @@ public class MainMenuView implements Observer{
 	public void update(Observable obs, Object arg) {
 		Star e = (Star) obs;
 		
-		gc.setFill(Color.WHITE);
+		Color color = (mmc.isStart ? Color.LIGHTSKYBLUE : Color.WHITE);
+		
+		gc.setFill(color);
 		gc.setGlobalAlpha(e.getOpacity());
 		gc.fillOval(e.getPosition().getX(), e.getPosition().getY(), e.getRayon(), e.getRayon());
 		gc.setGlobalAlpha(1);
-		
 	}
 	
 	public void printBackground() {

@@ -22,7 +22,7 @@ public class Star extends Observable{
 		this.pos = pos;
 		this.factorX = Math.random() < 0.5 ? 1 : -1;
 		this.factorY = Math.random() > 0.5 ? 1 : -1;
-		this.inc = inc;
+		this.inc = inc / 10;
 		this.rayon = Math.random() * 5;
 		this.opacity = Math.random();
 		this.factorOpacity = -1;
@@ -84,6 +84,10 @@ public class Star extends Observable{
 	
 	public double getOpacity() {
 		return opacity;
+	}
+	
+	public void setOpacity(double opacity) {
+		this.opacity = opacity;
 	}
 	
 }
