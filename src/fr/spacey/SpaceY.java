@@ -97,7 +97,7 @@ public class SpaceY extends Application {
 		MainMenuView mmv = new MainMenuView(mmc);
 		mmc.setView(mmv);
 		for (int i = 0; i < 500; i++) {
-			mmc.addStar(new Star(Math.random() * mmv.getWidth(), Math.random() * mmv.getHeight(), Math.random()), mmv);
+			mmc.addStar(new Star(Math.random() * mmv.getWidth(), Math.random() * mmv.getHeight(), Math.random(), mmv.getWidth()), mmv);
 		}
 		mmv.start(stage);
 		
@@ -128,12 +128,7 @@ public class SpaceY extends Application {
 				}
 				
 				if(timer >= dt*1000) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							mmc.updateStar();
-						}
-					});
+					
 					ticks = 0;
 					timer = 0;
 				}

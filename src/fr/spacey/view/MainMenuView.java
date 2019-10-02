@@ -92,12 +92,13 @@ public class MainMenuView implements Observer{
 		
 		gc.setFill(color);
 		gc.setGlobalAlpha(e.getOpacity());
-		gc.fillOval(e.getPosition().getX(), e.getPosition().getY(), e.getRayon(), e.getRayon());
+		double sx = map((e.getPosition().getX() / e.getZ()), width/2, 1, width/2, width);
+		double sy = map((e.getPosition().getY() / e.getZ()), height/2, 1, height/2, height);
+		gc.fillOval(sx, sy, e.getRayon(), e.getRayon());
 		gc.setGlobalAlpha(1);
 	}
 	
 	public void printBackground() {
-		this.gc.setTransform(1, 0, 0, 1, 0, 0);
 		this.gc.setFill(Color.BLACK);
 		this.gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 	}
@@ -108,6 +109,10 @@ public class MainMenuView implements Observer{
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public double map(double value, double istart, double istop, double ostart, double ostop) {
+		 return ostart + (ostop - ostart) * ((value - istart) / (istop - istart));
 	}
 	
 }
