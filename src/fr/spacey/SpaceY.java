@@ -1,16 +1,10 @@
 package fr.spacey;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
-import fr.spacey.models.entities.types.EntityType;
-import fr.spacey.models.entities.types.Fixe;
-import fr.spacey.models.entities.types.Simule;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.Position;
-import fr.spacey.utils.Velocity;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,11 +23,8 @@ public class SpaceY extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		/* ENTITIES */
-		
-		List<EntityModel> entities = AstroParser.loadAstroFile("res/exemple.astro");
-		
 		/* MODELES */
+		List<EntityModel> entities = AstroParser.loadAstroFile("res/exemple.astro");
 
 		/* CONTROLEURS */
 		SpaceController sc = new SpaceController();
@@ -43,46 +34,49 @@ public class SpaceY extends Application {
 		sc.setView(sv);
 		
 		/* START */
-		//sc.addEntityModel(soleil, sv);
-		//sc.addEntityModel(asteroid, sv);
 		for (EntityModel entityModel : entities) {
+			entityModel.toggleInfo();
 			sc.addEntityModel(entityModel, sv);
 		}
 
 		sv.start(stage);
 		isRunning = true;
-		dt = 1;
+		dt = 0.5;
+		fa = 2;
 
 		renderThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				
-				int fps = 120;
-				double timePerTick = 1000 / fps;
+				double timePerTick = 1000 / 30;
 				double delta = 0;
 				long now = 0;
 				long lastTime = System.currentTimeMillis();
 				long timer = 0;
-				int ticks = 0;
+				int fps = 0;
+				long spaceTick = 0;
 				
 				while(isRunning) {
-					//System.out.println(now+" "+delta+" "+timer+" "+lastTime+" "+ticks);
-					
 					now = System.currentTimeMillis();
 					delta += (now - lastTime) / timePerTick;
 					timer += now - lastTime;
+					spaceTick += now - lastTime;
 					lastTime = now;
 					
 					if(delta >= 1) {
 						Platform.runLater(sc);
-						ticks++;
+						fps++;
 						delta--;
 					}
 					
-					if(timer >= dt*1000) {
-						System.out.println("Application gravitationelle (dt="+dt+")");
-						ticks = 0;
+					if(timer >= 1000) {
+						System.out.println("fps="+fps);
+						fps = 0;
 						timer = 0;
+					}
+					if(spaceTick >= dt*1000) {
+						System.out.println("SpaceTick");
+						spaceTick = 0;
 					}
 				}
 			}

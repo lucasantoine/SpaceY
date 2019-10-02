@@ -3,7 +3,6 @@ package fr.spacey.view;
 import java.util.Observable;
 import java.util.Observer;
 
-import fr.spacey.controller.EntityController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
 import javafx.event.EventHandler;
@@ -80,7 +79,6 @@ public class SpaceView implements Observer {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
-		
 	}
 	
 	@Override
@@ -88,16 +86,31 @@ public class SpaceView implements Observer {
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
 		{
 			EntityModel e = (EntityModel) obs;
+
+			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
+			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
 			
-			gc.setFill(Color.AQUA);
-			gc.fillOval(e.getPos().getX()+xOffset-e.getMasse()/2, e.getPos().getY()+yOffset-e.getMasse()/2, 
-					e.getMasse(), e.getMasse());
+			gc.setFill(Color.RED);
+			gc.fillOval(planetX, planetY, e.getMasse(), e.getMasse());
 			
-			gc.setFill(Color.ALICEBLUE);
-			gc.setLineWidth(3.0);
-			gc.strokeRect(e.getPos().getX()+xOffset, e.getPos().getY()+yOffset, 1, 1);
+			if(e.isShowInfo()) {
+				gc.setStroke(Color.WHITE);
+				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
+		        gc.setLineWidth(2);
+		        double startDescX = planetX+e.getMasse()+25, 
+		        	   startDescY = planetY+e.getMasse()+25;
+		        
+				gc.strokeLine(planetX+e.getMasse()+3, planetY+e.getMasse()+3,
+						startDescX-5, startDescY-5);
+				gc.setFont(new Font(16));
+				gc.fillText(e.getName()+':', startDescX, startDescY);
+				gc.setFill(Color.LIGHTGRAY);
+				gc.setFont(new Font(10));
+				gc.fillText("Masse: "+e.getMasse(), startDescX, startDescY+15);
+				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX, startDescY+30);
+			}
 		}
-		gc.setFont(new Font(20));
+		gc.setFont(new Font(15));
 		gc.setFill(Color.WHITE);
 		
 

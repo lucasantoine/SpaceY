@@ -46,7 +46,13 @@ public class Position {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		return sb.append('[').append(x).append(';')
-				.append(y).append(']').toString();
+		return sb.append('[').append(Math.round(x * 100.0) / 100.0).append(';')
+				.append(Math.round(y * 100.0) / 100.0).append(']').toString();
+	}
+	
+	public String toStringRounded() {
+		StringBuilder sb = new StringBuilder();
+		return sb.append('[').append((int)x).append(';')
+				.append((int)y).append(']').toString();
 	}
 }

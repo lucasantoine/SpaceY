@@ -15,6 +15,7 @@ public abstract class EntityModel extends Observable {
 	private double masse;
 	private Position pos;
 	private Velocity vel;
+	private boolean showInfo;
 	
 	public EntityModel(String name, EntityType type, double masse, Position pos, Velocity vel) {
 		this.TYPE = type;
@@ -22,6 +23,7 @@ public abstract class EntityModel extends Observable {
 		this.masse = masse;
 		this.pos = pos;
 		this.vel = vel;
+		this.showInfo = false;
 	}
 	
 	public String getName() {
@@ -52,6 +54,10 @@ public abstract class EntityModel extends Observable {
 		return masse;
 	}
 	
+	public void toggleInfo() {
+		this.showInfo = !this.showInfo;
+	}
+	
 	public void setMasse(double masse) {
 		this.masse = masse;
 	}
@@ -61,5 +67,9 @@ public abstract class EntityModel extends Observable {
 		pos.setX(pos.getX()+vel.getY());
 		setChanged();
 		notifyObservers();
+	}
+
+	public boolean isShowInfo() {
+		return this.showInfo;
 	}
 }
