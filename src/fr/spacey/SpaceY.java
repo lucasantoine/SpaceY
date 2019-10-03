@@ -1,16 +1,11 @@
 package fr.spacey;
 
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import fr.spacey.controller.MainMenuController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
-import fr.spacey.model.menu.Star;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.view.MainMenuView;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
