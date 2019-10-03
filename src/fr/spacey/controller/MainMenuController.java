@@ -40,16 +40,14 @@ public class MainMenuController implements Runnable{
 				s.update(isStart);
 			}
 		}else {
-			//mmv.printBackground();
 			for(Star s : stars) {
 				s.update(isStart);
 			}
-//			mmv.title.setOpacity(mmv.title.getOpacity() - 0.1);
-//			mmv.play.setOpacity(mmv.play.getOpacity() - 0.1);
-//			mmv.quit.setOpacity(mmv.quit.getOpacity() - 0.1);
 			mmv.title.setVisible(false);
 			mmv.play.setVisible(false);
 			mmv.quit.setVisible(false);
+			
+			
 		}
 	}
 	

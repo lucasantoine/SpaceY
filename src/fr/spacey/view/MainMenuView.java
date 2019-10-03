@@ -29,7 +29,7 @@ public class MainMenuView implements Observer{
 	private Canvas canvas;
 	private int width;
 	private int height;
-	private GraphicsContext gc;
+	public GraphicsContext gc;
 	public Text title;
 	public Text play;
 	public Text quit;
