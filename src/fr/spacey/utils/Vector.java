@@ -25,7 +25,11 @@ public class Vector {
 	public void setPos(Vector v) {
 		this.setX(v.x);
 		this.setY(v.y);
-
+	}
+	
+	public void setPos(double x, double y) {
+		this.setX(x);
+		this.setY(y);
 	}
 
 	public void setX(double x) {
@@ -51,7 +55,7 @@ public class Vector {
 	}
 
 	public Vector add(Vector v) {
-		return new Vector(this.x + v.x, this.y + v.y);
+		return new Vector(this.x + v.x, this.y + v.y);	 
 	}
 
 	public Vector minus(Vector v) {

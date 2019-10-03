@@ -10,6 +10,7 @@ public class Fixe extends Entity {
 	
 	public Fixe(String name, EntityType type, double masse, Vector pos) {
 		super(name, type, masse, pos, VELOCITY_FIXE);
+		super.radius = 40;
 	}
 
 	@Override

@@ -96,22 +96,22 @@ public class SpaceView implements Observer, Runnable {
 		
 		//ENTITES
 		for(Entity e : sc.getModel().getEntities()) {
-			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
-			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
+			double planetX = e.getPos().getX()+xOffset-e.getRadius()/2;
+			double planetY = e.getPos().getY()+yOffset-e.getRadius()/2;
 
 			gc.setFill(Color.AQUA);
 			gc.fillOval(planetX, planetY, 
-					e.getMasse(), e.getMasse());
+					e.getRadius(), e.getRadius());
 
 			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
 				gc.setStroke(Color.WHITE);
-				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
+				gc.strokeOval(planetX, planetY, e.getRadius(), e.getRadius());
 		        gc.setLineWidth(2);
-		        double startDescX = planetX+e.getMasse()+25, 
-		        	   startDescY = planetY+e.getMasse()+25;
+		        double startDescX = planetX+e.getRadius()+25, 
+		        	   startDescY = planetY+e.getRadius()+25;
 		        
-				gc.strokeLine(planetX+e.getMasse()+3, planetY+e.getMasse()+3,
+				gc.strokeLine(planetX+e.getRadius()+3, planetY+e.getRadius()+3,
 						startDescX-5, startDescY-5);
 				gc.setFont(new Font(16));
 				gc.fillText(e.getName()+':', startDescX, startDescY);
