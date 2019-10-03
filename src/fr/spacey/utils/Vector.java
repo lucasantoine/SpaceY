@@ -2,13 +2,14 @@ package fr.spacey.utils;
 
 /**
  * Position dans l'espace avec deux coordonnées x et y
+ * 
  * @author Benoit
  */
-public class Position {
-	
+public class Vector {
+
 	private double x, y;
 
-	public Position(double x, double y) {
+	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -20,7 +21,13 @@ public class Position {
 	public double getY() {
 		return y;
 	}
-	
+
+	public void setPos(Vector v) {
+		this.setX(v.x);
+		this.setY(v.y);
+
+	}
+
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -29,7 +36,7 @@ public class Position {
 		this.y = y;
 	}
 
-	public boolean equals(Position obj) {
+	public boolean equals(Vector obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -43,11 +50,34 @@ public class Position {
 		return true;
 	}
 
+	public Vector add(Vector v) {
+		return new Vector(this.x + v.x, this.y + v.y);
+	}
+
+	public Vector minus(Vector v) {
+		return new Vector(this.x - v.x, this.y - v.y);
+	}
+
+	public double getDistanceTo(Vector v) {
+		return Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2));
+	}
+
+	public double getMagnitude() {
+		return Math.sqrt(x * x + y * y);
+	}
+
+	public double getCosine() {
+		return x / getMagnitude();
+	}
+
+	public double getSine() {
+		return y / getMagnitude();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		return sb.append('[').append(Math.round(x * 100.0) / 100.0).append(';')
-				.append(Math.round(y * 100.0) / 100.0).append(']').toString();
+		return sb.append('[').append(x).append(';').append(y).append(']').toString();
 	}
 	
 	public String toStringRounded() {

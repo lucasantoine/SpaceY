@@ -19,8 +19,10 @@ public class SpaceModel extends Observable {
 	
 	public void update() {
 		for(Entity e : entities) {
-			e.applyMotion(entities);
+			e.updatePosition(entities);
 		}
+		setChanged();
+		notifyObservers();
 	}
 	
 }
