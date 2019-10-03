@@ -25,8 +25,7 @@ public class SpaceView implements Observer, Runnable {
 	
 	/* VARIABLES GRAPHIQUES */
 	private Canvas can;
-	private Pane pane;
-	private Scene scene;
+	public Pane pane;
 	private GraphicsContext gc;
 	
 	/* VARIABLES DE CANVAS */
@@ -40,10 +39,8 @@ public class SpaceView implements Observer, Runnable {
 	private double zoom;
 	
 	public SpaceView(SpaceController sc) {
-		super();
 		this.sc = sc;
 		this.pane = new Pane();
-		this.scene = new Scene(pane);
 		this.width = 1280;
 		this.height = 720;
 		this.can = new Canvas(width, height);
@@ -77,15 +74,7 @@ public class SpaceView implements Observer, Runnable {
 
 	@Override
 	public void update(Observable obs, Object obj) {
-
-	}
 	
-	public void start(Stage s) {
-		s.setTitle("SpaceY");
-		s.setScene(scene);
-		s.setResizable(true);
-		s.setFullScreen(false);
-		s.show();
 	}
 
 	public void printBackground() {
@@ -141,5 +130,14 @@ public class SpaceView implements Observer, Runnable {
 		
 		gc.fillText("x: "+(xOffset-width/2), 0 - gc.getTransform().getTx(), 15 -  gc.getTransform().getTy());
 		gc.fillText("y: "+(yOffset-height/2), 0 - gc.getTransform().getTx(), 35 -  gc.getTransform().getTy());
+	}
+
+
+	public void start(Stage s) {
+		s.setTitle("SpaceY");
+		s.setScene(new Scene(pane, width, height));
+		s.setResizable(true);
+		s.setFullScreen(false);
+		s.show();
 	}
 }

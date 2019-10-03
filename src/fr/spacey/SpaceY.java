@@ -1,21 +1,29 @@
 package fr.spacey;
 
-import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import fr.spacey.controller.MainMenuController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
+import fr.spacey.model.menu.Star;
 import fr.spacey.utils.AstroParser;
+import fr.spacey.view.MainMenuView;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SpaceY extends Application {
-
 	private static SpaceY instance;
-	public boolean isRunning;
+	
+	public Stage stage;
+	public Scene menu, simulation;
+	
+	public boolean isRunning = false;
 	public double dt;
 	public double gravite;
 	public double rayon;
@@ -25,22 +33,23 @@ public class SpaceY extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		this.stage = stage;
+		this.isRunning = true;
 		
-		/* ENTITIES */
+		// ENTITIES
 		Set<Entity> entities = AstroParser.loadAstroFile("res/exemple.astro");
 		for(Entity e : entities) e.toggleInfo();
 		
-		/* MODELES */
+		// MODELES
 		SpaceModel sm = new SpaceModel(entities);
 
-		/* CONTROLEURS */
+		// CONTROLEURS
 		SpaceController sc = new SpaceController(sm);
 		
-		/* VUES */
+		// VUES
 		SpaceView sv = new SpaceView(sc);
 		sv.start(stage);
 		
-		this.isRunning = true;
 		this.dt = 1;
 		this.rayon = 1000;
 
