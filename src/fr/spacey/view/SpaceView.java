@@ -3,6 +3,7 @@ package fr.spacey.view;
 import java.util.Observable;
 import java.util.Observer;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.entity.Entity;
 import javafx.event.EventHandler;
@@ -99,37 +100,60 @@ public class SpaceView implements Observer, Runnable {
 			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
 			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
 
-			gc.setFill(Color.AQUA);
+			gc.setFill(Color.RED);
 			gc.fillOval(planetX, planetY, 
 					e.getMasse(), e.getMasse());
 
 			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
-				gc.setStroke(Color.WHITE);
-				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
-		        gc.setLineWidth(2);
 		        double startDescX = planetX+e.getMasse()+25, 
 		        	   startDescY = planetY+e.getMasse()+25;
-		        
+				
+		        gc.setFill(new Color(.4,.4,.4,0.7));
+				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
+
+				gc.setFill(Color.RED);
+		        gc.setFont(new Font(16));
+				gc.fillText(e.getName(), startDescX+5, startDescY+17);
+				
+				gc.setStroke(Color.WHITE);
+				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
+		        gc.setLineWidth(1);
 				gc.strokeLine(planetX+e.getMasse()+3, planetY+e.getMasse()+3,
 						startDescX-5, startDescY-5);
-				gc.setFont(new Font(16));
-				gc.fillText(e.getName()+':', startDescX, startDescY);
+				
 				gc.setFill(Color.LIGHTGRAY);
 				gc.setFont(new Font(10));
-				gc.fillText("Masse: "+e.getMasse(), startDescX, startDescY+15);
-				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX, startDescY+30);
+				gc.fillText("Masse: "+e.getMasse(), startDescX+5, startDescY+30);
+				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+5, startDescY+40);
 			}
 
 		}
 
 		//COORD EN HAUT DE GAUCHE
 		gc.setTransform(1, 0, 0, 1, 0, 0);
-		gc.setFont(new Font(20));
-		gc.setFill(Color.WHITE);
+		gc.setFont(new Font(17));
+		SpaceY inst = SpaceY.getInstance();
+		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
 		
-		gc.fillText("x: "+(xOffset-width/2), 0 - gc.getTransform().getTx(), 15 -  gc.getTransform().getTy());
-		gc.fillText("y: "+(yOffset-height/2), 0 - gc.getTransform().getTx(), 35 -  gc.getTransform().getTy());
+		gc.setFill(new Color(.1,.1,.1,0.9));
+		gc.fillRoundRect(relatX-5, 5-relatY, 130, 100, 10, 10);
+		
+		gc.setFill(Color.WHITE);
+		gc.fillText("Pos: ["+(int)(xOffset-width/2)+","+(int)(yOffset-height/2)+']', 
+				relatX, 25 - relatY);
+
+		gc.fillText("G: "+inst.gravite, 
+				relatX, 43 - relatY);
+		
+		gc.fillText("dt: "+inst.dt, 
+				relatX, 62 - relatY);
+		
+		gc.fillText("fa: "+inst.fa, 
+				relatX, 80 - relatY);
+		
+		gc.fillText("rayon: "+inst.rayon, 
+				relatX, 97 - relatY);
 	}
 
 
