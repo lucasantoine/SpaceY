@@ -1,10 +1,9 @@
-package fr.spacey.models.entities.types;
+package fr.spacey.model.entity;
 
-import fr.spacey.models.entities.EntityModel;
 import fr.spacey.utils.Position;
 import fr.spacey.utils.Velocity;
 
-public class Vaisseau extends EntityModel {
+public class Vaisseau extends Entity {
 
 	private double pprincipal;
 	private double pretro;

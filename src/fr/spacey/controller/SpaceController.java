@@ -1,44 +1,23 @@
 package fr.spacey.controller;
 
-import java.util.HashSet;
+
 import java.util.Observer;
-import java.util.Set;
 
-import fr.spacey.models.entities.EntityModel;
-import fr.spacey.view.SpaceView;
+import fr.spacey.model.SpaceModel;
 
-public class SpaceController implements Runnable {
+public class SpaceController {
+
+	private SpaceModel sm;
 	
-	private Set<EntityController> entities;
-	private SpaceView sv;
-	
-	public SpaceController() {
-		this.entities = new HashSet<EntityController>();
+	public SpaceController(SpaceModel space) {
+		this.sm = space;
 	}
 
-	public Set<EntityController> getEntities() {
-		return entities;
+	public void register(Observer view) {
+		sm.addObserver(view);
 	}
 
-	public boolean addEntityModel(EntityModel em, Observer observer) {
-		EntityController ec = new EntityController(em, observer);
-		return addEntityController(ec);
-	}
-	
-	public boolean addEntityController(EntityController ec) {
-		return entities.add(ec);
-	}
-	
-	public void setView(SpaceView sv) {
-		this.sv = sv;
-	}
-
-	@Override
-	public void run() {
-		sv.printBackground();
-		for(EntityController ec : entities) {
-			EntityModel em = ec.getEntityModel();
-			em.updatePosition();
-		}
+	public SpaceModel getModel() {
+		return sm;
 	}
 }

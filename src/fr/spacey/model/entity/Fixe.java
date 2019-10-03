@@ -1,10 +1,9 @@
-package fr.spacey.models.entities.types;
+package fr.spacey.model.entity;
 
-import fr.spacey.models.entities.EntityModel;
 import fr.spacey.utils.Position;
 import fr.spacey.utils.Velocity;
 
-public class Fixe extends EntityModel {
+public class Fixe extends Entity {
 	
 	public final static Velocity VELOCITY_FIXE = new Velocity(0, 0);
 	

@@ -6,21 +6,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import fr.spacey.SpaceY;
 import fr.spacey.exceptions.TypeUnknownException;
-import fr.spacey.models.entities.EntityModel;
-import fr.spacey.models.entities.types.EntityType;
-import fr.spacey.models.entities.types.Fixe;
-import fr.spacey.models.entities.types.Simule;
-import fr.spacey.models.entities.types.Vaisseau;
+import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.EntityType;
+import fr.spacey.model.entity.Fixe;
+import fr.spacey.model.entity.Simule;
+import fr.spacey.model.entity.Vaisseau;
 
 public class AstroParser {
 
-	public static List<EntityModel> loadAstroFile(String filepath) {
-		List<EntityModel> entities = new ArrayList<EntityModel>();
+	public static Set<Entity> loadAstroFile(String filepath) {
+		Set<Entity> entities = new HashSet<Entity>();
 		File file = new File(filepath);
 		String[] values;
 		try(BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"))){

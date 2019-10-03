@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import fr.spacey.controller.SpaceController;
-import fr.spacey.models.entities.EntityModel;
+import fr.spacey.model.entity.Entity;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  * @author ItsPower
  *
  */
-public class SpaceView implements Observer {
+public class SpaceView implements Observer, Runnable {
 
 	private SpaceController sc;
 	
@@ -74,25 +74,47 @@ public class SpaceView implements Observer {
 				this.zoom += valeur;
 		});
 	}
+
+	@Override
+	public void update(Observable obs, Object obj) {
+
+	}
 	
-	void setwall() {
+	public void start(Stage s) {
+		s.setTitle("SpaceY");
+		s.setScene(scene);
+		s.setResizable(true);
+		s.setFullScreen(false);
+		s.show();
+	}
+
+	public void printBackground() {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 	}
-	
+		
 	@Override
-	public void update(Observable obs, Object obj) {
-		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
-		{
-			EntityModel e = (EntityModel) obs;
+	public void run() {
 
+		// FOND DECRAN
+		gc.setTransform(1, 0, 0, 1, 0, 0);
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
+		
+		// ZOOM
+		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
+		
+		//ENTITES
+		for(Entity e : sc.getModel().getEntities()) {
 			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
 			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
-			
-			gc.setFill(Color.RED);
-			gc.fillOval(planetX, planetY, e.getMasse(), e.getMasse());
-			
+
+			gc.setFill(Color.AQUA);
+			gc.fillOval(planetX, planetY, 
+					e.getMasse(), e.getMasse());
+
+			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
 				gc.setStroke(Color.WHITE);
 				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
@@ -109,35 +131,15 @@ public class SpaceView implements Observer {
 				gc.fillText("Masse: "+e.getMasse(), startDescX, startDescY+15);
 				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX, startDescY+30);
 			}
+
 		}
-		gc.setFont(new Font(15));
+
+		//COORD EN HAUT DE GAUCHE
+		gc.setTransform(1, 0, 0, 1, 0, 0);
+		gc.setFont(new Font(20));
 		gc.setFill(Color.WHITE);
 		
-
-		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.fillText("x: "+(xOffset-width/2), 0 - gc.getTransform().getTx(), 15 -  gc.getTransform().getTy());
 		gc.fillText("y: "+(yOffset-height/2), 0 - gc.getTransform().getTx(), 35 -  gc.getTransform().getTy());
-	}
-	
-	public void move(float x, float y) {
-		xOffset += x;
-		yOffset += y;
-		checkOffScreen();
-	}
-	
-	private void checkOffScreen() {}
-	
-	public void start(Stage s) {
-		s.setTitle("SpaceY");
-		s.setScene(scene);
-		s.setResizable(true);
-		s.setFullScreen(false);
-		s.show();
-	}
-
-	public void printBackground() {
-		gc.setTransform(1, 0, 0, 1, 0, 0);
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 	}
 }

@@ -54,5 +54,9 @@ public class Position {
 		StringBuilder sb = new StringBuilder();
 		return sb.append('[').append((int)x).append(';')
 				.append((int)y).append(']').toString();
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/heads/Benoit
 	}
 }
