@@ -14,5 +14,13 @@ public class Vaisseau extends EntityModel {
 		this.pretro = pretro;
 	}
 	
+	@Override
+	public void updatePosition(EntityModel entity) {
+		super.updateVelocity(entity);
+		super.getPos().setPos(this.getPos().add(getVel()));
+		setChanged();
+		notifyObservers();
+	}
+	
 	
 }

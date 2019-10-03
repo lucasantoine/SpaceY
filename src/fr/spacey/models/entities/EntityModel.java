@@ -1,8 +1,10 @@
 package fr.spacey.models.entities;
 
 import java.util.Observable;
+import java.util.Set;
 
 import fr.spacey.SpaceY;
+import fr.spacey.controller.EntityController;
 import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.utils.Vector;
 
@@ -33,7 +35,7 @@ public abstract class EntityModel extends Observable {
 	public Vector getPos() {
 		return pos;
 	}
-
+ 
 	public void setPos(Vector pos) {
 		this.pos = pos;
 	}
@@ -58,23 +60,33 @@ public abstract class EntityModel extends Observable {
 		this.masse = masse;
 	}
 
-	public void updatePosition() {
-		updateVelocity();
-		pos.setY(pos.getY()+vel.getX());
-		pos.setX(pos.getX()+vel.getY());
-		setChanged();
-		notifyObservers();
-	}
+	public abstract void updatePosition(EntityModel model);
 	
-	private void updateVelocity() {
-		updateAcceleration();
+	protected void updateVelocity(EntityModel entity) {
+		updateAcceleration(entity);
 		vel.setX(vel.getX()+acc.getX());
 		vel.setY(vel.getY()+acc.getY());
 	}
 	
-	private void updateAcceleration() {
-		acc.setX(0.00002);
-		acc.setY(-0.00005);
+	private void updateAcceleration(Set<EntityController> entities) {
+		Vector force = new Vector(0,0);
+		for(EntityController ec : entities) {
+			if(ec.getEntityModel() != this) {
+				force.add(getForce(ec.getEntityModel()));
+			}
+		}
+		
+		
+	}
+	
+	private Vector getForce(EntityModel entity) {
+		Vector distance = entity.getPos().minus(this.getPos());
+		double forceMagnitude = getForceMagnitude(entity);
+		return new Vector(forceMagnitude * distance.getCosine(), forceMagnitude * distance.getSine());
+	}
+	
+	private double getForceMagnitude(EntityModel entity) {
+		return SpaceY.gravite*this.masse*entity.getMasse()/Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
 	}
 	
 	

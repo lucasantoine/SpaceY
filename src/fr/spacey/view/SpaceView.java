@@ -3,7 +3,6 @@ package fr.spacey.view;
 import java.util.Observable;
 import java.util.Observer;
 
-import fr.spacey.controller.EntityController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.models.entities.EntityModel;
 import javafx.event.EventHandler;

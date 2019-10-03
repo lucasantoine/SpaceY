@@ -5,6 +5,7 @@ import java.util.Observer;
 import java.util.Set;
 
 import fr.spacey.models.entities.EntityModel;
+import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.view.SpaceView;
 
 public class SpaceController implements Runnable {
@@ -38,7 +39,7 @@ public class SpaceController implements Runnable {
 		sv.printBackground();
 		for(EntityController ec : entities) {
 			EntityModel em = ec.getEntityModel();
-			em.updatePosition();
+			em.updatePosition(entities);
 		}
 	}
 }

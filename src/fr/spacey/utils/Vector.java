@@ -2,10 +2,11 @@ package fr.spacey.utils;
 
 /**
  * Position dans l'espace avec deux coordonnées x et y
+ * 
  * @author Benoit
  */
 public class Vector {
-	
+
 	private double x, y;
 
 	public Vector(double x, double y) {
@@ -20,7 +21,13 @@ public class Vector {
 	public double getY() {
 		return y;
 	}
-	
+
+	public void setPos(Vector v) {
+		this.setX(v.x);
+		this.setY(v.y);
+
+	}
+
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -43,10 +50,33 @@ public class Vector {
 		return true;
 	}
 
+	public Vector add(Vector v) {
+		return new Vector(this.x + v.x, this.y + v.y);
+	}
+
+	public Vector minus(Vector v) {
+		return new Vector(this.x - v.x, this.y - v.y);
+	}
+
+	public double getDistanceTo(Vector v) {
+		return Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2));
+	}
+
+	public double getMagnitude() {
+		return Math.sqrt(x * x + y * y);
+	}
+
+	public double getCosine() {
+		return x / getMagnitude();
+	}
+
+	public double getSine() {
+		return y / getMagnitude();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		return sb.append('[').append(x).append(';')
-				.append(y).append(']').toString();
+		return sb.append('[').append(x).append(';').append(y).append(']').toString();
 	}
 }
