@@ -1,18 +1,10 @@
 package fr.spacey;
 
-<<<<<<< HEAD
 import java.util.Set;
-=======
-import java.util.List;
->>>>>>> refs/heads/Lucas
 
 import fr.spacey.controller.SpaceController;
-<<<<<<< HEAD
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
-=======
-import fr.spacey.models.entities.EntityModel;
->>>>>>> refs/heads/Lucas
 import fr.spacey.utils.AstroParser;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
