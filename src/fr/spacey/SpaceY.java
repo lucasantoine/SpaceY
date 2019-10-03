@@ -1,9 +1,10 @@
 package fr.spacey;
 
-import java.util.List;
+import java.util.Set;
 
 import fr.spacey.controller.SpaceController;
-import fr.spacey.models.entities.EntityModel;
+import fr.spacey.model.SpaceModel;
+import fr.spacey.model.entity.Entity;
 import fr.spacey.utils.AstroParser;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
@@ -23,30 +24,24 @@ public class SpaceY extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		/* ENTITIES */
 		
-		List<EntityModel> entities = AstroParser.loadAstroFile("res/exemple.astro");
+		/* ENTITIES */
+		Set<Entity> entities = AstroParser.loadAstroFile("res/exemple.astro");
+		for(Entity e : entities) e.toggleInfo();
 		
 		/* MODELES */
+		SpaceModel sm = new SpaceModel(entities);
 
 		/* CONTROLEURS */
-		SpaceController sc = new SpaceController();
+		SpaceController sc = new SpaceController(sm);
 		
 		/* VUES */
 		SpaceView sv = new SpaceView(sc);
-		sc.setView(sv);
-		
-		/* START */
-		//sc.addEntityModel(soleil, sv);
-		//sc.addEntityModel(asteroid, sv);
-		for (EntityModel entityModel : entities) {
-			sc.addEntityModel(entityModel, sv);
-		}
-
 		sv.start(stage);
-		isRunning = true;
-		dt = 1;
-		rayon = 1000;
+		
+		this.isRunning = true;
+		this.dt = 1;
+		this.rayon = 1000;
 
 		renderThread = new Thread(new Runnable() {
 			@Override
@@ -69,13 +64,14 @@ public class SpaceY extends Application {
 					lastTime = now;
 					
 					if(delta >= 1) {
-						Platform.runLater(sc);
+						Platform.runLater(sv);
 						ticks++;
 						delta--;
 					}
 					 
 					if(timer >= dt*1000) {
 						//System.out.println("Application gravitationelle (dt="+dt+")");
+						sm.update();
 						ticks = 0;
 						timer = 0;
 					}

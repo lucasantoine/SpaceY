@@ -1,4 +1,4 @@
-package fr.spacey.models.entities.types;
+package fr.spacey.model.entity;
 
 import fr.spacey.exceptions.TypeUnknownException;
 

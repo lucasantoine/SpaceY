@@ -1,27 +1,26 @@
-package fr.spacey.models.entities;
+package fr.spacey.model.entity;
 
-import java.util.Observable;
+import java.util.Set;
 
-import fr.spacey.models.entities.types.EntityType;
 import fr.spacey.utils.Position;
 import fr.spacey.utils.Velocity;
 
-public abstract class EntityModel extends Observable {
-	
-	/* NE PAS OUBLIER setChanged() et notifyObservers() */
+public abstract class Entity {
 	
 	private final String NAME;
 	private final EntityType TYPE;
 	private double masse;
 	private Position pos;
 	private Velocity vel;
+	private boolean showInfo;
 	
-	public EntityModel(String name, EntityType type, double masse, Position pos, Velocity vel) {
+	public Entity(String name, EntityType type, double masse, Position pos, Velocity vel) {
 		this.TYPE = type;
 		this.NAME = name;
 		this.masse = masse;
 		this.pos = pos;
 		this.vel = vel;
+		this.showInfo = false;
 	}
 	
 	public String getName() {
@@ -59,7 +58,17 @@ public abstract class EntityModel extends Observable {
 	public void updatePosition() {
 		pos.setY(pos.getY()+vel.getX());
 		pos.setX(pos.getX()+vel.getY());
-		setChanged();
-		notifyObservers();
+	}
+
+	public void applyMotion(Set<Entity> entities) {
+		
+	}
+
+	public void toggleInfo() {
+		this.showInfo = !this.showInfo;
+	}
+	
+	public boolean isShowInfo() {
+		return this.showInfo;
 	}
 }
