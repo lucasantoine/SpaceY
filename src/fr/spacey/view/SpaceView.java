@@ -102,13 +102,13 @@ public class SpaceView implements Observer, Runnable {
 
 			gc.setFill(Color.RED);
 			gc.fillOval(planetX, planetY, 
-					e.getMasse(), e.getMasse());
+					e.getRadius(), e.getRadius());
 
 			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
-		        double startDescX = planetX+e.getMasse()+25, 
-		        	   startDescY = planetY+e.getMasse()+25;
-				
+		         double startDescX = planetX+e.getRadius()+25, 
+		        	   startDescY = planetY+e.getRadius()+25;
+		        
 		        gc.setFill(new Color(.4,.4,.4,0.7));
 				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
 
@@ -117,14 +117,14 @@ public class SpaceView implements Observer, Runnable {
 				gc.fillText(e.getName(), startDescX+5, startDescY+17);
 				
 				gc.setStroke(Color.WHITE);
-				gc.strokeOval(planetX, planetY, e.getMasse(), e.getMasse());
+				gc.strokeOval(planetX, planetY, e.getRadius(), e.getRadius());
 		        gc.setLineWidth(1);
-				gc.strokeLine(planetX+e.getMasse()+3, planetY+e.getMasse()+3,
+				gc.strokeLine(planetX+e.getRadius()+3, planetY+e.getRadius()+3,
 						startDescX-5, startDescY-5);
 				
 				gc.setFill(Color.LIGHTGRAY);
 				gc.setFont(new Font(10));
-				gc.fillText("Masse: "+e.getMasse(), startDescX+5, startDescY+30);
+				gc.fillText("Masse: "+e.getRadius(), startDescX+5, startDescY+30);
 				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+5, startDescY+40);
 			}
 
