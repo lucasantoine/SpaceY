@@ -1,11 +1,14 @@
 package fr.spacey.view;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.Simule;
+import fr.spacey.utils.Vector;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -15,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 /**
  * 
  * @author ItsPower
@@ -23,12 +27,12 @@ import javafx.stage.Stage;
 public class SpaceView implements Observer, Runnable {
 
 	private SpaceController sc;
-	
+
 	/* VARIABLES GRAPHIQUES */
 	private Canvas can;
 	public Pane pane;
 	private GraphicsContext gc;
-	
+
 	/* VARIABLES DE CANVAS */
 	private double xOffset;
 	private double yOffset;
@@ -38,7 +42,7 @@ public class SpaceView implements Observer, Runnable {
 	protected double startSceneX;
 	protected double startSceneY;
 	private double zoom;
-	
+
 	public SpaceView(SpaceController sc) {
 		this.sc = sc;
 		this.pane = new Pane();
@@ -46,11 +50,11 @@ public class SpaceView implements Observer, Runnable {
 		this.height = 720;
 		this.can = new Canvas(width, height);
 		this.gc = can.getGraphicsContext2D();
-		this.xOffset = width/2;
-		this.yOffset = height/2;
+		this.xOffset = width / 2;
+		this.yOffset = height / 2;
 		this.zoom = 1;
 		this.pane.getChildren().add(can);
-		
+
 		pane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -65,17 +69,17 @@ public class SpaceView implements Observer, Runnable {
 			xOffset = startSceneX + e.getSceneX() - startDragX;
 			yOffset = startSceneY + e.getSceneY() - startDragY;
 		});
-		
+
 		pane.setOnScroll(e -> {
-			double valeur = e.getDeltaY()>0?0.1:-0.1;
-			if(this.zoom+valeur > 0.5 && this.zoom+valeur < 2) 
+			double valeur = e.getDeltaY() > 0 ? 0.1 : -0.1;
+			if (this.zoom + valeur > 0.5 && this.zoom + valeur < 2)
 				this.zoom += valeur;
 		});
 	}
 
 	@Override
 	public void update(Observable obs, Object obj) {
-	
+
 	}
 
 	public void printBackground() {
@@ -83,7 +87,7 @@ public class SpaceView implements Observer, Runnable {
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 	}
-		
+
 	@Override
 	public void run() {
 
@@ -91,71 +95,78 @@ public class SpaceView implements Observer, Runnable {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
-		
+
 		// ZOOM
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
-		
-		//ENTITES
-		for(Entity e : sc.getModel().getEntities()) {
-			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
-			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
+
+		// ENTITES
+		for (Entity e : sc.getModel().getEntities()) {
+			double planetX = e.getPos().getX() + xOffset - e.getRadius() / 2;
+			double planetY = e.getPos().getY() + yOffset - e.getRadius() / 2;
+
+			// TRAINEE
+			if (e instanceof Simule) {
+				try {
+					@SuppressWarnings("unchecked")
+					LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
+					for (Vector v : ll) {
+						gc.setFill(Color.WHITE);
+						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 1, 1);
+					}
+				} catch (NullPointerException exc) {
+				}
+
+			}
 
 			gc.setFill(Color.RED);
-			gc.fillOval(planetX, planetY, 
-					e.getRadius(), e.getRadius());
+			gc.fillOval(planetX, planetY, e.getRadius(), e.getRadius());
 
-			//INFOS SUR ENTITE
-			if(e.isShowInfo()) {
-		         double startDescX = planetX+e.getRadius()+25, 
-		        	   startDescY = planetY+e.getRadius()+25;
-		        
-		        gc.setFill(new Color(.4,.4,.4,0.7));
+			// INFOS SUR ENTITE
+			if (e.isShowInfo()) {
+				double startDescX = planetX + e.getRadius() + 25, startDescY = planetY + e.getRadius() + 25;
+
+				gc.setFill(new Color(.4, .4, .4, 0.7));
 				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
 
 				gc.setFill(Color.RED);
-		        gc.setFont(new Font(16));
-				gc.fillText(e.getName(), startDescX+5, startDescY+17);
-				
+				gc.setFont(new Font(16));
+				gc.fillText(e.getName(), startDescX + 5, startDescY + 17);
+
 				gc.setStroke(Color.WHITE);
 				gc.strokeOval(planetX, planetY, e.getRadius(), e.getRadius());
-		        gc.setLineWidth(1);
-				gc.strokeLine(planetX+e.getRadius()+3, planetY+e.getRadius()+3,
-						startDescX-5, startDescY-5);
-				
+				gc.setLineWidth(1);
+				gc.strokeLine(planetX + e.getRadius() + 3, planetY + e.getRadius() + 3, startDescX - 5, startDescY - 5);
+
 				gc.setFill(Color.LIGHTGRAY);
 				gc.setFont(new Font(10));
-				gc.fillText("Masse: "+e.getRadius(), startDescX+5, startDescY+30);
-				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+5, startDescY+40);
+				gc.fillText("Masse: " + e.getRadius(), startDescX + 5, startDescY + 30);
+				gc.fillText("Pos: " + e.getPos().toStringRounded(), startDescX + 5, startDescY + 40);
 			}
 
 		}
 
-		//COORD EN HAUT DE GAUCHE
+		// COORD EN HAUT DE GAUCHE
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFont(new Font(17));
+
 		SpaceY inst = SpaceY.getInstance();
 		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
-		
-		gc.setFill(new Color(.1,.1,.1,0.9));
-		gc.fillRoundRect(relatX-5, 5-relatY, 130, 100, 10, 10);
-		
+
+		gc.setFill(new Color(.1, .1, .1, 0.9));
+		gc.fillRoundRect(relatX - 5, 5 - relatY, 130, 100, 10, 10);
+
 		gc.setFill(Color.WHITE);
-		gc.fillText("Pos: ["+(int)(xOffset-width/2)+","+(int)(yOffset-height/2)+']', 
-				relatX, 25 - relatY);
+		gc.fillText("Pos: [" + (int) (xOffset - width / 2) + "," + (int) (yOffset - height / 2) + ']', relatX,
+				25 - relatY);
 
-		gc.fillText("G: "+inst.gravite, 
-				relatX, 43 - relatY);
-		
-		gc.fillText("dt: "+inst.dt, 
-				relatX, 62 - relatY);
-		
-		gc.fillText("fa: "+inst.fa, 
-				relatX, 80 - relatY);
-		
-		gc.fillText("rayon: "+inst.rayon, 
-				relatX, 97 - relatY);
+		gc.fillText("G: " + inst.gravite, relatX, 43 - relatY);
+
+		gc.fillText("dt: " + inst.dt, relatX, 62 - relatY);
+
+		gc.fillText("fa: " + inst.fa, relatX, 80 - relatY);
+
+		gc.fillText("rayon: " + inst.rayon, relatX, 97 - relatY);
 	}
-
 
 	public void start(Stage s) {
 		s.setTitle("SpaceY");

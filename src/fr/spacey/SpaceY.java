@@ -45,7 +45,7 @@ public class SpaceY extends Application {
 		SpaceView sv = new SpaceView(sc);
 		sv.start(stage);
 		
-		this.dt = 0.0001;
+		this.dt = 0.00001;
 		this.rayon = 1000;
 
 		renderThread = new Thread(new Runnable() {
