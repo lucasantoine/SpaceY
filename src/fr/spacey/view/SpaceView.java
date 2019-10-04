@@ -1,11 +1,14 @@
 package fr.spacey.view;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.Simule;
+import fr.spacey.utils.Vector;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -95,7 +98,21 @@ public class SpaceView implements Observer {
 			double planetX = e.getPos().getX()+xOffset-e.getRadius()/2;
 			double planetY = e.getPos().getY()+yOffset-e.getRadius()/2;
 
-			gc.setFill(Color.RED);
+			// TRAINEE
+			if (e instanceof Simule) {
+				try {
+					@SuppressWarnings("unchecked")
+					LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
+					for (Vector v : ll) {
+						gc.setFill(Color.WHITE);
+						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 1, 1);
+					}
+				} catch (NullPointerException exc) {
+				}
+
+			}
+
+			//gc.setFill(Color.RED);
 			gc.drawImage(e.getImage(), planetX, planetY, e.getRadius(), e.getRadius());
 			//gc.fillOval(planetX, planetY, 
 			//		e.getRadius(), e.getRadius());

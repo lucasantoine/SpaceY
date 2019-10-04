@@ -31,7 +31,7 @@ public class SpaceController {
 				int ticks = 0;
 				
 				while(instanceY.isRunning) {
-					System.out.println(now+" "+delta+" "+timer+" "+lastTime+" "+ticks);
+					//System.out.println(now+" "+delta+" "+timer+" "+lastTime+" "+ticks);
 					
 					now = System.currentTimeMillis();
 					delta += (now - lastTime) / timePerTick;

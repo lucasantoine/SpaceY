@@ -9,7 +9,6 @@ import fr.spacey.utils.AstroParser;
 import fr.spacey.utils.ImageLoader;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SpaceY extends Application {
@@ -54,6 +53,7 @@ public class SpaceY extends Application {
 		instance.rayon = 1000;
 		
 		sc.initRender();
+		
 	}
 	
 	public static SpaceY getInstance() {
