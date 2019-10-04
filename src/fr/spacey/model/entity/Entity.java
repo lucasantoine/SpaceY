@@ -24,7 +24,7 @@ public abstract class Entity {
 		this.vel = vel;
 		this.showInfo = false;
 		this.acc = new Vector(0, 0);
-		this.radius = 20;
+		this.radius = masse * 10;
 	}
 	
 	public double getRadius() {

@@ -11,7 +11,7 @@ public class Vaisseau extends Entity {
 	
 	public Vaisseau(String name, EntityType type, double masse, Vector pos, Vector vel, double pprincipal, double pretro) {
 		super(name, type, masse, pos, vel);
-		super.radius = 1;
+		super.radius = masse * 100;
 		this.pprincipal = pprincipal;
 		this.pretro = pretro;
 	}
