@@ -14,8 +14,6 @@ public class Simule extends Entity {
 		trail = new LinkedList<>();
 	}
 	
-	
-
 	public LinkedList<Vector> getTrail() {
 		return trail;
 	}
