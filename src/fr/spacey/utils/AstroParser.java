@@ -37,7 +37,6 @@ public class AstroParser {
 						values = line.split(":");
 						String name = values[0];
 						values = values[1].split(" ");
-						System.out.println(values[1]);
 						EntityType entityType = EntityType.getByName(values[1]);
 						switch (entityType) {
 						case FIXE:

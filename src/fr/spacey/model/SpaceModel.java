@@ -17,10 +17,15 @@ public class SpaceModel extends Observable {
 		return entities;
 	}
 	
-	public void update() {
+	public void update() { // confus sur le nom de la methode
 		for(Entity e : entities) {
 			e.updatePosition(entities);
 		}
+		setChanged();
+		notifyObservers();
+	}
+
+	public void askForRender() {
 		setChanged();
 		notifyObservers();
 	}

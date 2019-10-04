@@ -3,7 +3,9 @@ package fr.spacey.model.entity;
 import java.util.Set;
 
 import fr.spacey.SpaceY;
+import fr.spacey.utils.ImageLoader;
 import fr.spacey.utils.Vector;
+import javafx.scene.image.Image;
 
 public abstract class Entity {
 	
@@ -15,6 +17,7 @@ public abstract class Entity {
 	private Vector acc;
 	private boolean showInfo;
 	protected double radius;
+	private Image img;
 	
 	public Entity(String name, EntityType type, double masse, Vector pos, Vector vel) {
 		this.TYPE = type;
@@ -25,6 +28,7 @@ public abstract class Entity {
 		this.showInfo = false;
 		this.acc = new Vector(0, 0);
 		this.radius = 20;
+		this.img = ImageLoader.MERCURE;
 	}
 	
 	public double getRadius() {
@@ -70,6 +74,14 @@ public abstract class Entity {
 	}
 	public boolean isShowInfo() {
 		return this.showInfo;
+	}
+
+	public Image getImage() {
+		return img;
+	}
+
+	public void setImg(Image img) {
+		this.img = img;
 	}
 
 	protected void updateVelocity(Set<Entity> entities) {

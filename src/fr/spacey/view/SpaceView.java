@@ -1,7 +1,13 @@
 package fr.spacey.view;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.imageio.ImageIO;
+
+import com.sun.javafx.tk.Toolkit;
 
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
@@ -10,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -20,7 +28,7 @@ import javafx.stage.Stage;
  * @author ItsPower
  *
  */
-public class SpaceView implements Observer, Runnable {
+public class SpaceView implements Observer {
 
 	private SpaceController sc;
 	
@@ -50,7 +58,7 @@ public class SpaceView implements Observer, Runnable {
 		this.yOffset = height/2;
 		this.zoom = 1;
 		this.pane.getChildren().add(can);
-		
+		this.sc.register(this);
 		pane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -73,20 +81,15 @@ public class SpaceView implements Observer, Runnable {
 		});
 	}
 
-	@Override
-	public void update(Observable obs, Object obj) {
-	
-	}
-
 	public void printBackground() {
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
 		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
 	}
-		
+	
 	@Override
-	public void run() {
-
+	public void update(Observable obs, Object obj) {
+		
 		// FOND DECRAN
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
@@ -97,12 +100,13 @@ public class SpaceView implements Observer, Runnable {
 		
 		//ENTITES
 		for(Entity e : sc.getModel().getEntities()) {
-			double planetX = e.getPos().getX()+xOffset-e.getMasse()/2;
-			double planetY = e.getPos().getY()+yOffset-e.getMasse()/2;
+			double planetX = e.getPos().getX()+xOffset-e.getRadius()/2;
+			double planetY = e.getPos().getY()+yOffset-e.getRadius()/2;
 
 			gc.setFill(Color.RED);
-			gc.fillOval(planetX, planetY, 
-					e.getRadius(), e.getRadius());
+			gc.drawImage(e.getImage(), planetX, planetY, e.getRadius(), e.getRadius());
+			//gc.fillOval(planetX, planetY, 
+			//		e.getRadius(), e.getRadius());
 
 			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
@@ -155,7 +159,6 @@ public class SpaceView implements Observer, Runnable {
 		gc.fillText("rayon: "+inst.rayon, 
 				relatX, 97 - relatY);
 	}
-
 
 	public void start(Stage s) {
 		s.setTitle("SpaceY");
