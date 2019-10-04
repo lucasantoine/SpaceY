@@ -6,16 +6,16 @@ import fr.spacey.SpaceY;
 import fr.spacey.utils.Vector;
 
 public abstract class Entity {
-
+	
 	private final String NAME;
 	private final EntityType TYPE;
 	private double masse;
 	private Vector pos;
 	private Vector vel;
 	private Vector acc;
-	protected double radius;
 	private boolean showInfo;
-
+	protected double radius;
+	
 	public Entity(String name, EntityType type, double masse, Vector pos, Vector vel) {
 		this.TYPE = type;
 		this.NAME = name;
@@ -30,7 +30,7 @@ public abstract class Entity {
 	public double getRadius() {
 		return this.radius;
 	}
-
+	
 	public String getName() {
 		return NAME;
 	}
@@ -58,7 +58,7 @@ public abstract class Entity {
 	public double getMasse() {
 		return masse;
 	}
-
+	
 	public void setMasse(double masse) {
 		this.masse = masse;
 	}
@@ -68,7 +68,6 @@ public abstract class Entity {
 	public void toggleInfo() {
 		this.showInfo = !this.showInfo;
 	}
-
 	public boolean isShowInfo() {
 		return this.showInfo;
 	}
@@ -97,6 +96,6 @@ public abstract class Entity {
 	}
 
 	private double getForceMagnitude(Entity entity) {
-		return SpaceY.gravite * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
+		return SpaceY.getInstance().gravite * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
 	}
 }

@@ -20,7 +20,7 @@ public class SpaceY extends Application {
 	
 	public boolean isRunning = false;
 	public double dt;
-	public static double gravite;
+	public double gravite;
 	public double rayon;
 	public double fa;
 
@@ -33,7 +33,7 @@ public class SpaceY extends Application {
 		
 		// ENTITIES
 		Set<Entity> entities = AstroParser.loadAstroFile("res/exemple.astro");
-		for(Entity e : entities) e.toggleInfo();
+		//for(Entity e : entities) e.toggleInfo();
 		
 		// MODELES
 		SpaceModel sm = new SpaceModel(entities);
