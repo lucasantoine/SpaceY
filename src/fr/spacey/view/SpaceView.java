@@ -1,13 +1,7 @@
 package fr.spacey.view;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.imageio.ImageIO;
-
-import com.sun.javafx.tk.Toolkit;
 
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
@@ -16,8 +10,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

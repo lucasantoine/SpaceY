@@ -25,12 +25,8 @@ public class SpaceY extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		instance.isRunning = true;
-		instance.dt = 0.0025;
-		instance.rayon = 1000;
 		
 		// ENTITIES
-		
 		Set<Entity> entities = AstroParser.loadAstroFile("res/exemple.astro");
 		for(Entity e : entities) {
 			e.toggleInfo();
@@ -52,6 +48,10 @@ public class SpaceY extends Application {
 		// VUES
 		SpaceView sv = new SpaceView(sc);
 		sv.start(stage);
+
+		instance.isRunning = true;
+		instance.dt = 0.00001;
+		instance.rayon = 1000;
 		
 		sc.initRender();
 	}
