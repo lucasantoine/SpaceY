@@ -49,7 +49,7 @@ public class SpaceController {
 
 							@Override
 							public void run() {
-								sm.update();
+								sm.updatePositions();
 							}
 							
 						});

@@ -26,7 +26,7 @@ public class SpaceY extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		// ENTITIES
-		Set<Entity> entities = AstroParser.loadAstroFile("res/exemple.astro");
+		Set<Entity> entities = AstroParser.loadAstroFile("res/systemes/test.astro");
 		for(Entity e : entities) {
 			e.toggleInfo();
 			if(e.getName().equalsIgnoreCase("SOLEIL")) {
@@ -35,6 +35,12 @@ public class SpaceY extends Application {
 				e.setImg(ImageLoader.JUPITER);
 			} else if(e.getName().equalsIgnoreCase("TERRE")) {
 				e.setImg(ImageLoader.TERRE);
+			} else if(e.getName().equalsIgnoreCase("VENUS")) {
+				e.setImg(ImageLoader.VENUS);
+			} else if(e.getName().equalsIgnoreCase("LUNE")) {
+				e.setImg(ImageLoader.LUNE);
+			} else {
+				e.setImg(ImageLoader.MERCURE);
 			}
 		}
 		
@@ -51,6 +57,7 @@ public class SpaceY extends Application {
 		instance.isRunning = true;
 		instance.dt = 0.00001;
 		instance.rayon = 1000;
+		instance.gravite = 0.01;
 		
 		sc.initRender();
 		

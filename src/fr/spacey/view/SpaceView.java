@@ -104,8 +104,8 @@ public class SpaceView implements Observer {
 					@SuppressWarnings("unchecked")
 					LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
 					for (Vector v : ll) {
-						gc.setFill(Color.WHITE);
-						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 1, 1);
+						gc.setFill(Color.GREY);
+						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 2, 2);
 					}
 				} catch (NullPointerException exc) {
 				}

@@ -17,7 +17,7 @@ public class SpaceModel extends Observable {
 		return entities;
 	}
 	
-	public void update() { // confus sur le nom de la methode
+	public void updatePositions() {
 		for(Entity e : entities) {
 			e.updatePosition(entities);
 		}
