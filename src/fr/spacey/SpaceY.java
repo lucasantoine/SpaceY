@@ -20,7 +20,7 @@ public class SpaceY extends Application {
 	
 	public boolean isRunning = false;
 	public double dt;
-	public static double gravite;
+	public double gravite;
 	public double rayon;
 	public double fa;
 

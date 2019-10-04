@@ -91,6 +91,6 @@ public abstract class Entity {
 	}
 	
 	private double getForceMagnitude(Entity entity) {
-		return SpaceY.gravite*this.masse*entity.getMasse()/Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
+		return SpaceY.getInstance().gravite*this.masse*entity.getMasse()/Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
 	}
 }
