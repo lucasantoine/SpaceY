@@ -31,6 +31,6 @@ public class Simule extends Entity {
 			this.timeForTrail = 0;
 		}
 		super.updateVelocity(entities);
-		super.getPos().setPos(this.getPos().add(getVel()));
+		super.getPos().setVector(this.getPos().add(getVel()));
 	}
 }

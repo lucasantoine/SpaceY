@@ -86,7 +86,7 @@ public abstract class Entity {
 
 	protected void updateVelocity(Set<Entity> entities) {
 		updateAcceleration(entities);
-		vel.setPos(vel.add(acc));
+		vel.setVector(vel.add(acc));
 	}
 
 	private void updateAcceleration(Set<Entity> entities) {
@@ -94,11 +94,11 @@ public abstract class Entity {
 		for (Entity e : entities) {
 			if(e != this) {
 				Vector v = getForce(e);
-				force.setPos(force.add(v));
+				force.setVector(force.add(v));
 			}
 			
 		}
-		acc.setPos(force.getX() / this.masse, force.getY() / this.masse);
+		acc.setVector(force.getX() / this.masse, force.getY() / this.masse);
 	}
 
 	private Vector getForce(Entity entity) {
