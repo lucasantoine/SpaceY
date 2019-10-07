@@ -11,17 +11,29 @@ import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * SpaceY - IUT A of Lille - 3rd Semester
+ * 
+ * Classe main qui génère le modèle MVC et
+ * démarre la simulation.
+ * 
+ * @author BARBIER Benoit
+ * @Since 24 sept 2019
+ */
 public class SpaceY extends Application {
 	private static SpaceY instance = new SpaceY();
 	
-	public boolean isRunning = false;
-	public double dt;
-	public double gravite;
-	public double rayon;
-	public double fa;
+	private boolean isRunning = false;
+	private double dt;
+	private double gravite;
+	private double rayon;
+	private double fa;
 
-	private Thread renderThread;
-
+	/**
+	 * Fonction de démarrage de l'Application
+	 * 
+	 * @return Le premier stage initialisé par JavaFX
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
 		
@@ -63,10 +75,68 @@ public class SpaceY extends Application {
 		
 	}
 	
+	/**
+	 * getter to know is the simulation is currently running
+	 * 
+	 * @author Benoit
+	 */
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	/**
+	 * getter to get the current time value of the simulation
+	 * 
+	 * @author Benoit
+	 */
+	public double getDt() {
+		return dt;
+	}
+
+	/**
+	 * getter to get the current gravity constant
+	 * 
+	 * @author Benoit
+	 */
+	public double getG() {
+		return gravite;
+	}
+
+	/**
+	 * getter to get the length of the simulation
+	 * 
+	 * @author Benoit
+	 */
+	public double getRayon() {
+		return rayon;
+	}
+
+
+	/**
+	 * getter to get the acceleration value
+	 * 
+	 * @author Benoit
+	 */
+	public double getFa() {
+		return fa;
+	}
+
+	/**
+	 * Singleton of the simulation
+	 * 
+	 * @author Benoit
+	 */
 	public static SpaceY getInstance() {
 		return instance;
 	}
 	
+
+	/**
+	 * main function to start the java application
+	 * 
+	 * @param array of arguments while starting the java app
+	 * @author Benoit
+	 */
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
