@@ -29,10 +29,10 @@ public class AstroParser {
 				if(!line.startsWith("#")) {
 					if(line.startsWith("PARAMS")) {
 						values = line.split(" ");
-						SpaceY.getInstance().gravite = Double.valueOf(values[1].split("=")[1]);
-						SpaceY.getInstance().dt = Double.valueOf(values[2].split("=")[1]);
-						SpaceY.getInstance().fa = Double.valueOf(values[3].split("=")[1]);
-						SpaceY.getInstance().rayon = Double.valueOf(values[4].split("=")[1]);
+						SpaceY.getInstance().setG(Double.valueOf(values[1].split("=")[1]));
+						SpaceY.getInstance().setDt(Double.valueOf(values[2].split("=")[1]));
+						SpaceY.getInstance().setFa(Double.valueOf(values[3].split("=")[1]));
+						SpaceY.getInstance().setRayon(Double.valueOf(values[4].split("=")[1]));
 					}else if(line.contains(":")) {
 						values = line.split(":");
 						String name = values[0];

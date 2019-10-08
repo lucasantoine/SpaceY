@@ -92,6 +92,19 @@ public class SpaceY extends Application {
 	public double getDt() {
 		return dt;
 	}
+	
+
+	public void setDt(double dt) {
+		this.dt = dt;
+	}
+
+	public void setRayon(double rayon) {
+		this.rayon = rayon;
+	}
+
+	public void setFa(double fa) {
+		this.fa = fa;
+	}
 
 	/**
 	 * getter to get the current gravity constant
@@ -100,6 +113,10 @@ public class SpaceY extends Application {
 	 */
 	public double getG() {
 		return gravite;
+	}
+
+	public void setG(Double v) {
+		this.gravite = v;
 	}
 
 	/**

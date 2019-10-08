@@ -33,9 +33,13 @@ public class SpaceView implements Observer {
 	private GraphicsContext gc;
 	
 	/* VARIABLES DE CANVAS */
+	private double width;
+	private double height;
+	
 	private double xOffset;
 	private double yOffset;
-	private final int width, height;
+	
+	
 	private double startDragX = 0;
 	private double startDragY = 0;
 	protected double startSceneX;
@@ -45,8 +49,8 @@ public class SpaceView implements Observer {
 	public SpaceView(SpaceController sc) {
 		this.sc = sc;
 		this.pane = new Pane();
-		this.width = 1280;
-		this.height = 720;
+		this.width = 1920;
+		this.height = 1080;
 		this.can = new Canvas(width, height);
 		this.gc = can.getGraphicsContext2D();
 		this.xOffset = width/2;
@@ -54,6 +58,7 @@ public class SpaceView implements Observer {
 		this.zoom = 1;
 		this.pane.getChildren().add(can);
 		this.sc.register(this);
+		
 		pane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -74,12 +79,11 @@ public class SpaceView implements Observer {
 			if(this.zoom+valeur > 0.5 && this.zoom+valeur < 2) 
 				this.zoom += valeur;
 		});
-	}
 
-	public void printBackground() {
-		gc.setTransform(1, 0, 0, 1, 0, 0);
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
+        can.widthProperty().bind(pane.widthProperty());
+        can.heightProperty().bind(pane.heightProperty());
+        
+        
 	}
 	
 	@Override
@@ -88,7 +92,7 @@ public class SpaceView implements Observer {
 		// FOND DECRAN
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 0, can.getWidth(), can.getHeight());
+		gc.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 		
 		// ZOOM
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
@@ -156,16 +160,16 @@ public class SpaceView implements Observer {
 		gc.fillText("Pos: ["+(int)(xOffset-width/2)+","+(int)(yOffset-height/2)+']', 
 				relatX, 25 - relatY);
 
-		gc.fillText("G: "+inst.gravite, 
+		gc.fillText("G: "+inst.getG(), 
 				relatX, 43 - relatY);
 		
-		gc.fillText("dt: "+inst.dt, 
+		gc.fillText("dt: "+inst.getDt(), 
 				relatX, 62 - relatY);
 		
-		gc.fillText("fa: "+inst.fa, 
+		gc.fillText("fa: "+inst.getFa(), 
 				relatX, 80 - relatY);
 		
-		gc.fillText("rayon: "+inst.rayon, 
+		gc.fillText("rayon: "+inst.getRayon(), 
 				relatX, 97 - relatY);
 	}
 
@@ -174,6 +178,7 @@ public class SpaceView implements Observer {
 		s.setScene(new Scene(pane, width, height));
 		s.setResizable(true);
 		s.setFullScreen(false);
+		s.setMaximized(true);
 		s.show();
 	}
 }
