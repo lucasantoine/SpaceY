@@ -72,6 +72,7 @@ public abstract class Entity {
 	public void toggleInfo() {
 		this.showInfo = !this.showInfo;
 	}
+	
 	public boolean isShowInfo() {
 		return this.showInfo;
 	}
@@ -99,6 +100,10 @@ public abstract class Entity {
 			
 		}
 		acc.setVector(force.getX() / this.masse, force.getY() / this.masse);
+	}
+	
+	public Vector getAcc() {
+		return acc;
 	}
 
 	private Vector getForce(Entity entity) {

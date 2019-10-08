@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.sun.javafx.scene.paint.GradientUtils;
-
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.entity.Entity;
@@ -22,6 +20,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 /**
@@ -155,8 +156,12 @@ public class SpaceView implements Observer {
 				
 				gc.setFill(Color.LIGHTGRAY);
 				gc.setFont(new Font("pixelmix regular", 10));
-				gc.fillText("Masse: "+e.getRadius(), startDescX+5, startDescY+30);
-				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+5, startDescY+40);
+				gc.fillText("Type: "+e.getType().NOM, startDescX+15, startDescY+30);
+				gc.fillText("Masse: "+(int)e.getMasse(), startDescX+15, startDescY+42);
+				gc.fillText("Rayon: "+(int)e.getRadius(), startDescX+15, startDescY+54);
+				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+15, startDescY+66);
+				gc.fillText("Vel: "+e.getVel().toStringRounded(2), startDescX+15, startDescY+78);
+				gc.fillText("Acc: "+e.getAcc().toStringRounded(3), startDescX+15, startDescY+90);
 			}
 		}
 
@@ -195,13 +200,30 @@ public class SpaceView implements Observer {
 			gc.setStroke(new Color(0.6,0.6,0.6,1));
 			gc.strokeOval(relatX+27.5, height-192.5-relatY, 145, 145);
 			
-			// HUD BARRES VAISSEAU
-			// ancienne couleur bleu gc.setStroke(new Color(0,0.5,0.9,1));
+			
+			// HUD BARRES VAISSEAU ACCELERATION
 			gc.fillRoundRect(relatX+150, height-135-relatY, 200, 35, 20, 20);
 			gc.strokeRoundRect(relatX+155, height-130-relatY, 190, 25, 20, 20);
-			
+
+			Stop[] stops = new Stop[] { new Stop(0, Color.YELLOW), new Stop(1, Color.RED)};
+			gc.setFill(new LinearGradient(relatX+158, height-127-relatY, relatX+342, height-108-relatY, false, CycleMethod.NO_CYCLE, stops));
+			gc.fillRoundRect(relatX+158, height-127-relatY, sc.getModel().getVaisseau().getPropPrincipal()*184, 19, 15, 15);
+
+			// HUD BARRES VAISSEAU FUEL
+			gc.setFill(new Color(.3,.3,.3,1));
 			gc.fillRoundRect(relatX+130, height-90-relatY, 200, 35, 20, 20);
 			gc.strokeRoundRect(relatX+135, height-85-relatY, 190, 25, 20, 20);
+			
+			double val = (sc.getModel().getVaisseau().getFuel()*100/sc.getModel().getVaisseau().getTankSize())/100;
+			Color col = new Color(1,1,0,1);
+			if(val > 0.75) {
+				col = new Color(0,1,0,1);
+			} else if(val < 0.25) {
+				col = new Color(1,0,0,1);
+			}
+			gc.setFill(col);
+			gc.fillRoundRect(relatX+138, height-82-relatY, 
+					val*184, 19, 15, 15);
 		}
 	}
 

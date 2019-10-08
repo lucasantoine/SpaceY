@@ -40,7 +40,7 @@ public class SpaceY extends Application {
 		// ENTITIES
 		Set<Entity> entities = AstroParser.loadAstroFile("res/systemes/test.astro");
 		for(Entity e : entities) {
-			e.toggleInfo();
+			//e.toggleInfo();
 			if(e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImg(ImageLoader.SOLEIL);
 			} else if(e.getName().equalsIgnoreCase("JUPITER")) {

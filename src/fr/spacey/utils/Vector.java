@@ -1,5 +1,8 @@
 package fr.spacey.utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * ProjetY - IUT A of Lille - 3rd Semester
  * 
@@ -185,5 +188,18 @@ public class Vector {
 	public String toStringRounded() {
 		StringBuilder sb = new StringBuilder();
 		return sb.append('[').append((int) x).append(';').append((int) y).append(']').toString();
+	}
+	
+	/**
+	 * Returns a string representation of this Vector, containing the String
+	 * representation of each rounded element.
+	 * 
+	 * @return a string representation of this Vector, containing the String
+	 *         representation of each rounded element.
+	 */
+	public String toStringRounded(int i) {
+		StringBuilder sb = new StringBuilder();
+		return sb.append('[').append(new BigDecimal(x).setScale(i, RoundingMode.HALF_EVEN).doubleValue()).append(';')
+				.append(new BigDecimal(y).setScale(i, RoundingMode.HALF_EVEN).doubleValue()).append(']').toString();
 	}
 }

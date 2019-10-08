@@ -22,7 +22,7 @@ public class SpaceController {
 			@Override
 			public void run() {
 				
-				int fps = 60;
+				int fps = 10;
 				double timePerTick = 1000 / fps;
 				double delta = 0;
 				long now = 0;
@@ -50,7 +50,7 @@ public class SpaceController {
 						ticks++;
 						delta--;
 					}
-					 
+					
 					if(instanceY.isRunning() && timer >= instanceY.getDt()*1000) {
 						Platform.runLater(new Runnable() {
 
