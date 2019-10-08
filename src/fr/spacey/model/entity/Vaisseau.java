@@ -4,7 +4,6 @@ import fr.spacey.utils.Vector;
 
 public class Vaisseau extends Simule {
 
-	
 	private double pprincipal;
 	private double pretro;
 	
@@ -13,5 +12,13 @@ public class Vaisseau extends Simule {
 		super.radius = masse * 10000;
 		this.pprincipal = pprincipal;
 		this.pretro = pretro;
+	}
+	
+	public double getPropPrincipal() {
+		return pprincipal;
+	}
+
+	public void setPropPrincipal(double d) {
+		this.pprincipal = d;
 	}
 }

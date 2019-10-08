@@ -30,7 +30,7 @@ public class SpaceController {
 				long timer = 0;
 				int ticks = 0;
 				
-				while(instanceY.isRunning()) {
+				while(true) {
 					//System.out.println(now+" "+delta+" "+timer+" "+lastTime+" "+ticks);
 					
 					now = System.currentTimeMillis();
@@ -39,12 +39,19 @@ public class SpaceController {
 					lastTime = now;
 					
 					if(delta >= 1) {
-						//Platform.runLater(sv);
+						Platform.runLater(new Runnable() {
+
+							@Override
+							public void run() {
+								sm.askForRender();
+							}
+							
+						});
 						ticks++;
 						delta--;
 					}
 					 
-					if(timer >= instanceY.getDt()*1000) {
+					if(instanceY.isRunning() && timer >= instanceY.getDt()*1000) {
 						Platform.runLater(new Runnable() {
 
 							@Override

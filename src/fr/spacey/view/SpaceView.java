@@ -1,8 +1,13 @@
 package fr.spacey.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.sun.javafx.scene.paint.GradientUtils;
 
 import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
@@ -13,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -39,7 +45,6 @@ public class SpaceView implements Observer {
 	private double xOffset;
 	private double yOffset;
 	
-	
 	private double startDragX = 0;
 	private double startDragY = 0;
 	protected double startSceneX;
@@ -49,15 +54,28 @@ public class SpaceView implements Observer {
 	public SpaceView(SpaceController sc) {
 		this.sc = sc;
 		this.pane = new Pane();
-		this.width = 1920;
-		this.height = 1080;
+		this.width = 1600;
+		this.height = 900;
 		this.can = new Canvas(width, height);
 		this.gc = can.getGraphicsContext2D();
 		this.xOffset = width/2;
 		this.yOffset = height/2;
 		this.zoom = 1;
-		this.pane.getChildren().add(can);
+		this.can.setFocusTraversable(true);
 		this.sc.register(this);
+		this.pane.getChildren().add(can);
+		try {
+			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
+			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix_bold.ttf")), 10);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		
+		pane.setOnKeyPressed(e -> {
+			if(e.getCode().equals(KeyCode.SPACE)) {
+				SpaceY.getInstance().toggleRunning();
+			}
+		});
 		
 		pane.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
@@ -111,15 +129,10 @@ public class SpaceView implements Observer {
 						gc.setFill(Color.GREY);
 						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 2, 2);
 					}
-				} catch (NullPointerException exc) {
-				}
-
+				} catch (NullPointerException exc) {}
 			}
 
-			//gc.setFill(Color.RED);
 			gc.drawImage(e.getImage(), planetX, planetY, e.getRadius(), e.getRadius());
-			//gc.fillOval(planetX, planetY, 
-			//		e.getRadius(), e.getRadius());
 
 			//INFOS SUR ENTITE
 			if(e.isShowInfo()) {
@@ -130,21 +143,21 @@ public class SpaceView implements Observer {
 				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
 
 				gc.setFill(Color.RED);
-		        gc.setFont(new Font(16));
+		        gc.setFont(new Font("pixelmix regular", 16));
 				gc.fillText(e.getName(), startDescX+5, startDescY+17);
 				
-				gc.setStroke(Color.WHITE);
+				gc.setStroke(Color.MEDIUMAQUAMARINE);
+				gc.setLineWidth(5);
 				gc.strokeOval(planetX, planetY, e.getRadius(), e.getRadius());
-		        gc.setLineWidth(1);
+				gc.setLineWidth(1);
 				gc.strokeLine(planetX+e.getRadius()+3, planetY+e.getRadius()+3,
 						startDescX-5, startDescY-5);
 				
 				gc.setFill(Color.LIGHTGRAY);
-				gc.setFont(new Font(10));
+				gc.setFont(new Font("pixelmix regular", 10));
 				gc.fillText("Masse: "+e.getRadius(), startDescX+5, startDescY+30);
 				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+5, startDescY+40);
 			}
-
 		}
 
 		//COORD EN HAUT DE GAUCHE
@@ -157,6 +170,7 @@ public class SpaceView implements Observer {
 		gc.fillRoundRect(relatX-5, 5-relatY, 130, 100, 10, 10);
 		
 		gc.setFill(Color.WHITE);
+		gc.setFont(new Font("pixelmix regular", 10));
 		gc.fillText("Pos: ["+(int)(xOffset-width/2)+","+(int)(yOffset-height/2)+']', 
 				relatX, 25 - relatY);
 
@@ -171,14 +185,32 @@ public class SpaceView implements Observer {
 		
 		gc.fillText("rayon: "+inst.getRayon(), 
 				relatX, 97 - relatY);
+		
+		if(sc.getModel().hasVaisseau()) {
+			// HUD ROND VAISSEAU
+			gc.setFill(new Color(.3,.3,.3,1));
+			gc.fillOval(relatX+20, height-200-relatY, 160, 160);
+			
+			gc.setLineWidth(1);
+			gc.setStroke(new Color(0.6,0.6,0.6,1));
+			gc.strokeOval(relatX+27.5, height-192.5-relatY, 145, 145);
+			
+			// HUD BARRES VAISSEAU
+			// ancienne couleur bleu gc.setStroke(new Color(0,0.5,0.9,1));
+			gc.fillRoundRect(relatX+150, height-135-relatY, 200, 35, 20, 20);
+			gc.strokeRoundRect(relatX+155, height-130-relatY, 190, 25, 20, 20);
+			
+			gc.fillRoundRect(relatX+130, height-90-relatY, 200, 35, 20, 20);
+			gc.strokeRoundRect(relatX+135, height-85-relatY, 190, 25, 20, 20);
+		}
 	}
 
 	public void start(Stage s) {
 		s.setTitle("SpaceY");
 		s.setScene(new Scene(pane, width, height));
 		s.setResizable(true);
-		s.setFullScreen(false);
-		s.setMaximized(true);
+		//s.setFullScreen(true);
+		//s.setMaximized(true);
 		s.show();
 	}
 }

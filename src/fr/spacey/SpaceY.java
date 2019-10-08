@@ -157,4 +157,8 @@ public class SpaceY extends Application {
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
+
+	public void toggleRunning() {
+		this.isRunning = !this.isRunning;
+	}
 }
