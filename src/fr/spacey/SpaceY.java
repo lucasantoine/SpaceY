@@ -6,7 +6,7 @@ import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.ImageLoader;
+import fr.spacey.utils.Sprite;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -42,17 +42,17 @@ public class SpaceY extends Application {
 		for(Entity e : entities) {
 			//e.toggleInfo();
 			if(e.getName().equalsIgnoreCase("SOLEIL")) {
-				e.setImg(ImageLoader.SOLEIL);
+				e.setImg(Sprite.SOLEIL.getImage());
 			} else if(e.getName().equalsIgnoreCase("JUPITER")) {
-				e.setImg(ImageLoader.JUPITER);
+				e.setImg(Sprite.JUPITER.getImage());
 			} else if(e.getName().equalsIgnoreCase("TERRE")) {
-				e.setImg(ImageLoader.TERRE);
+				e.setImg(Sprite.TERRE.getImage());
 			} else if(e.getName().equalsIgnoreCase("VENUS")) {
-				e.setImg(ImageLoader.VENUS);
+				e.setImg(Sprite.VENUS.getImage());
 			} else if(e.getName().equalsIgnoreCase("LUNE")) {
-				e.setImg(ImageLoader.LUNE);
+				e.setImg(Sprite.LUNE.getImage());
 			} else {
-				e.setImg(ImageLoader.MERCURE);
+				e.setImg(Sprite.MERCURE.getImage());
 			}
 		}
 		

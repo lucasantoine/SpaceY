@@ -3,7 +3,8 @@ package fr.spacey.model.entity;
 import java.util.Set;
 
 import fr.spacey.SpaceY;
-import fr.spacey.utils.ImageLoader;
+import fr.spacey.utils.ShowState;
+import fr.spacey.utils.Sprite;
 import fr.spacey.utils.Vector;
 import javafx.scene.image.Image;
 
@@ -15,7 +16,7 @@ public abstract class Entity {
 	private Vector pos;
 	private Vector vel;
 	private Vector acc;
-	private boolean showInfo;
+	private ShowState infomode;
 	protected double radius;
 	private Image img;
 	
@@ -25,10 +26,10 @@ public abstract class Entity {
 		this.masse = masse;
 		this.pos = pos;
 		this.vel = vel;
-		this.showInfo = false;
+		this.infomode = ShowState.NOINFO;
 		this.acc = new Vector(0, 0);
 		this.radius = masse * 10;
-		this.img = ImageLoader.MERCURE;
+		this.img = Sprite.MERCURE.getImage();
 	}
 	
 	public double getRadius() {
@@ -68,13 +69,9 @@ public abstract class Entity {
 	}
 
 	public abstract void updatePosition(Set<Entity> entities);
-
-	public void toggleInfo() {
-		this.showInfo = !this.showInfo;
-	}
 	
-	public boolean isShowInfo() {
-		return this.showInfo;
+	public ShowState getInfoMode() {
+		return this.infomode;
 	}
 
 	public Image getImage() {
@@ -114,5 +111,9 @@ public abstract class Entity {
 
 	private double getForceMagnitude(Entity entity) {
 		return SpaceY.getInstance().getG() * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
+	}
+
+	public void setInfo(ShowState b) {
+		this.infomode = b;
 	}
 }
