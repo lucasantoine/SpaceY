@@ -162,6 +162,7 @@ public class SpaceView implements Observer {
 				gc.fillText("Pos: "+e.getPos().toStringRounded(), startDescX+15, startDescY+66);
 				gc.fillText("Vel: "+e.getVel().toStringRounded(2), startDescX+15, startDescY+78);
 				gc.fillText("Acc: "+e.getAcc().toStringRounded(3), startDescX+15, startDescY+90);
+				
 			}
 		}
 
