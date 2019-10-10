@@ -13,12 +13,10 @@ import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Vector;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -43,6 +41,7 @@ public class SpaceView implements Observer {
 	/* VARIABLES DE CANVAS */
 	private double width;
 	private double height;
+	
 
 	private double xOffset;
 	private double yOffset;
@@ -52,12 +51,13 @@ public class SpaceView implements Observer {
 	protected double startSceneX;
 	protected double startSceneY;
 	private double zoom;
-
+	
 	public SpaceView(SpaceController sc) {
 		this.sc = sc;
 		this.pane = new Pane();
 		this.width = 1600;
 		this.height = 900;
+	    
 		this.can = new Canvas(width, height);
 		this.gc = can.getGraphicsContext2D();
 		this.xOffset = width/2;
@@ -85,6 +85,11 @@ public class SpaceView implements Observer {
 			startSceneX = xOffset;
 			startSceneY = yOffset;
 			
+			/*double 	mouseX = e.getSceneX() - xOffset, 
+					mouseY = e.getSceneY() - yOffset;
+			*/
+			
+			/*
 			double mouseX = e.getSceneX(), mouseY= e.getSceneY();
 			for(Entity en: sc.getModel().getEntities()) {
 				double entityX = en.getPos().getX() + xOffset;
@@ -98,19 +103,25 @@ public class SpaceView implements Observer {
 				} else {
 					en.setInfo(ShowState.NOINFO);
 				}
-			}
+			}*/
 		});
 		
 		pane.setOnMouseMoved(e -> {
-			double mouseX = e.getSceneX(), mouseY= e.getSceneY();
+			
+			double mouseX = e.getSceneX(), mouseY = e.getSceneY();
+
+			double mouseXTransformed = (mouseX) / zoom;
+			double mouseYTransformed = (mouseY) / zoom;
+			
 			for(Entity en: sc.getModel().getEntities()) {
-				double entityX = en.getPos().getX() + xOffset + gc.getTransform().getTx();
-				double entityY = en.getPos().getY() + yOffset + gc.getTransform().getTy();
+				double entityX = en.getPos().getX() + xOffset;
+				double entityY = en.getPos().getY() + yOffset;
 
 				double minX = entityX-en.getRadius()/2, maxX = entityX+en.getRadius()/2;
 				double minY = entityY-en.getRadius()/2, maxY = entityY+en.getRadius()/2;
 				
-				if(!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseX > minX && mouseX < maxX && mouseY > minY && mouseY < maxY) {
+				if(!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX 
+						&& mouseYTransformed > minY && mouseYTransformed < maxY) {
 					en.setInfo(ShowState.HOVERING);
 				} else if(en.getInfoMode().equals(ShowState.HOVERING)) {
 					en.setInfo(ShowState.NOINFO);
@@ -119,26 +130,16 @@ public class SpaceView implements Observer {
 			
 		});
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		pane.setOnMouseDragged(e -> {
 			xOffset = startSceneX + e.getSceneX() - startDragX;
 			yOffset = startSceneY + e.getSceneY() - startDragY;
 		});
 
-		pane.setOnScroll(e -> {
+		/*pane.setOnScroll(e -> {
 			double valeur = e.getDeltaY()>0?0.1:-0.1;
 			if(this.zoom+valeur > 0.5 && this.zoom+valeur < 2) 
 				this.zoom += valeur;
-		});
+		});*/
 
 		can.widthProperty().bind(pane.widthProperty());
 		can.heightProperty().bind(pane.heightProperty());
@@ -155,6 +156,7 @@ public class SpaceView implements Observer {
 
 		// ZOOM
 		gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0, (height - height * zoom) / 2.0);
+		gc.setFill(Color.WHITE);
 
 		//ENTITES
 		for(Entity e : sc.getModel().getEntities()) {
@@ -232,9 +234,12 @@ public class SpaceView implements Observer {
 		gc.fillText("rayon: "+inst.getRayon(), 
 				relatX, 97 - relatY);
 		
-		gc.fillText("zoom: "+zoom+"  "+(width - width * zoom)/2+"   "+(height - height * zoom)/2, 
-				relatX, 110 - relatY);
-
+		if(sc.getModel().hasEntitySelected()) {
+			Entity e = sc.getModel().getEntitySelected();
+			
+			
+		}
+		
 		if(sc.getModel().hasVaisseau()) {
 			// HUD ROND VAISSEAU
 			gc.setFill(new Color(.3,.3,.3,1));
@@ -269,6 +274,8 @@ public class SpaceView implements Observer {
 			gc.fillRoundRect(relatX+138, height-82-relatY, 
 					val*184, 19, 15, 15);
 		}
+		
+		
 	}
 
 	public void start(Stage s) {

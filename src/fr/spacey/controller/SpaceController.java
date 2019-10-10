@@ -16,9 +16,18 @@ public class SpaceController {
 		this.sm = space;
 		this.instanceY = SpaceY.getInstance();
 	}
+
+	public SpaceModel getModel() {
+		return sm;
+	}
+
+	public void register(Observer view) {
+		sm.addObserver(view);
+	}
 	
 	public void initRender() {
 		this.renderThread = new Thread(new Runnable() {
+			@SuppressWarnings("unused")
 			@Override
 			public void run() {
 				
@@ -70,13 +79,4 @@ public class SpaceController {
 		renderThread.start();
 
 	}
-
-	public void register(Observer view) {
-		sm.addObserver(view);
-	}
-
-	public SpaceModel getModel() {
-		return sm;
-	}
-
 }
