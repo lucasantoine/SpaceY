@@ -72,6 +72,10 @@ public class SpaceView implements Observer {
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
+		
+		pane.setOnMouseClicked(e -> {
+			sc.onMouseClicked(e, xOffset, yOffset);
+		});
 
 		pane.setOnKeyPressed(e -> {
 			if(e.getCode().equals(KeyCode.SPACE)) {
