@@ -7,8 +7,8 @@ import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.Sprite;
 import fr.spacey.view.SpaceView;
+import fr.spacey.view.Sprite;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

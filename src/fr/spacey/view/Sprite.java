@@ -1,4 +1,4 @@
-package fr.spacey.utils;
+package fr.spacey.view;
 
 import javafx.scene.image.Image;
 
@@ -18,7 +18,9 @@ public enum Sprite {
 		this.img = new Image(url);
 	}
 	
-	public Image getImage() {
-		return this.img;
+	public Image getImage(int id) {
+		if(id < 0 || id >= values().length)
+			throw new Error("L'iamge "+id+" n'existe pas.");
+		return values()[id].img;
 	}
 }
