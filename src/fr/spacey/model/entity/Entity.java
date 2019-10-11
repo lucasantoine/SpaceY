@@ -116,4 +116,7 @@ public abstract class Entity {
 	public void setInfo(ShowState b) {
 		this.infomode = b;
 	}
+	
+	public abstract Entity clone();
+	public abstract boolean isSimule();
 }

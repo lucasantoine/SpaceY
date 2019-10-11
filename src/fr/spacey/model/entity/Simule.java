@@ -8,11 +8,13 @@ import fr.spacey.utils.Vector;
 public class Simule extends Entity {
 
 	private LinkedList<Vector> trail;
+	private LinkedList<Vector> next;
 	private int timeForTrail;
 
 	public Simule(String name, EntityType type, double masse, Vector pos, Vector vel) {
 		super(name, type, masse, pos, vel);
 		this.trail = new LinkedList<>();
+		this.next = new LinkedList<>();
 		this.timeForTrail = 0;
 	}
 
@@ -22,15 +24,33 @@ public class Simule extends Entity {
 
 	@Override
 	public void updatePosition(Set<Entity> entities) {
+		previousPosition();
+		super.updateVelocity(entities);
+		super.getPos().setVector(this.getPos().add(getVel()));	
+	}
+
+	private void previousPosition() {
 		Vector newPos = new Vector(getPos().getX(), getPos().getY());
-		if(this.timeForTrail++ > 100) {
+		if (this.timeForTrail++ > 100) {
 			this.trail.add(newPos);
-			if(this.trail.size()>100) {
+			if (this.trail.size() > 100) {
 				this.trail.removeFirst();
 			}
 			this.timeForTrail = 0;
 		}
-		super.updateVelocity(entities);
-		super.getPos().setVector(this.getPos().add(getVel()));
+	}
+
+	public LinkedList<Vector> getNext() {
+		return next;
+	}
+
+	@Override
+	public Entity clone() {
+		return new Simule(this.getName(), this.getType(), this.getMasse(), this.getPos(), this.getVel());
+	}
+
+	@Override
+	public boolean isSimule() {
+		return true;
 	}
 }

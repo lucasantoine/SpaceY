@@ -4,11 +4,10 @@ import java.util.Observer;
 
 import fr.spacey.SpaceY;
 import fr.spacey.model.SpaceModel;
-import fr.spacey.model.entity.EntityType;
-import fr.spacey.model.entity.Simule;
-import fr.spacey.utils.Vector;
+import fr.spacey.view.CreateEntityView;
 import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 public class SpaceController {
 
@@ -75,10 +74,18 @@ public class SpaceController {
 
 	}
 	
-	public void onMouseClicked(MouseEvent e, double xOffset, double yOffset) {
+	public void onMouseClicked(MouseEvent e, Stage stage, double xOffset, double yOffset) {
 		if(e.isControlDown()) {
-			sm.getEntities().add(new Simule("Objet", EntityType.SIMULE, 0.01, new Vector(e.getX()-xOffset, e.getY()-yOffset), new Vector(0,0)));
+			CreateEntityController controller = new CreateEntityController(sm);
+			CreateEntityView cev = new CreateEntityView(controller, xOffset, yOffset, e);
+			cev.start(stage);
+			
 		}
+	}
+	
+	public void createEntity(MouseEvent e) {
+		SpaceY.getInstance().toggleRunning();
+		
 	}
 
 	public void register(Observer view) {
