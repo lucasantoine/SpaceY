@@ -1,7 +1,9 @@
 package fr.spacey;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
@@ -10,6 +12,7 @@ import fr.spacey.utils.AstroParser;
 import fr.spacey.view.SpaceView;
 import fr.spacey.view.Sprite;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -37,6 +40,13 @@ public class SpaceY extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
+	
+		// FONT
+		try {
+			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		
 		// ENTITIES
 		List<Entity> entities = AstroParser.loadAstroFile("res/systemes/test.astro");

@@ -17,6 +17,16 @@ public class Fixe extends Entity {
 	public void updatePosition(List<Entity> entities) {
 		return;
 	}
+
+	@Override
+	public Entity clone() {
+		return new Fixe(this.getName(), this.getType(), this.getMasse(), this.getPos());
+	}
+
+	@Override
+	public boolean isSimule() {
+		return false;
+	}
 	
 	
 }

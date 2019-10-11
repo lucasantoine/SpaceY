@@ -36,6 +36,7 @@ import javafx.stage.Stage;
 public class SpaceView implements Observer {
 
 	private SpaceY instance;
+	private Stage stage;
 	private SpaceController sc;
 
 	/* VARIABLES GRAPHIQUES */
@@ -122,6 +123,10 @@ public class SpaceView implements Observer {
 				sc.getModel().setEntitySelected(-1);
 			}
 
+		});
+		
+		pane.setOnMouseClicked(e -> {
+			sc.onMouseClicked(e, stage, xOffset, yOffset);
 		});
 
 		pane.setOnMousePressed(e -> {
@@ -228,6 +233,8 @@ public class SpaceView implements Observer {
 						gc.setFill(Color.GREY);
 						gc.fillOval(v.getX() + xOffset, v.getY() + yOffset, 2, 2);
 					}
+					
+					
 				} catch (NullPointerException exc) {
 				}
 			}
@@ -367,6 +374,7 @@ public class SpaceView implements Observer {
 	}
 
 	public void start(Stage s) {
+		this.stage = s;
 		s.setTitle("SpaceY");
 		s.setScene(new Scene(pane, width, height));
 		s.setResizable(true);
