@@ -1,6 +1,6 @@
 package fr.spacey.model.entity;
 
-import java.util.Set;
+import java.util.List;
 
 import fr.spacey.utils.Vector;
 
@@ -14,7 +14,7 @@ public class Fixe extends Entity {
 	}
 
 	@Override
-	public void updatePosition(Set<Entity> entities) {
+	public void updatePosition(List<Entity> entities) {
 		return;
 	}
 	

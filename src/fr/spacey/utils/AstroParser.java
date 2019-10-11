@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.spacey.SpaceY;
 import fr.spacey.exceptions.TypeUnknownException;
@@ -19,8 +19,8 @@ import fr.spacey.model.entity.Vaisseau;
 
 public class AstroParser {
 
-	public static Set<Entity> loadAstroFile(String filepath) {
-		Set<Entity> entities = new HashSet<Entity>();
+	public static List<Entity> loadAstroFile(String filepath) {
+		List<Entity> entities = new ArrayList<Entity>();
 		File file = new File(filepath);
 		String[] values;
 		try(BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"))){
@@ -32,7 +32,7 @@ public class AstroParser {
 						SpaceY.getInstance().setG(Double.valueOf(values[1].split("=")[1]));
 						SpaceY.getInstance().setDt(Double.valueOf(values[2].split("=")[1]));
 						SpaceY.getInstance().setFa(Double.valueOf(values[3].split("=")[1]));
-						SpaceY.getInstance().setRayon(Double.valueOf(values[4].split("=")[1]));
+						SpaceY.getInstance().setRayon(Integer.valueOf(values[4].split("=")[1]));
 					}else if(line.contains(":")) {
 						values = line.split(":");
 						String name = values[0];

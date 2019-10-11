@@ -1,5 +1,6 @@
 package fr.spacey.model.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import fr.spacey.SpaceY;
@@ -68,7 +69,7 @@ public abstract class Entity {
 		this.masse = masse;
 	}
 
-	public abstract void updatePosition(Set<Entity> entities);
+	public abstract void updatePosition(List<Entity> entities);
 	
 	public ShowState getInfoMode() {
 		return this.infomode;
@@ -82,12 +83,12 @@ public abstract class Entity {
 		this.img = img;
 	}
 
-	protected void updateVelocity(Set<Entity> entities) {
+	protected void updateVelocity(List<Entity> entities) {
 		updateAcceleration(entities);
 		vel.setVector(vel.add(acc));
 	}
 
-	private void updateAcceleration(Set<Entity> entities) {
+	private void updateAcceleration(List<Entity> entities) {
 		Vector force = new Vector(0, 0);
 		for (Entity e : entities) {
 			if(e != this) {

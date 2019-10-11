@@ -1,7 +1,7 @@
 package fr.spacey.model.entity;
 
 import java.util.LinkedList;
-import java.util.Set;
+import java.util.List;
 
 import fr.spacey.utils.Vector;
 
@@ -21,7 +21,7 @@ public class Simule extends Entity {
 	}
 
 	@Override
-	public void updatePosition(Set<Entity> entities) {
+	public void updatePosition(List<Entity> entities) {
 		Vector newPos = new Vector(getPos().getX(), getPos().getY());
 		if(this.timeForTrail++ > 100) {
 			this.trail.add(newPos);

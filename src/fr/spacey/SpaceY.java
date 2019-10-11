@@ -1,5 +1,6 @@
 package fr.spacey;
 
+import java.util.List;
 import java.util.Set;
 
 import fr.spacey.controller.SpaceController;
@@ -26,7 +27,7 @@ public class SpaceY extends Application {
 	private boolean isRunning = false;
 	private double dt;
 	private double gravite;
-	private double rayon;
+	private int rayon;
 	private double fa;
 
 	/**
@@ -38,9 +39,8 @@ public class SpaceY extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		// ENTITIES
-		Set<Entity> entities = AstroParser.loadAstroFile("res/systemes/test.astro");
+		List<Entity> entities = AstroParser.loadAstroFile("res/systemes/test.astro");
 		for(Entity e : entities) {
-			//e.toggleInfo();
 			if(e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImg(Sprite.SOLEIL.getImage());
 			} else if(e.getName().equalsIgnoreCase("JUPITER")) {
@@ -55,6 +55,11 @@ public class SpaceY extends Application {
 				e.setImg(Sprite.MERCURE.getImage());
 			}
 		}
+
+		instance.isRunning = true;
+		instance.dt = 0.00001;
+		instance.rayon = 500;
+		instance.gravite = 0.01;
 		
 		// MODELES
 		SpaceModel sm = new SpaceModel(entities);
@@ -65,11 +70,6 @@ public class SpaceY extends Application {
 		// VUES
 		SpaceView sv = new SpaceView(sc);
 		sv.start(stage);
-
-		instance.isRunning = true;
-		instance.dt = 0.00001;
-		instance.rayon = 1000;
-		instance.gravite = 0.01;
 		
 		sc.initRender();
 		
@@ -98,7 +98,7 @@ public class SpaceY extends Application {
 		this.dt = dt;
 	}
 
-	public void setRayon(double rayon) {
+	public void setRayon(int rayon) {
 		this.rayon = rayon;
 	}
 
@@ -124,7 +124,7 @@ public class SpaceY extends Application {
 	 * 
 	 * @author Benoit
 	 */
-	public double getRayon() {
+	public int getRayon() {
 		return rayon;
 	}
 

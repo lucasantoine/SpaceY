@@ -1,20 +1,20 @@
 package fr.spacey.model;
 
+import java.util.List;
 import java.util.Observable;
-import java.util.Set;
 
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.Vaisseau;
 
 public class SpaceModel extends Observable {
 	
-	private Set<Entity> entities;
+	private List<Entity> entities;
 	private Vaisseau vaisseau;
-	private Entity selected;
+	private int selected;
 	
-	public SpaceModel(Set<Entity> list) {
+	public SpaceModel(List<Entity> list) {
 		this.entities = list;
-		this.selected = null;
+		this.selected = -1;
 		for(Entity e : entities)
 			if(e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau)e;
@@ -22,7 +22,7 @@ public class SpaceModel extends Observable {
 			}
 	}
 	
-	public Set<Entity> getEntities() {
+	public List<Entity> getEntities() {
 		return entities;
 	}
 	
@@ -35,15 +35,15 @@ public class SpaceModel extends Observable {
 	}
 	
 	public boolean hasEntitySelected() {
-		return selected != null;
+		return selected > -1;
 	}
 
 	public Entity getEntitySelected() {
-		return selected;
+		return entities.get(selected);
 	}
 	
-	public void setEntitySelected(Entity e) {
-		this.selected = e;
+	public void setEntitySelected(int idx) {
+		this.selected = idx;
 	}
 	
 	public void updatePositions() {
