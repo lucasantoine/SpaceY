@@ -12,7 +12,7 @@ public class Vaisseau extends Simule {
 	
 	public Vaisseau(String name, EntityType type, double masse, Vector pos, Vector vel, double pprincipal, double pretro) {
 		super(name, type, masse, pos, vel);
-		super.radius = masse * 10000;
+		super.radius = masse;
 		this.pprincipal = pprincipal;
 		this.pretro = pretro;
 		this.TANKSIZE = 200;

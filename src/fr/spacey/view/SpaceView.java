@@ -35,7 +35,6 @@ import javafx.stage.Stage;
  */
 public class SpaceView implements Observer {
 
-	private SpaceY instance;
 	private Stage stage;
 	private SpaceController sc;
 
@@ -61,7 +60,6 @@ public class SpaceView implements Observer {
 
 	public SpaceView(SpaceController sc) {
 		this.sc = sc;
-		this.instance = SpaceY.getInstance();
 		this.pane = new Pane();
 		this.width = 1600;
 		this.height = 900;
@@ -69,9 +67,17 @@ public class SpaceView implements Observer {
 		this.stars = new Vector[1000];
 		Random r = new Random();
 		for (int i = 0; i < stars.length; i++) {
+			System.out.println(""+(sc == null));
 			this.stars[i] = new Vector(
-					r.nextInt((int) (instance.getRayon() + width) * 2) - (instance.getRayon() + width),
-					r.nextInt((int) (instance.getRayon() + height) * 2) - (instance.getRayon() + height));
+					r.nextInt((int) 
+							(sc
+									.getRayon() 
+									+ width) * 2) 
+					- (sc
+							.getRayon() 
+							+ width),
+					r.nextInt((int) (sc.getRayon() + height) * 2) - (sc.getRayon() + height)
+			);
 		}
 
 		this.can = new Canvas(width, height);
@@ -91,7 +97,7 @@ public class SpaceView implements Observer {
 
 		pane.setOnKeyPressed(e -> {
 			if (e.getCode().equals(KeyCode.SPACE)) {
-				SpaceY.getInstance().toggleRunning();
+				SpaceY.getInstance().sc.toggleRunning();
 			}
 		});
 
@@ -163,26 +169,26 @@ public class SpaceView implements Observer {
 
 		pane.setOnMouseDragged(e -> {
 			int centerX = (int) (xOffset - width / 2), centerY = (int) (yOffset - height / 2);
-			System.out.println("center " + centerY + "   " + yOffset);
+			//System.out.println("center " + centerY + "   " + yOffset);
 			xOffset = startSceneX + e.getSceneX() - startDragX;
 			yOffset = startSceneY + e.getSceneY() - startDragY;
 
-			if (centerX > instance.getRayon()) {
-				xOffset = width / 2 + instance.getRayon();
+			if (centerX > sc.getRayon()) {
+				xOffset = width / 2 + sc.getRayon();
 				startDragX = e.getSceneX();
 				startSceneX = xOffset;
-			} else if (centerX < -instance.getRayon()) {
-				xOffset = width / 2 - instance.getRayon();
+			} else if (centerX < -sc.getRayon()) {
+				xOffset = width / 2 - sc.getRayon();
 				startDragX = e.getSceneX();
 				startSceneX = xOffset;
 			}
 
-			if (centerY > instance.getRayon()) {
-				yOffset = height / 2 + instance.getRayon();
+			if (centerY > sc.getRayon()) {
+				yOffset = height / 2 + sc.getRayon();
 				startDragY = e.getSceneY();
 				startSceneY = yOffset;
-			} else if (centerY < -instance.getRayon()) {
-				yOffset = height / 2 - instance.getRayon();
+			} else if (centerY < -sc.getRayon()) {
+				yOffset = height / 2 - sc.getRayon();
 				startDragY = e.getSceneY();
 				startSceneY = yOffset;
 			}
@@ -239,7 +245,9 @@ public class SpaceView implements Observer {
 				}
 			}
 
-			gc.drawImage(e.getImage(), planetX, planetY, e.getRadius(), e.getRadius());
+			//System.out.println(e.getRadius());
+			
+			gc.drawImage(Sprite.getImage(e.getImgId()), planetX, planetY, e.getRadius(), e.getRadius());
 
 			// INFOS SUR ENTITE
 			if (e.getInfoMode().equals(ShowState.HOVERING) || e.getInfoMode().equals(ShowState.SHOWINFO)) {
@@ -270,7 +278,6 @@ public class SpaceView implements Observer {
 		// COORD EN HAUT A GAUCHE
 		gc.setTransform(1, 0, 0, 1, 0, 0);
 		gc.setFont(new Font(17));
-		SpaceY inst = SpaceY.getInstance();
 		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
 
 		gc.setFill(new Color(.1, .1, .1, 0.9));
@@ -281,10 +288,10 @@ public class SpaceView implements Observer {
 		gc.fillText("Pos: [" + (int) (xOffset - width / 2) + "," + (int) (yOffset - height / 2) + ']', relatX,
 				25 - relatY);
 
-		gc.fillText("G: " + inst.getG(), relatX, 43 - relatY);
-		gc.fillText("dt: " + inst.getDt(), relatX, 62 - relatY);
-		gc.fillText("fa: " + inst.getFa(), relatX, 80 - relatY);
-		gc.fillText("rayon: " + inst.getRayon(), relatX, 97 - relatY);
+		gc.fillText("G: " + SpaceController.G, relatX, 43 - relatY);
+		gc.fillText("dt: " + SpaceController.dt, relatX, 62 - relatY);
+		gc.fillText("fa: " + SpaceController.fa, relatX, 80 - relatY);
+		gc.fillText("rayon: " + sc.getRayon(), relatX, 97 - relatY);
 
 		if (sc.getModel().hasEntitySelected()) {
 			drawSelectedEntity(gc);
@@ -349,8 +356,8 @@ public class SpaceView implements Observer {
 		gc.setFill(new Color(0.6, 0.6, 0.6, 1));
 		gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, new double[] { 780, 805, 755 }, 3);
 		gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, new double[] { 780, 805, 755 }, 3);
-
-		gc.drawImage(e.getImage(), SELECTX + SELECTWIDTH / 2 - 50, SELECTY + SELECTHEIGHT / 2 - 50, TAILLEIMG,
+		
+		gc.drawImage(Sprite.getImage(e.getImgId()), SELECTX + SELECTWIDTH / 2 - 50, SELECTY + SELECTHEIGHT / 2 - 50, TAILLEIMG,
 				TAILLEIMG);
 
 		gc.setFill(Color.LIGHTBLUE);

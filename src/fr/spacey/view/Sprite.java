@@ -18,9 +18,9 @@ public enum Sprite {
 		this.img = new Image(url);
 	}
 	
-	public Image getImage(int id) {
+	public static Image getImage(int id) {
 		if(id < 0 || id >= values().length)
-			throw new Error("L'iamge "+id+" n'existe pas.");
+			throw new Error("L'image "+id+" n'existe pas.");
 		return values()[id].img;
 	}
 }

@@ -3,9 +3,9 @@ package fr.spacey.model.entity;
 import java.util.List;
 
 import fr.spacey.SpaceY;
+import fr.spacey.controller.SpaceController;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Vector;
-import fr.spacey.view.Sprite;
 
 public abstract class Entity {
 	
@@ -27,8 +27,8 @@ public abstract class Entity {
 		this.vel = vel;
 		this.infomode = ShowState.NOINFO;
 		this.acc = new Vector(0, 0);
-		this.radius = masse * 10;
-		this.sprite = Sprite.MERCURE;
+		this.radius = masse * 2;
+		this.imgId = 3;
 	}
 	
 	public double getRadius() {
@@ -73,12 +73,8 @@ public abstract class Entity {
 		return this.infomode;
 	}
 
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public void setImg(Sprite sp) {
-		this.sprite = sp;
+	public int getImgId() {
+		return imgId;
 	}
 
 	protected void updateVelocity(List<Entity> entities) {
@@ -109,11 +105,15 @@ public abstract class Entity {
 	}
 
 	private double getForceMagnitude(Entity entity) {
-		return SpaceY.getInstance().getG() * this.masse * entity.getMasse()
+		return SpaceController.G * this.masse * entity.getMasse()
 				/ Math.pow(this.pos.getDistanceTo(entity.getPos()), 2);
 	}
 
 	public void setInfo(ShowState b) {
 		this.infomode = b;
+	}
+
+	public void setImgId(int i) {
+		this.imgId = i;
 	}
 }

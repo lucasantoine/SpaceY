@@ -10,7 +10,6 @@ public class Fixe extends Entity {
 	
 	public Fixe(String name, EntityType type, double masse, Vector pos) {
 		super(name, type, masse, pos, VELOCITY_FIXE);
-		super.radius = masse * 5;
 	}
 
 	@Override
@@ -22,11 +21,4 @@ public class Fixe extends Entity {
 	public Entity clone() {
 		return new Fixe(this.getName(), this.getType(), this.getMasse(), this.getPos());
 	}
-
-	@Override
-	public boolean isSimule() {
-		return false;
-	}
-	
-	
 }

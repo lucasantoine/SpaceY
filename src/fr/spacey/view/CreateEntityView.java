@@ -3,7 +3,6 @@ package fr.spacey.view;
 import fr.spacey.SpaceY;
 import fr.spacey.controller.CreateEntityController;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -32,8 +31,8 @@ public class CreateEntityView extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		if (SpaceY.getInstance().isRunning()) {
-			SpaceY.getInstance().toggleRunning();
+		if (SpaceY.getInstance().sc.isRunning()) {
+			SpaceY.getInstance().sc.toggleRunning();
 		}
 
 		Stage modale = new Stage();
@@ -62,8 +61,8 @@ public class CreateEntityView extends Application {
 		Pane main = new Pane(hMain);
 
 		modale.setOnCloseRequest(e -> {
-			if (!SpaceY.getInstance().isRunning()) {
-				SpaceY.getInstance().toggleRunning();
+			if (!SpaceY.getInstance().sc.isRunning()) {
+				SpaceY.getInstance().sc.toggleRunning();
 			}
 		});
 		

@@ -50,11 +50,10 @@ public class SpaceModel extends Observable {
 		for(Entity e : entities) {
 			e.updatePosition(entities);
 		}
-		setChanged();
-		notifyObservers();
+		render();
 	}
 
-	public void askForRender() {
+	public void render() {
 		setChanged();
 		notifyObservers();
 	}
