@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.spacey.SpaceY;
 import fr.spacey.exceptions.TypeUnknownException;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;

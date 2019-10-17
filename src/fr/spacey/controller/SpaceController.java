@@ -10,30 +10,32 @@ import javafx.stage.Stage;
 
 public class SpaceController {
 
-	public static final int FPS = 10;
+	private static final int FPS = 30; // nb d'image par seconde de la simulation, inexact car la machine peut mettre plus ou moins de temps pour afficher une frame, ceci est donc une limite approximative
+	private static final double LOOPSLOT = 1f / FPS;
 	public static float dt; // nb d'update() qui sera réparti par le nombre d'image par seconde
 	public static double G; // constante gravitationelle
-	public static double fa; // facteur d'accélération
+	public static double fa; // facteur multiplicatif pour le nombre d'update()
 
 	private SpaceModel sm;
 	private Thread renderThread;
 
 	private boolean isRunning = false;
 	private int rayon;
+	private long time;
 
-	private RenderTimer timer;
+	private RenderTimer rendertimer;
 
 	public SpaceController(SpaceModel space) {
 		this.sm = space;
-		this.timer = new RenderTimer();
+		this.rendertimer = new RenderTimer();
 
 		//TODO A SUPPRIMER
 		isRunning = true;
 		rayon = 500;
-		
-		SpaceController.dt = 0.01f;
+		time = 0;
+		SpaceController.dt = 0.005f;
 		SpaceController.fa = 10;
-		SpaceController.G = 0.01;
+		SpaceController.G = 0.005;
 	}
 
 	public SpaceModel getModel() {
@@ -46,21 +48,21 @@ public class SpaceController {
 
 	public void initRender() {
 		this.renderThread = new Thread(new Runnable() {
-
+			
+			int timercounter = 0;
 			float ellapsedTime;
 			float accumulator = 0f;
 			
 			@Override
 			public void run() {
-				timer.init();
+				rendertimer.init();
 				while(true) {
-					ellapsedTime = timer.getEllapsedTime();
+					ellapsedTime = rendertimer.getEllapsedTime();
 					accumulator += ellapsedTime;
 
-					int nbUpdate = 0;
-					while (accumulator >= dt) {
+					//int nbUpdate = 0;
+					while (isRunning && accumulator >= dt) {
 						
-						//System.out.println(accumulator+">="+interval+"; ");
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
@@ -69,32 +71,33 @@ public class SpaceController {
 						});
 						
 						accumulator -= (dt/fa);
-						nbUpdate++;
+						//nbUpdate++;
 					}
-					System.out.println("updated "+nbUpdate+" times in 1 frame ("+FPS+" FPS)");
+					//System.out.println("updated "+nbUpdate+" times in 1 frame ("+FPS+" FPS, "+dt+" DT, "+fa+" FA)");
 
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							sm.render();
 						}
-
 					});
 
 					sync();
+
+					if(timercounter++ % (FPS / fa) < 1) {
+						time++;
+					}
 				}
 
 			}
 		}, "SpaceController-RenderThread");
 		renderThread.setDaemon(true);
 		renderThread.start();
-
 	}
 
 	private void sync() {
-		float loopSlot = 1f / FPS;
-		double endTime = timer.getLastLoopTime() + loopSlot;
-		while (timer.getTime() < endTime) {
+		double endTime = rendertimer.getLastLoopTime() + LOOPSLOT;
+		while (rendertimer.getTime() < endTime) {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException ie) {
