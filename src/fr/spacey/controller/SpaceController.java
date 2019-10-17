@@ -10,10 +10,10 @@ import javafx.stage.Stage;
 
 public class SpaceController {
 
-	public static final int FPS = 59;
-	public static float dt;
-	public static double G;
-	public static double fa;
+	public static final int FPS = 10;
+	public static float dt; // nb d'update() qui sera réparti par le nombre d'image par seconde
+	public static double G; // constante gravitationelle
+	public static double fa; // facteur d'accélération
 
 	private SpaceModel sm;
 	private Thread renderThread;
@@ -31,8 +31,8 @@ public class SpaceController {
 		isRunning = true;
 		rayon = 500;
 		
-		SpaceController.dt = 0.001f;
-		SpaceController.fa = 1;
+		SpaceController.dt = 0.01f;
+		SpaceController.fa = 10;
 		SpaceController.G = 0.01;
 	}
 
@@ -45,16 +45,11 @@ public class SpaceController {
 	}
 
 	public void initRender() {
-		//final int UPS = 100; // nb d'update() qui sera réparti par le nombre d'image par seconde
-		
-		
 		this.renderThread = new Thread(new Runnable() {
 
 			float ellapsedTime;
 			float accumulator = 0f;
 			
-			
-
 			@Override
 			public void run() {
 				timer.init();
@@ -71,10 +66,9 @@ public class SpaceController {
 							public void run() {
 								sm.updatePositions();
 							}
-
 						});
 						
-						accumulator -= dt;
+						accumulator -= (dt/fa);
 						nbUpdate++;
 					}
 					System.out.println("updated "+nbUpdate+" times in 1 frame ("+FPS+" FPS)");
