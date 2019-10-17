@@ -69,13 +69,7 @@ public class SpaceView implements Observer {
 		for (int i = 0; i < stars.length; i++) {
 			System.out.println(""+(sc == null));
 			this.stars[i] = new Vector(
-					r.nextInt((int) 
-							(sc
-									.getRayon() 
-									+ width) * 2) 
-					- (sc
-							.getRayon() 
-							+ width),
+					r.nextInt((int) (sc.getRayon() + width) * 2) - (sc.getRayon()+ width),
 					r.nextInt((int) (sc.getRayon() + height) * 2) - (sc.getRayon() + height)
 			);
 		}
@@ -117,7 +111,7 @@ public class SpaceView implements Observer {
 						&& mouseY < maxY) {
 					sc.getModel().setEntitySelected(idx);
 					en.setInfo(ShowState.SHOWINFO);
-					centerCameraOnEntity(en);
+					//centerCameraOnEntity(en);
 					e.setDragDetect(false);
 					nouvelleSelection = true;
 				} else {
@@ -299,6 +293,10 @@ public class SpaceView implements Observer {
 
 		if (sc.getModel().hasVaisseau()) {
 			drawSpaceshipHUD(gc);
+		}
+		
+		if(sc.getModel().hasEntitySelected()) {
+			centerCameraOnEntity(sc.getModel().getEntitySelected());
 		}
 	}
 
