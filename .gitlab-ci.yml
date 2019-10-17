@@ -13,7 +13,7 @@ test::java:
   image: openjdk:11-jdk
   script:
     - apt-get update && apt-get -y install maven && apt-get clean
-    - mvn $MAVEN_OPTS install
+    - mvn $MAVEN_OPTS test
 
 test::sonar:
   stage: 🔍test
