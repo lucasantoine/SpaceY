@@ -1,0 +1,26 @@
+stages:
+  - 🔍test
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+
+cache:
+  paths:
+    - ./.m2/
+
+test::java:
+  stage: 🔍test
+  image: openjdk:11-jdk
+  coverage: '/Total.*?([0-9]{1,3})%/'
+  script:
+    - apt-get update && apt-get -y install maven && apt-get clean
+    - mvn $MAVEN_OPTS install
+    - cat tests/target/site/jacoco-aggregate/index.html
+
+test::sonar:
+  stage: 🔍test
+  image: openjdk:11-jdk
+  script:
+    - apt-get update && apt-get -y install maven && apt-get clean
+    - mvn $MAVEN_OPTS sonar:sonar
+
