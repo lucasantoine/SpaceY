@@ -20,5 +20,5 @@ test::sonar:
   image: openjdk:11-jdk
   script:
     - apt-get update && apt-get -y install maven && apt-get clean
-    - mvn $MAVEN_OPTS compile sonar:sonar
+    - mvn $MAVEN_OPTS test sonar:sonar
 
