@@ -1,26 +1,23 @@
 package fr.spacey.utils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * ProjetY - IUT A of Lille - 3rd Semester
  * 
  * @author ANTOINE Lucas Created on 5 oct. 2019
  * 
- *         Vector class containing two double variables that permit to
- *         instantiate positions, magnitudes and velocities used by the entities
- *         of the simulation.
+ *         Classe Vecteur contenant deux variables double permettant
+ *         d'instancier les positions, les normes, les vitesses et les
+ *         accelerations utilises par les Entites de la simulation.
  */
 public class Vector {
 
 	private double x, y;
 
 	/**
-	 * Constructs a Vector fully parameterized with the specified two double values.
+	 * Constructeur de Vecteur prenant en parametre deux valeurs double.
 	 * 
-	 * @param x Vector's first parameter value.
-	 * @param y Vector's second parameter value.
+	 * @param x Valeur du premier parametre du Vecteur
+	 * @param y Valeur du second parametre du Vecteur.
 	 */
 	public Vector(double x, double y) {
 		this.x = x;
@@ -28,27 +25,27 @@ public class Vector {
 	}
 
 	/**
-	 * Returns Vector's first parameter value.
+	 * Renvoie la valeur du premier parametre du Vecteur.
 	 * 
-	 * @return Vector's first parameter value.
+	 * @return la valeur du premier parametre du Vecteur.
 	 */
 	public double getX() {
 		return x;
 	}
 
 	/**
-	 * Returns Vector's second parameter value.
+	 * Renvoie la valeur du second parametre du Vecteur.
 	 * 
-	 * @return Vector's second parameter value.
+	 * @return la valeur du second parametre du Vecteur.
 	 */
 	public double getY() {
 		return y;
 	}
 
 	/**
-	 * Sets this Vector's parameters with those from the specified Vector v.
+	 * Modifie les parametres de ce Vecteur avec ceux du Vecteur passe en parametre.
 	 * 
-	 * @param v Vector used to set this Vector's parameters.
+	 * @param v Vecteur utilise pour modifier les parametres de ce Vecteur.
 	 */
 	public void setVector(Vector v) {
 		this.setX(v.x);
@@ -56,10 +53,10 @@ public class Vector {
 	}
 
 	/**
-	 * Sets this Vector's parameters with the specified double values.
+	 * Modifie les parametres de ce Vecteur avec les valeurs passees en parametre.
 	 * 
-	 * @param x new value of Vector's first parameter.
-	 * @param y new value of Vector's second parameter.
+	 * @param x Nouvelle valeur du premier parametre de ce Vecteur.
+	 * @param y Nouvelle valeur du second parametre de ce Vecteur.
 	 */
 	public void setVector(double x, double y) {
 		this.setX(x);
@@ -67,31 +64,32 @@ public class Vector {
 	}
 
 	/**
-	 * Sets this Vector's first parameter with the specified double value.
+	 * Modifie le premier parametre de ce Vecteur avec la valeur passee en
+	 * parametre.
 	 * 
-	 * @param x new value of Vector's first parameter.
+	 * @param x Nouvelle valeur du premier parametre de ce Vecteur.
 	 */
 	public void setX(double x) {
 		this.x = x;
 	}
 
 	/**
-	 * Sets this Vector's second parameter with the specified double value.
+	 * Modifie le second parametre de ce Vecteur avec la valeur passee en parametre.
 	 * 
-	 * @param y new value of Vector's second parameter.
+	 * @param y Nouvelle valeur du second parametre de ce Vecteur.
 	 */
 	public void setY(double y) {
 		this.y = y;
 	}
 
 	/**
-	 * Compares the specified Vector with this Vector for equality. Returns true
-	 * only if they are the same instance or if their parameters have the same
-	 * double value.
+	 * Compare ce Vecteur avec celui passe en parametre. Renvoie vrai seulement si
+	 * il s'agit de la meme instance, ou si la valeur de leurs parametres est
+	 * identique. Renvoie faux sinon.
 	 * 
-	 * @param v Compared Vector.
-	 * @return true if they are the same instance or if their parameters have the
-	 *         same double value, else return false.
+	 * @param v Vecteur compare.
+	 * @return vrai si il s'agit de la meme instance, ou si la valeur de leurs
+	 *         parametres est identique, renvoie faux sinon.
 	 */
 	public boolean equals(Vector v) {
 		if (this == v)
@@ -108,69 +106,61 @@ public class Vector {
 	}
 
 	/**
-	 * Add specified Vector's parameters double values to this Vector's parameters
-	 * double values.
+	 * Additionne la valeur des parametres du Vecteur v passe en parametre a ceux de
+	 * ce Vecteur.
 	 * 
-	 * @param v Vector used to add double values to this Vector.
-	 * @return Vector with this Vector's parameters double values plus specified
-	 *         Vector's parameters double values.
+	 * @param v Vecteur ajoute a ce Vecteur.
+	 * @return l'addition des deux Vecteurs.
 	 */
 	public Vector add(Vector v) {
 		return new Vector(this.x + v.x, this.y + v.y);
 	}
 
 	/**
-	 * Remove specified Vector's parameters double values to this Vector's
-	 * parameters double values.
+	 * Soustrait la valeur des parametres du Vecteur v passe en parametre a ceux de
+	 * ce Vecteur.
 	 * 
-	 * @param v Vector used to remove double values to this Vector.
-	 * @return Vector with this Vector's parameters double values minus specified
-	 *         Vector's parameters double values.
+	 * @param v Vecteur soustrait a ce Vecteur.
+	 * @return la soustraction des deux Vecteurs.
 	 */
 	public Vector minus(Vector v) {
 		return new Vector(this.x - v.x, this.y - v.y);
 	}
 
+	/*
+	 * public Vector scalarproduct(Vector v) { return null; // TODO }
+	 */
+
 	/**
-	 * Returns the double distance between this Vector and the specified Vector.
+	 * Renvoie la distance entre ce Vecteur et le Vecteur passe en parametre.
 	 * 
-	 * @param v Vector used to calculate the distance.
-	 * @return the double distance between this Vector and the specified Vector.
+	 * @param v Vecteur utilise pour calculer la distance.
+	 * @return la distance entre ce Vecteur et le Vecteur passe en parametre.
 	 */
 	public double getDistanceTo(Vector v) {
 		return Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2));
 	}
 
 	/**
-	 * Returns the magnitude of this Vector.
+	 * Renvoie la norme de ce Vecteur.
 	 * 
-	 * @return the magnitude of this Vector.
+	 * @return la norme de ce Vecteur.
 	 */
 	public double getMagnitude() {
 		return Math.sqrt(x * x + y * y);
 	}
 
 	/**
-	 * Returns the cosine of this Vector.
+	 * Renvoie une copie de ce Vecteur.
 	 * 
-	 * @return the cosine of this Vector.
+	 * @return une copie de ce Vecteur.
 	 */
-	public double getCosine() {
-		return x / getMagnitude();
+	public Vector clone() {
+		return new Vector(this.getX(), this.getY());
 	}
 
 	/**
-	 * Returns the sine of this Vector.
-	 * 
-	 * @return the sine of this Vector.
-	 */
-	public double getSine() {
-		return y / getMagnitude();
-	}
-
-	/**
-	 * Returns a string representation of this Vector, containing the String
-	 * representation of each element.
+	 * Renvoie la representation d'un Vecteur sous forme de texte.
 	 */
 	@Override
 	public String toString() {
@@ -179,27 +169,15 @@ public class Vector {
 	}
 
 	/**
-	 * Returns a string representation of this Vector, containing the String
-	 * representation of each rounded element.
+	 * Renvoie la representation d'un Vecteur sous forme de texte en notation
+	 * scientifique.
 	 * 
-	 * @return a string representation of this Vector, containing the String
-	 *         representation of each rounded element.
+	 * @return la representation d'un Vecteur sous forme de texte en notation
+	 *         scientifique.
 	 */
-	public String toStringRounded() {
+	public String toStringScientific() {
 		StringBuilder sb = new StringBuilder();
-		return sb.append('[').append((int) x).append(';').append((int) y).append(']').toString();
-	}
-	
-	/**
-	 * Returns a string representation of this Vector, containing the String
-	 * representation of each rounded element.
-	 * 
-	 * @return a string representation of this Vector, containing the String
-	 *         representation of each rounded element.
-	 */
-	public String toStringRounded(int i) {
-		StringBuilder sb = new StringBuilder();
-		return sb.append('[').append(new BigDecimal(x).setScale(i, RoundingMode.HALF_EVEN).doubleValue()).append(';')
-				.append(new BigDecimal(y).setScale(i, RoundingMode.HALF_EVEN).doubleValue()).append(']').toString();
+		return sb.append('[').append(String.format("%4.2e", x)).append(';').append(String.format("%4.2e", y))
+				.append(']').toString();
 	}
 }

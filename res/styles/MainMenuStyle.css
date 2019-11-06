@@ -1,0 +1,31 @@
+.choice-box {
+    -fx-background-color: transparent;
+    -fx-border-width: 3 3 3 3;
+    -fx-border-color: yellow;
+    -fx-padding: 3 10 4 20;
+    -fx-font-size: 20px;
+    -fx-translate-y: 65px;
+}
+
+.choice-box .label{
+	-fx-text-fill : yellow;
+	-fx-font-size: 20px;
+}
+
+.choice-box .context-menu{
+	-fx-background-color: black;
+	/*-fx-translate-x: 300px;*/
+    -fx-border-width: 3 3 3 3;
+    -fx-border-color: yellow;
+    -fx-padding: 3 10 4 20;
+    -fx-font-size: 12px;
+    -fx-padding: 0px;
+}
+
+.choice-box .menu-item:focused{
+	-fx-background-color: #333333;
+}
+
+.choice-box .menu-item{
+	-fx-background-color: transparent;
+}
