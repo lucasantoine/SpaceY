@@ -13,6 +13,7 @@ import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Simule;
+import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Sprite;
 import fr.spacey.utils.Vector;
@@ -50,6 +51,7 @@ public class SpaceView implements Observer {
 	private Canvas can;
 	public Pane pane;
 	private GraphicsContext gc;
+	private Vector lastMousePos;
 
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
@@ -61,6 +63,7 @@ public class SpaceView implements Observer {
 		this.pane = new Pane();
 		this.can = new Canvas(1, 1);
 		this.gc = can.getGraphicsContext2D();
+		this.lastMousePos = new Vector(0, 0);
 		this.can.setFocusTraversable(true);
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
@@ -126,6 +129,7 @@ public class SpaceView implements Observer {
 		});
 
 		pane.setOnMouseMoved(e -> {
+			lastMousePos = new Vector(e.getSceneX(), e.getSceneY());
 			sc.onMouseMoved(e);
 		});
 
@@ -247,18 +251,14 @@ public class SpaceView implements Observer {
 
 		if (sc.getModel().hasEntitySelected()) {
 			drawSelectedEntity(gc);
+			centerCameraOnEntity(sc.getModel().getEntitySelected());
 		}
 
 		if (sc.getModel().hasVaisseau()) {
 			drawSpaceshipHUD(gc);
 		}
 
-		if (sc.getModel().hasEntitySelected()) {
-			centerCameraOnEntity(sc.getModel().getEntitySelected());
-		}
-
-		stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G
-				+ ", TIME=" + formatTimeFromSec(sc.getTime()));
+		//stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G + ", TIME=" + formatTimeFromSec(sc.getTime()));
 	}
 
 	/**
@@ -310,6 +310,18 @@ public class SpaceView implements Observer {
 		gc.setLineWidth(1);
 		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 		gc.strokeOval(relatX + 27.5, aff.getHeight() - 192.5 - relatY, 145, 145);
+		
+		// HUD IMAGE VAISSEAU
+		Vaisseau e = sc.getModel().getVaisseau();
+		double vaissX = relatX + 55 + 45;
+		double vaissY = aff.getHeight() - 165 - relatY + 45;
+		Image img = Sprite.getImage(e.getImgId());
+		
+        gc.save();
+        gc.transform(new Affine(new Rotate(sc.getModel().getVaisseau().getAngle(), vaissX, vaissY)));
+        gc.translate(-45, -45);
+        gc.drawImage(img, vaissX, vaissY, 90, 90);
+        gc.restore();
 
 		// HUD BARRES VAISSEAU ACCELERATION
 		gc.fillRoundRect(relatX + 150, aff.getHeight() - 135 - relatY, 200, 35, 20, 20);
@@ -361,12 +373,37 @@ public class SpaceView implements Observer {
 		gc.setLineWidth(1);
 		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 		gc.strokeRoundRect(SELECTX + 5, SELECTY + 5, SELECTWIDTH - 10, SELECTHEIGHT - 10, 20, 20);
+		
+		//fleche gauche
+		if(lastMousePos.getX() >= 855 && lastMousePos.getX() <= 890 
+				&& lastMousePos.getY() >= 740 && lastMousePos.getY() <= 820) {
+			
+			gc.setFill(new Color(0.95, 0.95, 0.95, 1));
+			gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, 
+			new double[] { 780, 805, 755 }, 3);
+			
+		} else {
 
-		gc.setFill(new Color(0.6, 0.6, 0.6, 1));
-		gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, 
+			gc.setFill(new Color(0.6, 0.6, 0.6, 1));
+			gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, 
+					new double[] { 780, 805, 755 }, 3);
+		}
+		
+		//fleche droite
+		if(lastMousePos.getX() >= 1510 && lastMousePos.getX() <= 1545 
+				&& lastMousePos.getY() >= 740 && lastMousePos.getY() <= 820) {
+			
+			gc.setFill(new Color(0.95, 0.95, 0.95, 1));
+			gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, 
 				new double[] { 780, 805, 755 }, 3);
-		gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, 
+			
+		} else {
+
+			gc.setFill(new Color(0.6, 0.6, 0.6, 1));
+			gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, 
 				new double[] { 780, 805, 755 }, 3);
+		}
+		
 
 		gc.drawImage(Sprite.getImage(e.getImgId()), SELECTX + SELECTWIDTH / 1.5 - 50, SELECTY + SELECTHEIGHT / 2 - 50,
 				TAILLEIMG, TAILLEIMG);

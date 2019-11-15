@@ -91,7 +91,7 @@ public class MainMenuView implements Observer {
 		for (File systemesfile : systemesfolder.listFiles()) {
 			choicebox.getItems().add(systemesfile.getName().replaceAll(".astro", ""));
 		}
-		choicebox.getSelectionModel().select(0);
+		choicebox.getSelectionModel().select(systemesfolder.listFiles().length-1);
 
 		play.setOnMouseClicked(e -> {
 			mmc.start(choicebox.getSelectionModel().getSelectedItem(), (Stage) play.getScene().getWindow());

@@ -204,6 +204,25 @@ public class SpaceController {
 		double mouseX = e.getSceneX(), mouseY = e.getSceneY();
 		boolean nouvelleSelection = false;
 		int idx = 0;
+		
+		if(getModel().hasEntitySelected()) {
+			//fleche gauche
+			if(e.getX() >= 855 && e.getX() <= 890 && e.getY() >= 740 && e.getY() <= 820) {
+				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
+				getModel().setEntitySelected((getModel().getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getModel().getEntitySelectedId()-1);
+				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
+				return;
+			}
+			//fleche droite
+			else if(e.getX() >= 1510 && e.getX() <= 1545 && e.getY() >= 740 && e.getY() <= 820) {
+				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
+				getModel().setEntitySelected((getModel().getEntitySelectedId()+1)%getModel().getEntities().size());
+				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
+				return;
+			}
+		}
+		
+		
 		for (Entity en : getModel().getEntities()) {
 			double entityX = en.getPos().getX() + aff.getxOffset();
 			double entityY = en.getPos().getY() + aff.getyOffset();

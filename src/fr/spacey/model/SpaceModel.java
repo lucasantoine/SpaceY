@@ -116,7 +116,16 @@ public class SpaceModel extends Observable {
 	public boolean hasEntitySelected() {
 		return selected > -1;
 	}
-
+	
+	/**
+	 * Renvoie le numéro de l'entite selectionnee.
+	 * 
+	 * @return le numéro de l'entite selectionnee.
+	 */
+	public int getEntitySelectedId() {
+		return selected;
+	}
+	
 	/**
 	 * Renvoie l'entite selectionnee, null sinon.
 	 * 
