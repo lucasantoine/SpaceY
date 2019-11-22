@@ -76,7 +76,6 @@ public class SpaceModel extends Observable {
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
-				this.vaisseau.fullThrottle();;
 			}
 		}
 	}

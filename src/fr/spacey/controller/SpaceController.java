@@ -9,7 +9,7 @@ import fr.spacey.utils.ShowState;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent; 
+import javafx.scene.input.MouseEvent;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -204,25 +204,26 @@ public class SpaceController {
 		double mouseX = e.getSceneX(), mouseY = e.getSceneY();
 		boolean nouvelleSelection = false;
 		int idx = 0;
-		
-		if(getModel().hasEntitySelected()) {
-			//fleche gauche
-			if(e.getX() >= 855 && e.getX() <= 890 && e.getY() >= 740 && e.getY() <= 820) {
+
+		if (getModel().hasEntitySelected()) {
+			// fleche gauche
+			if (e.getX() >= 855 && e.getX() <= 890 && e.getY() >= 740 && e.getY() <= 820) {
 				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
-				getModel().setEntitySelected((getModel().getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getModel().getEntitySelectedId()-1);
+				getModel().setEntitySelected(
+						(getModel().getEntitySelectedId() - 1) < 0 ? getModel().getEntities().size() - 1
+								: getModel().getEntitySelectedId() - 1);
 				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
 				return;
 			}
-			//fleche droite
-			else if(e.getX() >= 1510 && e.getX() <= 1545 && e.getY() >= 740 && e.getY() <= 820) {
+			// fleche droite
+			else if (e.getX() >= 1510 && e.getX() <= 1545 && e.getY() >= 740 && e.getY() <= 820) {
 				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
-				getModel().setEntitySelected((getModel().getEntitySelectedId()+1)%getModel().getEntities().size());
+				getModel().setEntitySelected((getModel().getEntitySelectedId() + 1) % getModel().getEntities().size());
 				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
 				return;
 			}
 		}
-		
-		
+
 		for (Entity en : getModel().getEntities()) {
 			double entityX = en.getPos().getX() + aff.getxOffset();
 			double entityY = en.getPos().getY() + aff.getyOffset();
@@ -305,25 +306,53 @@ public class SpaceController {
 	 * @param e Touche du clavier pressee.
 	 */
 	public void onKeyPressed(KeyEvent e) {
+		if (e.getCode().equals(KeyCode.SPACE)) {
+			this.toggleRunning();
+		}
 		if (isRunning) {
 			if (e.getCode().equals(KeyCode.ADD) && getModel().getFa() < 200) {
 				getModel().setFa(getModel().getFa() + 1);
 			} else if (e.getCode().equals(KeyCode.SUBTRACT) && getModel().getFa() > 1) {
 				getModel().setFa(getModel().getFa() - 1);
+			} else {
+				this.modifyStarship(e);
+			}
+		}
+	}
+
+	private void modifyStarship(KeyEvent e) {
+		if (sm.hasVaisseau()) {
+			if (e.getCode().equals(KeyCode.Z)) {
+				sm.getVaisseau().upThrottle();
 			}
 
-			/*if (sm.hasVaisseau()) {
-				switch (e.getCode()) {
-				case UP:
-					sm.getVaisseau().up();
-					break;
-				case DOWN:
-					sm.getVaisseau().down();
-					break;
-				default:
-					break;
+			if (e.getCode().equals(KeyCode.S)) {
+				sm.getVaisseau().downThrottle();
+			}
+
+			if (e.getCode().equals(KeyCode.Q)) {
+				if (e.isAltDown()) {
+					sm.getVaisseau().incAngle(-45.0);
+				} else {
+					sm.getVaisseau().incAngle(-1.0);
 				}
-			}*/
+			}
+
+			if (e.getCode().equals(KeyCode.D)) {
+				if (e.isAltDown()) {
+					sm.getVaisseau().incAngle(45.0);
+				} else {
+					sm.getVaisseau().incAngle(1.0);
+				}
+			}
+
+			if (e.getCode().equals(KeyCode.SHIFT)) {
+				sm.getVaisseau().fullThrottle();
+			}
+
+			if (e.getCode().equals(KeyCode.CONTROL)) {
+				sm.getVaisseau().noThrottle();
+			}
 		}
 	}
 

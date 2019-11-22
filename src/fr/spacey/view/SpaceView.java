@@ -21,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -75,45 +74,7 @@ public class SpaceView implements Observer {
 		}
 
 		pane.setOnKeyPressed(e -> {
-			if (e.getCode().equals(KeyCode.Z)) {
-				sc.getModel().getVaisseau().upThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.S)) {
-				sc.getModel().getVaisseau().downThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.Q)) {
-				if (e.isAltDown())
-					sc.getModel().getVaisseau().incAngle(-45.0);
-				else
-					sc.getModel().getVaisseau().incAngle(-1.0);
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.D)) {
-				if (e.isAltDown())
-					sc.getModel().getVaisseau().incAngle(45.0);
-				else
-					sc.getModel().getVaisseau().incAngle(1.0);
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.SHIFT)) {
-				sc.getModel().getVaisseau().fullThrottle();
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.CONTROL)) {
-				sc.getModel().getVaisseau().noThrottle();
-				;
-			}
-		
-			if (e.getCode().equals(KeyCode.SPACE)) {
-				sc.toggleRunning();
-			} else {
-				sc.onKeyPressed(e);
-			}
+			sc.onKeyPressed(e);
 		});
 
 		pane.setOnMouseReleased(e -> {
@@ -440,11 +401,11 @@ public class SpaceView implements Observer {
 	public void start(Stage s) {
 		this.stage = s;
 		Affichage aff = sc.getModel().getAffichage();
-		s.setTitle("SpaceY");
-		s.setScene(new Scene(pane, aff.getWidth(), aff.getHeight()));
-		s.setResizable(true);
-		// s.setFullScreen(true);
-		// s.setMaximized(true);
-		// s.show();
+		stage.setTitle("SpaceY");
+		stage.setScene(new Scene(pane, aff.getWidth(), aff.getHeight()));
+		stage.setResizable(true);
+		// stage.setFullScreen(true);
+		// stage.setMaximized(true);
+		// stage.show();
 	}
 }
