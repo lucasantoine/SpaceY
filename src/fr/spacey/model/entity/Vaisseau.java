@@ -7,6 +7,7 @@ public class Vaisseau extends Simule {
 	private final double TANKSIZE;
 	
 	private double angle;
+	@SuppressWarnings("unused")
 	private double pretro; //used for ship rotation
 	private double rocketActivity;
 	private double maxForce;
