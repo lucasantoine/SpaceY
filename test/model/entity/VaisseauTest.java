@@ -38,51 +38,156 @@ public class VaisseauTest {
 		System.out.println();
 		System.out.println("Fin de la serie de tests");
 	}
-
+	
 	@Test
-	public void testGetPropPrincipal() {
-		System.out.println("testGetPropPrincipal");
-		assertTrue(v1.getPropPrincipal() == 0.00001);
-		assertFalse(v1.getPropPrincipal() != 0.00001);
+	public void testFullThrottle() {
+		System.out.println("testFullThrottle");
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.fullThrottle();
+		assertFalse(v1.getRocketActivity() == 0);
+		assertTrue(v1.getRocketActivity() == 100);
 	}
 	
 	@Test
-	public void testSetPropPrincipal() {
-		System.out.println("testSetPropPrincipal");
-		assertTrue(v1.getPropPrincipal() == 0.00001);
-		v1.setPropPrincipal(0.01);
-		assertFalse(v1.getPropPrincipal() == 0.00001);
-		assertTrue(v1.getPropPrincipal() == 0.01);
+	public void testNoThrottle() {
+		System.out.println("testNoThrottle");
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.fullThrottle();
+		assertTrue(v1.getRocketActivity() == 100);
+		v1.noThrottle();
+		assertFalse(v1.getRocketActivity() == 100);
+		assertTrue(v1.getRocketActivity() == 0);
 	}
 	
 	@Test
-	public void testGetPropRetro() {
-		System.out.println("testGetPropRetro");
-		assertTrue(v1.getPropRetro() == 0.0000001);
-		assertFalse(v1.getPropRetro() != 0.0000001);
+	public void testUpThrottle() {
+		System.out.println("testUpThrottle");
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.upThrottle();
+		assertFalse(v1.getRocketActivity() == 0);
+		assertTrue(v1.getRocketActivity() == 1.0);
+		v1.fullThrottle();
+		assertTrue(v1.getRocketActivity() == 100);
+		v1.upThrottle();
+		assertFalse(v1.getRocketActivity() == 101.0);
+		assertTrue(v1.getRocketActivity() == 100);
 	}
 	
 	@Test
-	public void testSetPropRetro() {
-		System.out.println("testSetPropRetro");
-		assertTrue(v1.getPropRetro() == 0.0000001);
-		v1.setPropRetro(0.01);
-		assertFalse(v1.getPropRetro() == 0.0000001);
-		assertTrue(v1.getPropRetro() == 0.01);
+	public void testDownThrottle() {
+		System.out.println("testDownThrottle");
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.downThrottle();
+		assertFalse(v1.getRocketActivity() == -1.0);
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.fullThrottle();
+		assertTrue(v1.getRocketActivity() == 100);
+		v1.downThrottle();
+		assertFalse(v1.getRocketActivity() == 100);
+		assertTrue(v1.getRocketActivity() == 99.0);
+	}
+	
+	@Test
+	public void testIncAngle() {
+		System.out.println("testIncAngle");
+		assertTrue(v1.getAngle() == 0);
+		v1.incAngle(50);
+		assertFalse(v1.getAngle() == 0);
+		assertTrue(v1.getAngle() == 50);
+		v1.incAngle(360);
+		assertFalse(v1.getAngle() == 410);
+		assertTrue(v1.getAngle() == 50);
+	}
+	
+	@Test
+	public void testGetRocketActivity() {
+		System.out.println("testGetRocketActivity");
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.fullThrottle();
+		assertFalse(v1.getRocketActivity() == 0);
+		assertTrue(v1.getRocketActivity() == 100);
+		v1.noThrottle();
+		assertFalse(v1.getRocketActivity() == 100);
+		assertTrue(v1.getRocketActivity() == 0);
+		v1.upThrottle();
+		assertFalse(v1.getRocketActivity() == 0);
+		assertTrue(v1.getRocketActivity() == 1.0);
+		v1.downThrottle();
+		assertFalse(v1.getRocketActivity() == 1.0);
+		assertTrue(v1.getRocketActivity() == 0);
 	}
 	
 	@Test
 	public void testGetFuel() {
 		System.out.println("testGetFuel");
-		assertTrue(v1.getFuel() == 37);
-		assertFalse(v1.getFuel() != 37);
+		assertTrue(v1.getFuel() == 10000);
+		v1.consumeFuel();
+		assertTrue(v1.getFuel() == 10000);
+		v1.fullThrottle();
+		v1.consumeFuel();
+		assertFalse(v1.getFuel() == 10000);
+		assertTrue(v1.getFuel() == 9999.9);
+		v1.noThrottle();
+		v1.consumeFuel();
+		assertTrue(v1.getFuel() == 9999.9);
 	}
 	
 	@Test
 	public void testGetTankSize() {
 		System.out.println("testGetTankSize");
-		assertTrue(v1.getTankSize() == 200);
-		assertFalse(v1.getTankSize() != 200);
+		assertTrue(v1.getTankSize() == 10000);
+	}
+	
+	@Test
+	public void testGetForce() {
+		System.out.println("testGetForce");
+		assertTrue(v1.getForce() == 0);
+		v1.fullThrottle();
+		assertFalse(v1.getForce() == 0);
+		assertTrue(v1.getForce() == 0.00001);
+		v1.downThrottle();
+		assertFalse(v1.getForce() == 0.00001);
+		assertTrue(v1.getForce() == 0.0000099);
+	}
+	
+	@Test
+	public void testGetXForce() {
+		System.out.println("testGetXForce");
+		assertTrue(v1.getXForce() == 0);
+		v1.fullThrottle();
+		assertFalse(v1.getXForce() == 0);
+		assertTrue(v1.getXForce() == 0.00001);
+		v1.incAngle(180);
+		assertFalse(v1.getXForce() == 0.00001);
+		assertTrue(v1.getXForce() == -0.00001);
+	}
+	
+	@Test
+	public void testGetYForce() {
+		System.out.println("testGetYForce");
+		assertTrue(v1.getYForce() == 0);
+		v1.fullThrottle();
+		assertTrue(v1.getYForce() == 0);
+		assertTrue(v1.getYForce() == 0);
+		v1.incAngle(90);
+		assertFalse(v1.getYForce() == 0);
+		assertTrue(v1.getYForce() == 0.00001);
+	}
+	
+	@Test
+	public void testConsumeFuel() {
+		System.out.println("testConsumeFuel");
+		assertTrue(v1.getFuel() == 10000);
+		v1.fullThrottle();
+		v1.consumeFuel();
+		assertFalse(v1.getFuel() == 10000);
+		assertTrue(v1.getFuel() == 9999.9);
+		while(v1.getFuel() > 0) {
+			v1.consumeFuel();
+		}
+		assertTrue((int)v1.getFuel() == 0);
+		v1.consumeFuel();
+		assertTrue((int)v1.getFuel() == 0);	
 	}
 	
 	@Test
@@ -90,14 +195,5 @@ public class VaisseauTest {
 		System.out.println("testGetAngle");
 		assertTrue(v1.getAngle() == 0);
 		assertFalse(v1.getAngle() != 0);
-	}
-	
-	@Test
-	public void testSetAngle() {
-		System.out.println("testSetAngle");
-		assertTrue(v1.getAngle() == 0);
-		v1.setAngle(120);
-		assertFalse(v1.getAngle() == 0);
-		assertTrue(v1.getAngle() == 120);
 	}
 }
