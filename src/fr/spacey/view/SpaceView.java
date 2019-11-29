@@ -52,6 +52,7 @@ public class SpaceView implements Observer {
 	public Pane pane;
 	private GraphicsContext gc;
 	private Vector lastMousePos;
+	private boolean isMenu;
 
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
@@ -67,6 +68,7 @@ public class SpaceView implements Observer {
 		this.can.setFocusTraversable(true);
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
+		this.isMenu = false;
 		try {
 			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
 			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix_bold.ttf")), 10);
@@ -75,48 +77,16 @@ public class SpaceView implements Observer {
 		}
 
 		pane.setOnKeyPressed(e -> {
-			if (e.getCode().equals(KeyCode.Z)) {
-				sc.getModel().getVaisseau().upThrottle();
+			if(e.getCode().equals(KeyCode.ESCAPE)) {
+				if(!this.isMenu && sc.isRunning())
+					sc.toggleRunning();
+				this.isMenu = !this.isMenu;
 			}
-
-			if (e.getCode().equals(KeyCode.S)) {
-				sc.getModel().getVaisseau().downThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.Q)) {
-				if (e.isAltDown())
-					sc.getModel().getVaisseau().incAngle(-45.0);
-				else
-					sc.getModel().getVaisseau().incAngle(-1.0);
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.D)) {
-				if (e.isAltDown())
-					sc.getModel().getVaisseau().incAngle(45.0);
-				else
-					sc.getModel().getVaisseau().incAngle(1.0);
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.SHIFT)) {
-				sc.getModel().getVaisseau().fullThrottle();
-				;
-			}
-
-			if (e.getCode().equals(KeyCode.CONTROL)) {
-				sc.getModel().getVaisseau().noThrottle();
-				;
-			}
-		
-			if (e.getCode().equals(KeyCode.SPACE)) {
-				sc.toggleRunning();
-			} else {
-				sc.onKeyPressed(e);
-			}
+			sc.onKeyPressed(e);
 		});
 
 		pane.setOnMouseReleased(e -> {
+			if(isMenu) return;
 			sc.onMouseReleased(e);
 		});
 
@@ -125,15 +95,20 @@ public class SpaceView implements Observer {
 		 */
 
 		pane.setOnMousePressed(e -> {
+			if(isMenu) {
+				
+			}
 			sc.onMousePressed(e);
 		});
 
 		pane.setOnMouseMoved(e -> {
 			lastMousePos = new Vector(e.getSceneX(), e.getSceneY());
+			if(isMenu) return;
 			sc.onMouseMoved(e);
 		});
 
 		pane.setOnMouseDragged(e -> {
+			if(isMenu) return;
 			sc.onMouseDrag(e);
 		});
 
@@ -169,51 +144,63 @@ public class SpaceView implements Observer {
 		for (int i = 0; i < aff.getStars().length; i++) {
 			gc.fillOval(aff.getStars()[i].getX() + aff.getxOffset(), aff.getStars()[i].getY() + aff.getyOffset(), 3, 3);
 		}
+		
+
+
+
+		// ENTITES TRAINEES
+		for (Entity e : sc.getModel().getEntities()) {
+			// TRAINEE
+			if (e.getType().equals(EntityType.SIMULE)) {
+				@SuppressWarnings("unchecked")
+				LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
+				for (Vector v : ll) {
+					gc.setFill(Color.GREY);
+					gc.fillOval(v.getX() + aff.getxOffset(), v.getY() + aff.getyOffset(), 2, 2);
+				}
+			}
+		}
+
 
 		// ENTITES
 		for (Entity e : sc.getModel().getEntities()) {
 			double planetX = e.getPos().getX() + aff.getxOffset() - e.getRadius() / 2;
 			double planetY = e.getPos().getY() + aff.getyOffset() - e.getRadius() / 2;
 
-			// TRAINEE
-			if (e instanceof Simule) {
-				try {
-					@SuppressWarnings("unchecked")
-					LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
-					for (Vector v : ll) {
-						gc.setFill(Color.GREY);
-						gc.fillOval(v.getX() + aff.getxOffset(), v.getY() + aff.getyOffset(), 2, 2);
-					}
-
-				} catch (NullPointerException exc) {
-				}
-			}
-			
 			Image img = Sprite.getImage(e.getImgId());
-			
+
 			if(e.getType().equals(EntityType.VAISSEAU)) {
 				planetX += e.getRadius()/2;
 				planetY += e.getRadius()/2;
-		        gc.save();
-		        gc.transform(new Affine(new Rotate(sc.getModel().getVaisseau().getAngle(), planetX, planetY)));
-		        gc.translate(-e.getRadius()/2, -e.getRadius()/2);
-		        gc.drawImage(img, planetX, planetY, e.getRadius(), e.getRadius());
-		        gc.restore();
+				gc.save();
+				gc.transform(new Affine(new Rotate(sc.getModel().getVaisseau().getAngle(), planetX, planetY)));
+				gc.translate(-e.getRadius()/2, -e.getRadius()/2);
+				gc.drawImage(img, planetX, planetY, e.getRadius(), e.getRadius());
+				gc.restore();
 				planetX -= e.getRadius()/2;
 				planetY -= e.getRadius()/2;
 			} else {
 				gc.drawImage(img, planetX, planetY, e.getRadius(), e.getRadius());
 			}
-			
+
+
+		}
+
+		// ENTITES INFOS
+		for (Entity e : sc.getModel().getEntities()) {
 			// INFOS SUR ENTITE
 			if (e.getInfoMode().equals(ShowState.HOVERING) || e.getInfoMode().equals(ShowState.SHOWINFO)) {
+
+				double planetX = e.getPos().getX() + aff.getxOffset() - e.getRadius() / 2;
+				double planetY = e.getPos().getY() + aff.getyOffset() - e.getRadius() / 2;
+				
 				double startDescX = planetX + e.getRadius() + 25, startDescY = planetY + e.getRadius() + 25;
 
 				gc.setFill(new Color(.4, .4, .4, 0.7));
 				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
 
 				gc.setFill(Color.RED);
-				gc.setFont(new Font("pixelmix regular", 15));
+				gc.setFont(new Font("Minecraftia", 15));
 				gc.fillText(e.getName(), startDescX + 5, startDescY + 17);
 
 				gc.setStroke(Color.MEDIUMAQUAMARINE);
@@ -223,7 +210,7 @@ public class SpaceView implements Observer {
 				gc.strokeLine(planetX + e.getRadius() + 3, planetY + e.getRadius() + 3, startDescX - 5, startDescY - 5);
 
 				gc.setFill(Color.LIGHTGRAY);
-				gc.setFont(new Font("pixelmix regular", 10));
+				gc.setFont(new Font("Minecraftia", 10));
 				gc.fillText("Type: " + e.getType().NOM, startDescX + 15, startDescY + 30);
 				gc.fillText("Masse: " + (int) e.getMasse(), startDescX + 15, startDescY + 42);
 				gc.fillText("Rayon: " + (int) e.getRadius(), startDescX + 15, startDescY + 54);
@@ -237,11 +224,11 @@ public class SpaceView implements Observer {
 		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
 
 		gc.setFill(new Color(.2, .2, .2, 0.9));
-		gc.fillRoundRect(relatX - 5, 5 - relatY, 140, 125, 10, 10);
+		gc.fillRoundRect(relatX - 5, 5 - relatY, 140, 115, 10, 10);
 
 		gc.setFill(Color.WHITE);
-		gc.setFont(new Font("pixelmix regular", 10));
-		
+		gc.setFont(new Font("Minecraftia", 10));
+
 		gc.fillText("Pos: [" + (int) (aff.getxOffset() - aff.getWidth() / 2)+","+ (int)(aff.getyOffset() - aff.getHeight() / 2) + ']', relatX, 25 - relatY);
 		gc.fillText("G: " + String.format("%4.2e", SpaceModel.G), relatX, 43 - relatY);
 		gc.fillText("DT: " + String.format("%4.2e", sc.getModel().getDt()), relatX, 62 - relatY);
@@ -256,6 +243,50 @@ public class SpaceView implements Observer {
 
 		if (sc.getModel().hasVaisseau()) {
 			drawSpaceshipHUD(gc);
+		}
+		
+		if(isMenu) {
+			gc.setTransform(1, 0, 0, 1, 0, 0);
+			gc.setFill(new Color(0,0,0, 0.8));
+			//GaussianBlur gaussianBlur = new GaussianBlur(); 
+		    //gaussianBlur.setRadius(10); 
+			//gc.setEffect(gaussianBlur);
+			gc.fillRect(0, 0, pane.getWidth(), pane.getHeight());
+			//gc.setEffect(null);
+			
+			gc.setFill(new Color(.3, .3, .3, 1));
+			gc.fillRoundRect(aff.getWidth()/2-250, aff.getHeight()*0.3, 500, 80, 20, 20);
+			gc.fillRoundRect(aff.getWidth()/2-250, aff.getHeight()*0.42, 240, 80, 20, 20);
+			gc.fillRoundRect(aff.getWidth()/2+10, aff.getHeight()*0.42, 240, 80, 20, 20);
+			gc.fillRoundRect(aff.getWidth()/2-250, aff.getHeight()*0.54, 500, 80, 20, 20);
+			gc.fillRoundRect(aff.getWidth()/2-250, aff.getHeight()*0.66, 500, 80, 20, 20);
+
+			gc.setFill(Color.YELLOW);
+			gc.setFont(new Font("Minecraftia", 80));
+			gc.fillText("SpaceY", aff.getWidth()/2-160, aff.getHeight()*0.25);
+			gc.setFill(Color.WHITE);
+			gc.setFont(new Font("Minecraftia", 26));
+			gc.fillText("Reprendre", aff.getWidth()/2-80, aff.getHeight()*0.3+65);
+			gc.fillText("Sauvegarder", aff.getWidth()/2-235, aff.getHeight()*0.42+65);
+			gc.fillText("Charger", aff.getWidth()/2+65, aff.getHeight()*0.42+65);
+			gc.fillText("Paramètres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
+			gc.fillText("Menu Principal", aff.getWidth()/2-110, aff.getHeight()*0.66+65);
+
+			gc.setStroke(Color.RED);
+			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
+					&& lastMousePos.getY() >= 270 && lastMousePos.getY() <= 350) {
+				gc.setStroke(Color.WHITE);
+			} else {
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+			}
+			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.3+5, 490, 70, 20, 20);
+			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.42+5, 230, 70, 20, 20);
+			gc.strokeRoundRect(aff.getWidth()/2+15, aff.getHeight()*0.42+5, 230, 70, 20, 20);
+			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.54+5, 490, 70, 20, 20);
+			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.66+5, 490, 70, 20, 20);
+			
+			
+			
 		}
 
 		//stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G + ", TIME=" + formatTimeFromSec(sc.getTime()));
@@ -310,18 +341,18 @@ public class SpaceView implements Observer {
 		gc.setLineWidth(1);
 		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 		gc.strokeOval(relatX + 27.5, aff.getHeight() - 192.5 - relatY, 145, 145);
-		
+
 		// HUD IMAGE VAISSEAU
 		Vaisseau e = sc.getModel().getVaisseau();
 		double vaissX = relatX + 55 + 45;
 		double vaissY = aff.getHeight() - 165 - relatY + 45;
 		Image img = Sprite.getImage(e.getImgId());
-		
-        gc.save();
-        gc.transform(new Affine(new Rotate(sc.getModel().getVaisseau().getAngle(), vaissX, vaissY)));
-        gc.translate(-45, -45);
-        gc.drawImage(img, vaissX, vaissY, 90, 90);
-        gc.restore();
+
+		gc.save();
+		gc.transform(new Affine(new Rotate(sc.getModel().getVaisseau().getAngle(), vaissX, vaissY)));
+		gc.translate(-45, -45);
+		gc.drawImage(img, vaissX, vaissY, 90, 90);
+		gc.restore();
 
 		// HUD BARRES VAISSEAU ACCELERATION
 		gc.fillRoundRect(relatX + 150, aff.getHeight() - 135 - relatY, 200, 35, 20, 20);
@@ -373,52 +404,51 @@ public class SpaceView implements Observer {
 		gc.setLineWidth(1);
 		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 		gc.strokeRoundRect(SELECTX + 5, SELECTY + 5, SELECTWIDTH - 10, SELECTHEIGHT - 10, 20, 20);
-		
+
 		//fleche gauche
 		if(lastMousePos.getX() >= 855 && lastMousePos.getX() <= 890 
 				&& lastMousePos.getY() >= 740 && lastMousePos.getY() <= 820) {
-			
+
 			gc.setFill(new Color(0.95, 0.95, 0.95, 1));
 			gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, 
-			new double[] { 780, 805, 755 }, 3);
-			
+					new double[] { 780, 805, 755 }, 3);
+
 		} else {
 
 			gc.setFill(new Color(0.6, 0.6, 0.6, 1));
 			gc.fillPolygon(new double[] { SELECTX + 15, SELECTX + 30, SELECTX + 30 }, 
 					new double[] { 780, 805, 755 }, 3);
 		}
-		
+
 		//fleche droite
 		if(lastMousePos.getX() >= 1510 && lastMousePos.getX() <= 1545 
 				&& lastMousePos.getY() >= 740 && lastMousePos.getY() <= 820) {
-			
+
 			gc.setFill(new Color(0.95, 0.95, 0.95, 1));
 			gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, 
-				new double[] { 780, 805, 755 }, 3);
-			
+					new double[] { 780, 805, 755 }, 3);
+
 		} else {
 
 			gc.setFill(new Color(0.6, 0.6, 0.6, 1));
 			gc.fillPolygon(new double[] { SELECTX + 685, SELECTX + 670, SELECTX + 670 }, 
-				new double[] { 780, 805, 755 }, 3);
+					new double[] { 780, 805, 755 }, 3);
 		}
-		
 
-		gc.drawImage(Sprite.getImage(e.getImgId()), SELECTX + SELECTWIDTH / 1.5 - 50, SELECTY + SELECTHEIGHT / 2 - 50,
-				TAILLEIMG, TAILLEIMG);
+
+		gc.drawImage(Sprite.getImage(e.getImgId()), SELECTX + SELECTWIDTH / 1.5 - 50, SELECTY + SELECTHEIGHT / 2 - 50, TAILLEIMG, TAILLEIMG);
 
 		gc.setFill(Color.LIGHTBLUE);
-		gc.setFont(new Font("pixelmix regular", 17));
-		gc.fillText(e.getName(), TEXTX + 8, SELECTY + 28);
+		gc.setFont(new Font("Minecraftia", 17));
+		gc.fillText(e.getName(), TEXTX + 8, SELECTY + 40);
 		gc.setFill(Color.LIGHTGRAY);
-		gc.setFont(new Font("pixelmix regular", 14));
-		gc.fillText("Type: " + e.getType().NOM, TEXTX, SELECTY + 46);
-		gc.fillText("Masse: " + String.format("%4.2e", e.getMasse()) + " kg", TEXTX, SELECTY + 62);
-		gc.fillText("Rayon: " + String.format("%4.2e", e.getRadius()) + " m", TEXTX, SELECTY + 78);
-		gc.fillText("Pos: " + e.getPos().toStringScientific(), TEXTX, SELECTY + 94);
-		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", TEXTX, SELECTY + 110);
-		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", TEXTX, SELECTY + 126);
+		gc.setFont(new Font("Minecraftia", 14));
+		gc.fillText("Type: " + e.getType().NOM, TEXTX, SELECTY + 55);
+		gc.fillText("Masse: " + String.format("%4.2e", e.getMasse()) + " kg", TEXTX, SELECTY + 70);
+		gc.fillText("Rayon: " + String.format("%4.2e", e.getRadius()) + " m", TEXTX, SELECTY + 85);
+		gc.fillText("Pos: " + e.getPos().toStringScientific(), TEXTX, SELECTY + 100);
+		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", TEXTX, SELECTY + 115);
+		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", TEXTX, SELECTY + 130);
 	}
 
 	/**
@@ -443,8 +473,8 @@ public class SpaceView implements Observer {
 		s.setTitle("SpaceY");
 		s.setScene(new Scene(pane, aff.getWidth(), aff.getHeight()));
 		s.setResizable(true);
-		// s.setFullScreen(true);
-		// s.setMaximized(true);
+		 s.setFullScreen(true);
+		 s.setMaximized(true);
 		// s.show();
 	}
 }
