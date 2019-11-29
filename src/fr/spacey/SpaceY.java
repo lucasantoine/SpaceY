@@ -39,7 +39,7 @@ public class SpaceY extends Application {
 		SpaceY.instance = this;
 		// FONT
 		try {
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
+			Font.loadFont(new FileInputStream(new File("res/fonts/Minecraftia.ttf")), 10);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}

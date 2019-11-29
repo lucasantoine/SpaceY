@@ -1,10 +1,16 @@
 package fr.spacey.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Observer;
 
 import fr.spacey.model.Affichage;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.EntityType;
 import fr.spacey.utils.ShowState;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
@@ -204,7 +210,7 @@ public class SpaceController {
 		double mouseX = e.getSceneX(), mouseY = e.getSceneY();
 		boolean nouvelleSelection = false;
 		int idx = 0;
-		
+		System.out.println(e.getX()+" "+e.getY());
 		if(getModel().hasEntitySelected()) {
 			//fleche gauche
 			if(e.getX() >= 855 && e.getX() <= 890 && e.getY() >= 740 && e.getY() <= 820) {
@@ -222,6 +228,23 @@ public class SpaceController {
 			}
 		}
 		
+		if(sm.hasVaisseau()) {
+			if(e.getX() >= 60 && e.getX() <= 150 && e.getY() >= 730 && e.getY() <= 815) {
+				int k = 0;
+				for (Entity en : getModel().getEntities()) {
+					if(en.getType().equals(EntityType.VAISSEAU)) {
+						getModel().setEntitySelected(k);
+						en.setInfo(ShowState.SHOWINFO);
+						return;
+					}
+					k++;
+				}
+			}
+		}
+				
+			
+		
+		
 		
 		for (Entity en : getModel().getEntities()) {
 			double entityX = en.getPos().getX() + aff.getxOffset();
@@ -234,7 +257,6 @@ public class SpaceController {
 					&& mouseY < maxY) {
 				getModel().setEntitySelected(idx);
 				en.setInfo(ShowState.SHOWINFO);
-				// centerCameraOnEntity(en);
 				e.setDragDetect(false);
 				nouvelleSelection = true;
 			} else {
@@ -305,26 +327,83 @@ public class SpaceController {
 	 * @param e Touche du clavier pressee.
 	 */
 	public void onKeyPressed(KeyEvent e) {
+		if(e.getCode().equals(KeyCode.SPACE)) {
+			toggleRunning();
+		} else if(e.getCode().equals(KeyCode.P)) {
+			saveSpace();
+		}
 		if (isRunning) {
 			if (e.getCode().equals(KeyCode.ADD) && getModel().getFa() < 200) {
 				getModel().setFa(getModel().getFa() + 1);
 			} else if (e.getCode().equals(KeyCode.SUBTRACT) && getModel().getFa() > 1) {
 				getModel().setFa(getModel().getFa() - 1);
 			}
+			if (e.getCode().equals(KeyCode.Z)) {
+				getModel().getVaisseau().upThrottle();
+			}
 
-			/*if (sm.hasVaisseau()) {
-				switch (e.getCode()) {
-				case UP:
-					sm.getVaisseau().up();
-					break;
-				case DOWN:
-					sm.getVaisseau().down();
-					break;
-				default:
-					break;
-				}
-			}*/
+			if (e.getCode().equals(KeyCode.S)) {
+				getModel().getVaisseau().downThrottle();
+			}
+
+			if (e.getCode().equals(KeyCode.Q)) {
+				if (e.isAltDown())
+					getModel().getVaisseau().incAngle(-45.0);
+				else
+					getModel().getVaisseau().incAngle(-1.0);
+			}
+
+			if (e.getCode().equals(KeyCode.D)) {
+				if (e.isAltDown())
+					getModel().getVaisseau().incAngle(45.0);
+				else
+					getModel().getVaisseau().incAngle(1.0);
+			}
+
+			if (e.getCode().equals(KeyCode.SHIFT)) {
+				getModel().getVaisseau().fullThrottle();
+			}
+
+			if (e.getCode().equals(KeyCode.CONTROL)) {
+				getModel().getVaisseau().noThrottle();
+			}
 		}
+	}
+
+	private void saveSpace() {
+		saveSpace("save.astro");
+	}
+	private void saveSpace(String path) {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		try(PrintWriter bf = new PrintWriter(new File(path))) {
+
+			bf.println("# "+formatter.format(LocalDateTime.now()));
+			
+			bf.println("PARAMS G="+SpaceModel.G+" dt="+getModel().getDt()+" fa="+getModel().getFa()+" rayon="+getModel().getRayon());
+			
+			for(Entity e : getModel().getEntities()) {
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append(e.getName()).append(": ").append(e.getType().NOM).append(" masse=").append(e.getMasse())
+				.append(" posx=").append(e.getPos().getX()).append(" posy=").append(e.getPos().getY());
+				
+				if(!e.getType().equals(EntityType.FIXE)) {
+					sb.append(" vitx=").append(e.getVel().getX()).append(" vity=").append(e.getVel().getY());
+				}
+				
+				bf.println(sb.toString());
+				
+			}
+			
+			bf.flush();
+			
+		} catch(IOException ioe) {
+			
+		}
+		
+		System.out.println("Systeme sauvegardé.");
 	}
 
 }
