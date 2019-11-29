@@ -55,6 +55,18 @@ public class Vaisseau extends Simule {
 		return this.fuel;
 	}
 
+	public double getMaxForce() {
+		return maxForce;
+	}
+
+	public double getPretro() {
+		return pretro;
+	}
+
+	public void setPretro(double pretro) {
+		this.pretro = pretro;
+	}
+
 	public double getTankSize() {
 		return this.TANKSIZE;
 	}

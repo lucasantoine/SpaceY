@@ -40,35 +40,26 @@ public class VaisseauTest {
 	}
 
 	@Test
-	public void testGetPropPrincipal() {
-		System.out.println("testGetPropPrincipal");
-		assertTrue(v1.getPropPrincipal() == 0.00001);
-		assertFalse(v1.getPropPrincipal() != 0.00001);
+	public void testGetMaxForce() {
+		System.out.println("testgetMaxForce");
+		assertTrue(v1.getMaxForce() == 0.00001);
+		assertFalse(v1.getMaxForce() != 0.00001);
 	}
 	
 	@Test
-	public void testSetPropPrincipal() {
-		System.out.println("testSetPropPrincipal");
-		assertTrue(v1.getPropPrincipal() == 0.00001);
-		v1.setPropPrincipal(0.01);
-		assertFalse(v1.getPropPrincipal() == 0.00001);
-		assertTrue(v1.getPropPrincipal() == 0.01);
-	}
-	
-	@Test
-	public void testGetPropRetro() {
-		System.out.println("testGetPropRetro");
-		assertTrue(v1.getPropRetro() == 0.0000001);
-		assertFalse(v1.getPropRetro() != 0.0000001);
+	public void testgetMaxForce() {
+		System.out.println("testgetMaxForce");
+		assertTrue(v1.getMaxForce() == 0.0000001);
+		assertFalse(v1.getMaxForce() != 0.0000001);
 	}
 	
 	@Test
 	public void testSetPropRetro() {
 		System.out.println("testSetPropRetro");
-		assertTrue(v1.getPropRetro() == 0.0000001);
-		v1.setPropRetro(0.01);
-		assertFalse(v1.getPropRetro() == 0.0000001);
-		assertTrue(v1.getPropRetro() == 0.01);
+		assertTrue(v1.getMaxForce() == 0.0000001);
+		v1.setPretro(0.01);
+		assertFalse(v1.getMaxForce() == 0.0000001);
+		assertTrue(v1.getMaxForce() == 0.01);
 	}
 	
 	@Test
@@ -96,8 +87,42 @@ public class VaisseauTest {
 	public void testSetAngle() {
 		System.out.println("testSetAngle");
 		assertTrue(v1.getAngle() == 0);
-		v1.setAngle(120);
+		v1.incAngle(120);
 		assertFalse(v1.getAngle() == 0);
 		assertTrue(v1.getAngle() == 120);
+	}
+	
+	@Test
+	public void testThrottle() {
+		v1.fullThrottle();
+		assertTrue(v1.getRocketActivity()==100);
+		v1.noThrottle();
+		assertTrue(v1.getRocketActivity()==0);
+		v1.upThrottle();
+		assertTrue(v1.getRocketActivity()==1);
+		v1.downThrottle();
+		assertTrue(v1.getRocketActivity()==0);
+		v1.downThrottle();
+		assertTrue(v1.getRocketActivity()==0);
+		v1.fullThrottle();
+		v1.upThrottle();
+		assertTrue(v1.getRocketActivity()==100);
+	}
+	
+	@Test
+	public void testIncAngle() {
+		v1.incAngle(90);
+		assertTrue(v1.getAngle()==90);
+		v1.incAngle(359);
+		assertTrue(v1.getAngle()==89);
+		v1.incAngle(-89);
+		assertTrue(v1.getAngle()==0);
+		v1.incAngle(-180);
+		assertTrue(v1.getAngle()==180);
+	}
+	
+	@Test
+	public void testForce() {
+		assertTrue(v1.getForce()==0);
 	}
 }
