@@ -6,111 +6,219 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
+import fr.spacey.exceptions.AstroParserException;
 import fr.spacey.exceptions.TypeUnknownException;
 import fr.spacey.model.SpaceModel;
+import fr.spacey.model.entity.Circle;
+import fr.spacey.model.entity.Ellipse;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 
-/**
- * SpaceY - IUT A de Lille - 3e Semestre
- * 
- * @author ANTOINE Lucas, BARBIER Benoit, POMIER Mathys, RYCKEBUSH Corentin
- * @since 26 oct. 2019
- * 
- *        Classe permettant de lire un fichier et de creer un Array d'Entite a
- *        partir de ce fichier.
- */
 public class AstroParser {
 
-	/**
-	 * Retourne une liste d'entites generee a�partir d'un fichier de configuration
-	 * au format astro.
-	 * 
-	 * @param spaceModel
-	 * @param filepath   Chemin vers un fichier de configuration au format astro.
-	 * @return Liste d'entites generee a�partir d'un fichier de configuration au
-	 *         format astro.
-	 */
-	public static List<Entity> loadAstroFile(SpaceModel spaceModel, String filepath) {
+	public static List<Entity> loadAstroFile(SpaceModel spaceModel, String filepath) throws Exception {
 		List<Entity> entities = new ArrayList<Entity>();
-		File file = new File(filepath);
 		String[] values;
-		try (BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"))) {
+		boolean paramsset = false;
+		boolean vaisseaualreadycreate = false;
+		IntStream chars;
+		long count;
+		EntityType entityType;
+		double masse;
+		double posx;
+		double posy;
+		try (BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filepath)), "UTF8"))) {
 			String line = "";
 			while ((line = bf.readLine()) != null) {
-				if (!line.startsWith("#")) {
-					if (line.startsWith("PARAMS")) {
-						values = line.split(" ");
-						SpaceModel.G = Double.valueOf(values[1].split("=")[1]);
-						spaceModel.setDt(Float.valueOf(values[2].split("=")[1]));
-						spaceModel.setFa(Double.valueOf(values[3].split("=")[1]));
-						spaceModel.setRayon(Integer.valueOf(values[4].split("=")[1]));
-					} else if (line.contains(":")) {
-						values = line.split(":");
-						String name = values[0];
-						values = values[1].split(" ");
-						EntityType entityType = EntityType.getByName(values[1]);
-						switch (entityType) {
-						case FIXE:
-							entities.add(new Fixe(name, // Name
-									Double.valueOf(values[2].split("=")[1]), // Masse
-									new Vector( // Position
-											Integer.valueOf(values[3].split("=")[1]), // Pos X
-											Integer.valueOf(values[4].split("=")[1])) // Pos Y
-							));
-							break;
-						case SIMULE: 
-							entities.add(new Simule(name, // name
-									Double.valueOf(values[2].split("=")[1]), // masse
-									new Vector( // Position
-											Integer.valueOf(values[3].split("=")[1]), // Pos X
-											Integer.valueOf(values[4].split("=")[1])), // Pos Y
-									new Vector( // Velocity
-											Double.valueOf(values[5].split("=")[1]), // Velocity X
-											Double.valueOf(values[6].split("=")[1])) // Velocity Y
-							));
-							break;
-						case VAISSEAU:
-							entities.add(new Vaisseau(name, // name
-									Double.valueOf(values[2].split("=")[1]), // masse
-									new Vector( // Position
-											Integer.valueOf(values[3].split("=")[1]), // Pos X
-											Integer.valueOf(values[4].split("=")[1])), // Pos Y
-									new Vector( // Velocity
-											Double.valueOf(values[5].split("=")[1]), // Velocity X
-											Double.valueOf(values[6].split("=")[1])), // Velocity Y
-									Double.valueOf(values[7].split("=")[1]), // Propulseur principal
-									Double.valueOf(values[8].split("=")[1]) // Propulseur retro
-							));
-							break;
-						case CERCLE:
-							// TODO
-							break;
-						case ELLIPSE:
-							// TODO
-							break;
-						default:
-							break;
+				line = formatLine(line);
+				if(!line.startsWith("#") && !line.isEmpty()) {
+					chars = line.chars();
+					chars = chars.filter(ch -> ch == ':');
+					count = chars.count();
+					if(line.startsWith("PARAMS") || line.startsWith("PARMS")) {
+						line = line.replace("PARAMS ", "");
+						line = line.replace("PARMS ", "");
+						values = line.split(" "); 
+						final double g = getDouble("G", values);
+						final double dt = getDouble("dt", values);
+						final double fa = getDouble("fa", values);
+						final double rayon = getDouble("rayon", values);
+						SpaceModel.G = g;
+						spaceModel.setDt(dt);
+						spaceModel.setFa(fa);
+						spaceModel.setRayon(rayon);
+						paramsset = true;
+					}else if(line.contains(":") && count == 1){
+						if(paramsset) {
+							values = line.split(" ");
+							String name = getName(values);
+							if(entityAlreadyExists(name, entities)) { throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Une entit� avec ce nom existe d�j�"); }
+							entityType = getType(values);
+							masse = getDouble("masse", values);
+							posx = getDouble("posx", values);
+							posy = getDouble("posy", values);
+							if(posx < -spaceModel.getRayon() || posy < -spaceModel.getRayon() || posx > spaceModel.getRayon() || posy > spaceModel.getRayon()) {
+								throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Position de l'entit� hors rayon");
+							}
+							Vector position = new Vector(posx, posy);
+							switch (entityType) {
+							case FIXE:
+								entities.add(new Fixe(name, // Name
+											masse, // Masse
+											position // Position
+								));
+								break;
+							case SIMULE: 
+								entities.add(new Simule(name, // name
+										masse, // masse
+										position, // position
+										new Vector( // Velocity
+												getDouble("vitx", values), // Velocity X
+												getDouble("vity", values)) // Velocity Y
+								));
+								break;
+							case VAISSEAU:
+								if(vaisseaualreadycreate) throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Il ne peut y avoir que 1 vaisseau par syst�me");
+								entities.add(new Vaisseau(name, // name
+										masse, // masse
+										position, // position
+										new Vector( // Velocity
+												getDouble("vitx", values), // Velocity X
+												getDouble("vity", values)), // Velocity Y
+										getDouble("pprincipal", values), // Propulseur principal
+										getDouble("pretro", values) // Propulseur retro
+								));
+								vaisseaualreadycreate = true;
+								break;
+							case CERCLE:
+								entities.add(new Circle(
+										name, 
+										masse, 
+										position, 
+										getEntity("centre", entities, values)
+								));
+								break;
+							case ELLIPSE:
+								entities.add(new Ellipse(
+										name, 
+										masse,
+										position, 
+										getFixeEntity("f1", entities, values), 
+										getFixeEntity("f2", entities, values)
+								));
+								break;
+							}
+						}else {
+							throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : PARAMS non d�fini ");
 						}
+					}else {
+						throw new AstroParserException("Erreur formatage");
 					}
 				}
 			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			return null;
 		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} catch (TypeUnknownException e) {
 			e.printStackTrace();
 		}
 		return entities;
 	}
 
+	private static String getName(String... values) throws Exception {
+		String name = values[0];
+		if(name.length() > 1 && !name.contains(" ") && name.contains(":") && name.indexOf(":") == name.length()-1) {
+			name = name.substring(0, name.length()-1);
+			return name;
+		}
+		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : formatage du nom");
+	}
+	
+	private static EntityType getType(String... values) throws Exception {
+		for (String string : values) {
+			if(!string.contains("=") && !string.contains(":")) {
+				try {
+					EntityType type = EntityType.getByName(string);
+					return type;
+				} catch (TypeUnknownException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Type manquant");
+	}
+	
+	private static String getValue(String label, String... values) throws Exception {
+		String[] temp;
+		String value;
+		for (String string : values) {
+			temp = string.split("=");
+			value = temp[0];
+			if(value.equalsIgnoreCase(label)) {
+				return temp[1];
+			}
+		}
+		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : valeur manquante (" + label + ")");
+	}
+	
+	private static double getDouble(String label, String... values) throws Exception {
+		String value = getValue(label, values);
+		if(value == null) return -1;
+		try {
+			double d = Double.parseDouble(value);
+			return d;
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		throw new AstroParserException("Erreur lors de la création d'une entité : NumberFormat");
+	}
+	
+	private static Entity getEntity(String label, List<Entity> entities, String...values) throws Exception {
+		String value = getValue(label, values);
+		String name;
+		for (Entity entity : entities) {
+			name = entity.getName();
+			if(name.equalsIgnoreCase(value)) {
+				return entity;
+			}
+		}
+		throw new AstroParserException("Erreur lors de la création d'une entité : Unknown entity");
+	}
+	
+	private static Fixe getFixeEntity(String label, List<Entity> entities, String...values) throws Exception {
+		Entity entity = getEntity(label, entities, values);
+		if(entity.getType() == EntityType.FIXE) {
+			return (Fixe) entity;
+		}
+		throw new AstroParserException("Erreur lors de la création d'une entité : None fix entity");
+	}
+	
+	private static boolean entityAlreadyExists(String name, List<Entity> entities) {
+		String nameValue;
+		for (Entity entity : entities) {
+			nameValue = entity.getName();
+			if(nameValue.equalsIgnoreCase(name)) return true;
+		}
+		return false;
+	}
+	
+	private static String formatLine(String line) {
+		String formatedLine = line;
+		formatedLine = formatedLine.replaceAll("  *", " ");
+		formatedLine = formatedLine.replaceAll("\t", "");
+		if(formatedLine.indexOf(" ") == 0) {
+			formatedLine = formatedLine.replaceFirst("\\s*", "");
+		}
+		return formatedLine;
+	}
+	
 }

@@ -1,12 +1,10 @@
 package fr.spacey.view;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.Affichage;
 import fr.spacey.model.SpaceModel;
@@ -67,12 +65,9 @@ public class SpaceView implements Observer {
 		this.can.setFocusTraversable(true);
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
-		try {
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix_bold.ttf")), 10);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
+		
+		Font.loadFont(SpaceY.getInstance().getClass().getResourceAsStream("res/fonts/pixelmix.ttf"), 10);
+		Font.loadFont(SpaceY.getInstance().getClass().getResourceAsStream("res/fonts/pixelmix_bold.ttf"), 10);
 
 		pane.setOnKeyPressed(e -> {
 			if (e.getCode().equals(KeyCode.Z)) {

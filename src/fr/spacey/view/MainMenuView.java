@@ -11,13 +11,14 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -40,6 +41,7 @@ public class MainMenuView implements Observer {
 	public GraphicsContext gc;
 	public Text title;
 	public Text play;
+	public Label chooseFile;
 	public Text quit;
 
 	/**
@@ -57,7 +59,7 @@ public class MainMenuView implements Observer {
 		this.gc = canvas.getGraphicsContext2D();
 		this.mmc.register(this);
 
-		scene.getStylesheets().add("file:res/styles/MainMenuStyle.css");
+		scene.getStylesheets().add(getClass().getClassLoader().getResource("styles/MainMenuStyle.css").toExternalForm());
 
 		title = new Text("S p a c e Y");
 		title.setFont(Font.font(100));
@@ -68,33 +70,40 @@ public class MainMenuView implements Observer {
 		title.setX(canvas.getWidth() / 2);
 		title.setY(canvas.getHeight() / 2);
 
-		play = new Text("Demarrer");
+		play = new Text("Démarrer");
 		play.setFont(Font.font(60));
 		play.setFill(Color.YELLOW);
 		play.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
 		play.setX(canvas.getWidth() / 2);
 		play.setY(canvas.getHeight() / 2 - 300);
+		play.setId("handCursor");
 		play.setOnMouseEntered(e -> {
 			play.setText("> " + play.getText() + " <");
 		});
 		play.setOnMouseExited(e -> {
 			play.setText(play.getText().replaceAll("[<> ]", ""));
 		});
-
-		ChoiceBox<String> choicebox = new ChoiceBox<String>();
-		choicebox.getTransforms().add(new Rotate(-50, 200, 100, 20, Rotate.X_AXIS));
-		choicebox.setManaged(true);
-		choicebox.relocate(canvas.getWidth() / 2, canvas.getHeight() / 2 - 800);
-
-		File systemesfolder = new File("res/systemes");
-
-		for (File systemesfile : systemesfolder.listFiles()) {
-			choicebox.getItems().add(systemesfile.getName().replaceAll(".astro", ""));
-		}
-		choicebox.getSelectionModel().select(systemesfolder.listFiles().length-1);
-
+		
+		chooseFile = new Label("Choisir un fichier ...");
+		chooseFile.setFont(Font.font(40));
+		chooseFile.setTextFill(Color.YELLOW);
+		chooseFile.getTransforms().add(new Rotate(-50, 300, 400, 20, Rotate.X_AXIS));
+		chooseFile.setLayoutX(canvas.getWidth() / 2);
+		chooseFile.setLayoutY(canvas.getHeight() / 2 - 700);
+		chooseFile.setId("chooseFile");
+		
+		chooseFile.setOnMouseClicked(e -> {
+			FileChooser filechooser = new FileChooser();
+			filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Aastro File", "*.astro"));
+            File file = filechooser.showOpenDialog((Stage)play.getScene().getWindow());
+            if (file != null) {
+            	chooseFile.setText(file.getName());
+            	mmc.chooseFile(file);
+            }
+		});
+		
 		play.setOnMouseClicked(e -> {
-			mmc.start(choicebox.getSelectionModel().getSelectedItem(), (Stage) play.getScene().getWindow());
+			mmc.start((Stage) play.getScene().getWindow());
 		});
 
 		quit = new Text("Quitter");
@@ -102,7 +111,8 @@ public class MainMenuView implements Observer {
 		quit.setFill(Color.YELLOW);
 		quit.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
 		quit.setX(canvas.getWidth() / 2);
-		quit.setY(canvas.getHeight() / 2 - 700);
+		quit.setY(canvas.getHeight() / 2 - 900);
+		quit.setId("handCursor");
 		quit.setOnMouseEntered(e -> {
 			quit.setText("> " + quit.getText() + " <");
 		});
@@ -114,7 +124,7 @@ public class MainMenuView implements Observer {
 		});
 
 		scene.setCamera(new PerspectiveCamera());
-		this.pane.getChildren().addAll(canvas, title, play, choicebox, quit);
+		this.pane.getChildren().addAll(canvas, title, play, chooseFile, quit);
 	}
 
 	/**

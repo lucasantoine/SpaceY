@@ -37,7 +37,12 @@ public class SpaceModel extends Observable {
 	 * @param filepath Nom du fichier de configuration sans son extension.
 	 */
 	public SpaceModel(String filepath) {
-		this.entities = AstroParser.loadAstroFile(this, "res/systemes/" + filepath + ".astro");
+		try {
+			this.entities = AstroParser.loadAstroFile(this,  filepath);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for (Entity e : entities) {
 			if (e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImgId(4);
@@ -188,10 +193,10 @@ public class SpaceModel extends Observable {
 	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la valeur
 	 * passee en parametre.
 	 * 
-	 * @param rayon Nouvelle hauteur et largeur de l'univers de la simulation.
+	 * @param rayon2 Nouvelle hauteur et largeur de l'univers de la simulation.
 	 */
-	public void setRayon(int rayon) {
-		this.rayon = rayon;
+	public void setRayon(double rayon2) {
+		this.rayon = rayon2;
 	}
 
 	/**

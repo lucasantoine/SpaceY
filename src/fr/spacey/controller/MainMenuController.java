@@ -1,5 +1,6 @@
 package fr.spacey.controller;
 
+import java.io.File;
 import java.util.Observer;
 
 import fr.spacey.SpaceY;
@@ -100,13 +101,11 @@ public class MainMenuController {
 	/**
 	 * Permet de demarrer le menu principal.
 	 * 
-	 * @param filepath Chemin d'acces au fichier de configuration de la simulation.
 	 * @param stage    Scene de la simulation.
 	 */
-	public void start(String filepath, Stage stage) {
+	public void start(Stage stage) {
 		mmm.setStart();
 		mmm.setStage(stage);
-		mmm.setFilepath(filepath);
 	}
 
 	/**
@@ -134,6 +133,10 @@ public class MainMenuController {
 	 */
 	public void leaveApplication(Stage stage) {
 		stage.close();
+	}
+
+	public void chooseFile(File file) {
+		mmm.setFilepath(file.getAbsolutePath());
 	}
 
 }
