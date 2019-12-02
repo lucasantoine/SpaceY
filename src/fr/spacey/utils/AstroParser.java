@@ -24,6 +24,8 @@ import fr.spacey.model.entity.Vaisseau;
 
 public class AstroParser {
 
+	private static int nbLine;
+	
 	public static List<Entity> loadAstroFile(SpaceModel spaceModel, String filepath) throws Exception {
 		List<Entity> entities = new ArrayList<Entity>();
 		String[] values;
@@ -35,6 +37,10 @@ public class AstroParser {
 		double masse;
 		double posx;
 		double posy;
+		
+		nbLine = 1;
+		
+		
 		try (BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filepath)), "UTF8"))) {
 			String line = "";
 			while ((line = bf.readLine()) != null) {
@@ -60,13 +66,13 @@ public class AstroParser {
 						if(paramsset) {
 							values = line.split(" ");
 							String name = getName(values);
-							if(entityAlreadyExists(name, entities)) { throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Une entit� avec ce nom existe d�j�"); }
+							if(entityAlreadyExists(name, entities)) { throw new AstroParserException("An entity with the name " + name + " already exists - line : " + nbLine); }
 							entityType = getType(values);
 							masse = getDouble("masse", values);
 							posx = getDouble("posx", values);
 							posy = getDouble("posy", values);
 							if(posx < -spaceModel.getRayon() || posy < -spaceModel.getRayon() || posx > spaceModel.getRayon() || posy > spaceModel.getRayon()) {
-								throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Position de l'entit� hors rayon");
+								throw new AstroParserException("One of the positions is outside the radius - line : " + nbLine);
 							}
 							Vector position = new Vector(posx, posy);
 							switch (entityType) {
@@ -86,7 +92,7 @@ public class AstroParser {
 								));
 								break;
 							case VAISSEAU:
-								if(vaisseaualreadycreate) throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Il ne peut y avoir que 1 vaisseau par syst�me");
+								if(vaisseaualreadycreate) throw new AstroParserException("The system can only have one ship - line : " + nbLine);
 								entities.add(new Vaisseau(name, // name
 										masse, // masse
 										position, // position
@@ -117,12 +123,13 @@ public class AstroParser {
 								break;
 							}
 						}else {
-							throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : PARAMS non d�fini ");
+							throw new AstroParserException("PARAMS is undefined");
 						}
 					}else {
-						throw new AstroParserException("Erreur formatage");
+						throw new AstroParserException("Formatting error - line : " + nbLine);
 					}
 				}
+				nbLine++;
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -167,7 +174,7 @@ public class AstroParser {
 				return temp[1];
 			}
 		}
-		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : valeur manquante (" + label + ")");
+		throw new AstroParserException("valeur manquante (" + label + ") - line : " + nbLine);
 	}
 	
 	private static double getDouble(String label, String... values) throws Exception {
@@ -177,9 +184,8 @@ public class AstroParser {
 			double d = Double.parseDouble(value);
 			return d;
 		}catch (NumberFormatException e) {
-			e.printStackTrace();
+			throw new AstroParserException(value + " is not a double value - line : " + nbLine);
 		}
-		throw new AstroParserException("Erreur lors de la création d'une entité : NumberFormat");
 	}
 	
 	private static Entity getEntity(String label, List<Entity> entities, String...values) throws Exception {
@@ -191,7 +197,7 @@ public class AstroParser {
 				return entity;
 			}
 		}
-		throw new AstroParserException("Erreur lors de la création d'une entité : Unknown entity");
+		throw new AstroParserException(value + " entity doesn't exist - line : " + nbLine);
 	}
 	
 	private static Fixe getFixeEntity(String label, List<Entity> entities, String...values) throws Exception {
@@ -199,7 +205,7 @@ public class AstroParser {
 		if(entity.getType() == EntityType.FIXE) {
 			return (Fixe) entity;
 		}
-		throw new AstroParserException("Erreur lors de la création d'une entité : None fix entity");
+		throw new AstroParserException(entity.getName() + " isn't an fix entity - line : " + nbLine);
 	}
 	
 	private static boolean entityAlreadyExists(String name, List<Entity> entities) {
