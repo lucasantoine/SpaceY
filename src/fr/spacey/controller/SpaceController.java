@@ -358,34 +358,30 @@ public class SpaceController {
 			} else if (e.getCode().equals(KeyCode.DIVIDE)) {
 				getModel().setFa(Math.max(getModel().getFa() - 10, 1));
 			}
+			if (sm.hasVaisseau()) {
 			if (e.getCode().equals(KeyCode.Z)) {
-				getModel().getVaisseau().upThrottle();
+				sm.getVaisseau().upThrottle();
 			}
 
 			if (e.getCode().equals(KeyCode.S)) {
-				getModel().getVaisseau().downThrottle();
+				sm.getVaisseau().downThrottle();
 			}
 
 			if (e.getCode().equals(KeyCode.Q)) {
-				if (e.isAltDown())
-					getModel().getVaisseau().incAngle(-45.0);
-				else
-					getModel().getVaisseau().incAngle(-1.0);
+				if (e.isAltDown()) {
+					sm.getVaisseau().incAngle(-45.0);
+				} else {
+					sm.getVaisseau().incAngle(-1.0);
+				}
 			}
 
 			if (e.getCode().equals(KeyCode.D)) {
-				if (e.isAltDown())
-					getModel().getVaisseau().incAngle(45.0);
-				else
-					getModel().getVaisseau().incAngle(1.0);
+				if (e.isAltDown()) {
+					sm.getVaisseau().incAngle(45.0);
+				} else {
+					sm.getVaisseau().incAngle(1.0);
+				}
 			}
-
-			if (e.getCode().equals(KeyCode.SHIFT)) {
-				getModel().getVaisseau().fullThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.CONTROL)) {
-				getModel().getVaisseau().noThrottle();
 			}
 		}
 	}

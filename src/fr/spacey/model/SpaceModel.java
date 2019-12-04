@@ -39,8 +39,7 @@ public class SpaceModel extends Observable {
 	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de
 	 * la simulation.
 	 * 
-	 * @param filepath
-	 *            Nom du fichier de configuration sans son extension.
+	 * @param filepath Nom du fichier de configuration sans son extension.
 	 */
 	public SpaceModel(String filepath) {
 		this.entities = AstroParser.loadAstroFile(this, filepath);
@@ -82,8 +81,6 @@ public class SpaceModel extends Observable {
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
-				this.vaisseau.fullThrottle();
-				;
 			}
 		}
 	}
@@ -175,8 +172,7 @@ public class SpaceModel extends Observable {
 	/**
 	 * Modifie le pas de temps de la simulation par celui passe en parametre.
 	 * 
-	 * @param dt
-	 *            Nouveau pas de temps de la simulation.
+	 * @param dt Nouveau pas de temps de la simulation.
 	 */
 	public void setDt(double dt) {
 		this.dt = dt;
@@ -186,8 +182,7 @@ public class SpaceModel extends Observable {
 	 * Modifie le facteur d'acceleration de la simulation par celui passe en
 	 * parametre.
 	 * 
-	 * @param fa
-	 *            Nouveau facteur d'acceleration de la simulation.
+	 * @param fa Nouveau facteur d'acceleration de la simulation.
 	 */
 	public void setFa(double fa) {
 		this.fa = fa;
@@ -197,8 +192,7 @@ public class SpaceModel extends Observable {
 	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la
 	 * valeur passee en parametre.
 	 * 
-	 * @param rayon
-	 *            Nouvelle hauteur et largeur de l'univers de la simulation.
+	 * @param rayon Nouvelle hauteur et largeur de l'univers de la simulation.
 	 */
 	public void setRayon(int rayon) {
 		this.rayon = rayon;
@@ -217,8 +211,7 @@ public class SpaceModel extends Observable {
 	 * Change l'entite selectionnee en celle positionnee en idx dans la List
 	 * entities.
 	 * 
-	 * @param idx
-	 *            designe l'index de l'entite dans la liste entities.
+	 * @param idx designe l'index de l'entite dans la liste entities.
 	 */
 	public void setEntitySelected(int idx) {
 		if (idx >= 0 && idx < entities.size()) {

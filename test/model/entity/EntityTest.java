@@ -54,7 +54,6 @@ public class EntityTest {
 		assertFalse(e3.getRadius() == e3.getMasse() * 10);
 		assertTrue(e2.getRadius() == e2.getMasse() * 10);
 		assertTrue(e1.getRadius() == e1.getMasse() * 2);
-		assertTrue(e3.getRadius() == e3.getMasse());
 	}
 	
 	@Test

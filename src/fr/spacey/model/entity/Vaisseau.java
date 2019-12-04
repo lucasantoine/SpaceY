@@ -7,6 +7,7 @@ public class Vaisseau extends Simule {
 	private final double TANKSIZE;
 	
 	private double angle;
+	@SuppressWarnings("unused")
 	private double pretro; //used for ship rotation
 	private double rocketActivity;
 	private double maxForce;
@@ -21,7 +22,6 @@ public class Vaisseau extends Simule {
 		this.angle = 0;
 		this.TANKSIZE = 10000;
 		this.fuel = 10000;
-
 	}
 	
 	public void fullThrottle() {
@@ -33,8 +33,9 @@ public class Vaisseau extends Simule {
 	}
 	
 	public void upThrottle() {
-		this.rocketActivity=rocketActivity+1.0;
-		if(this.rocketActivity>100)this.rocketActivity=100;
+		if((int)this.getFuel() != 0)
+			this.rocketActivity=rocketActivity+1.0;
+			if(this.rocketActivity>100) { this.rocketActivity=100; }
 	}
 	public void downThrottle() {
 		this.rocketActivity=rocketActivity-1.0;
@@ -72,6 +73,7 @@ public class Vaisseau extends Simule {
 
 	public void consumeFuel() {
 		this.fuel-=0.1*(this.rocketActivity/100);
+		if((int)this.getFuel() == 0) { this.noThrottle(); }
 	}
 	
 	public double getAngle() {
