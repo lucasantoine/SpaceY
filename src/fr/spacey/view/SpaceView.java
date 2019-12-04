@@ -522,7 +522,7 @@ public class SpaceView implements Observer {
 		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", TEXTX, SELECTY + 115);
 		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", TEXTX, SELECTY + 130);
 	}
-
+ 
 	/**
 	 * Methode permettant de centrer la camera sur l'Entite selectionnee.
 	 * 
