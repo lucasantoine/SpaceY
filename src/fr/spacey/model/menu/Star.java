@@ -47,7 +47,7 @@ public class Star {
 		this.rayon = Math.random() * 5;
 		this.opacity = Math.random();
 		this.z = Math.random() * z;
-		this.color = (Math.random() < 0.5 ? Color.LIGHTSKYBLUE : Color.WHITE);
+		this.color = Math.random() < 0.5 ? Color.LIGHTSKYBLUE : Color.WHITE;
 		this.ostartx = width / 2.0;
 		this.ostarty = height / 2.0;
 		switch (new Random().nextInt(4)) {

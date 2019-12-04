@@ -11,6 +11,7 @@ import fr.spacey.model.Affichage;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
+import fr.spacey.utils.RenderTimer;
 import fr.spacey.utils.ShowState;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
@@ -35,12 +36,13 @@ public class SpaceController {
 	private final double LOOPSLOT = 1f / FPS;
 
 	private boolean isRunning = false;
+	private boolean isStopped = false;
 	private int time;
 
-	private SpaceModel sm;
-
-	/* VARIABLES DE CANVAS */
+	private Thread renderThread;
 	private RenderTimer rendertimer;
+	private SpaceModel sm;
+	private boolean isZPressed;
 
 	/**
 	 * Constructeur de SpaceController prenant en parametre le modele de la
@@ -59,7 +61,7 @@ public class SpaceController {
 	 * Initialise le rendu de la simulation.
 	 */
 	public void initRender() {
-		Thread renderThread = new Thread(new Runnable() {
+		renderThread = new Thread(new Runnable() {
 
 			float ellapsedTime;
 			float accu = 0f;
@@ -67,7 +69,7 @@ public class SpaceController {
 			@Override
 			public void run() {
 				rendertimer.init();
-				while (true) {
+				while(!isStopped) {
 					ellapsedTime = rendertimer.getEllapsedTime();
 					if (!isRunning) {
 						ellapsedTime = 0;
@@ -84,7 +86,7 @@ public class SpaceController {
 							}
 						});
 
-						accu -= (sm.getDt() / sm.getFa());
+						accu -= sm.getDt() / sm.getFa();
 					}
 
 					Platform.runLater(new Runnable() {
@@ -124,6 +126,13 @@ public class SpaceController {
 	public void toggleRunning() {
 		this.isRunning = !this.isRunning;
 	}
+	
+	/**
+	 * Permet de mettre en pause, ou de reprendre la simulation.
+	 */
+	public void stopRunning() {
+		isStopped = true;
+	}
 
 	/**
 	 * Renvoie vrai si la simulation est en cours, renvoie faux sinon.
@@ -142,13 +151,16 @@ public class SpaceController {
 	 */
 	public void onMouseDrag(MouseEvent e) {
 		Affichage aff = getModel().getAffichage();
-		int centerX = (int) (aff.getxOffset() - aff.getWidth() / 2),
-				centerY = (int) (aff.getyOffset() - aff.getHeight() / 2);
-		// System.out.println("center " + centerY + " " + yOffset);
-		aff.setxOffset(aff.getStartSceneX() + e.getSceneX() - aff.getStartDragX());
-		aff.setyOffset(aff.getStartSceneY() + e.getSceneY() - aff.getStartDragY());
+		//int centerX = (int) (aff.getxOffset() - aff.getWidth() / 2),
+		//		centerY = (int) (aff.getyOffset() - aff.getHeight() / 2);
+		
+		double mouseXTransformed = e.getSceneX() /*/ aff.getZoom()*/;
+		double mouseYTransformed = e.getSceneY() /*/ aff.getZoom()*/;
+		
+		aff.setxOffset(aff.getStartSceneX() + mouseXTransformed - aff.getStartDragX());
+		aff.setyOffset(aff.getStartSceneY() + mouseYTransformed - aff.getStartDragY());
 
-		double rayon = sm.getRayon();
+		/*double rayon = sm.getRayon();
 		if (centerX > rayon) {
 			aff.setxOffset(aff.getWidth() / 2 + rayon);
 			aff.setStartDragX(e.getSceneX());
@@ -167,7 +179,7 @@ public class SpaceController {
 			aff.setyOffset(aff.getHeight() / 2 - rayon);
 			aff.setStartDragY(e.getSceneY());
 			aff.setStartSceneY(aff.getyOffset());
-		}
+		}*/
 	}
 
 	/**
@@ -207,20 +219,22 @@ public class SpaceController {
 	 */
 	public void onMouseReleased(MouseEvent e) {
 		Affichage aff = getModel().getAffichage();
-		double mouseX = e.getSceneX(), mouseY = e.getSceneY();
+
+		double mouseXTransformed = (e.getSceneX()) / aff.getZoom();
+		double mouseYTransformed = (e.getSceneY()) / aff.getZoom();
+		
 		boolean nouvelleSelection = false;
 		int idx = 0;
-		System.out.println(e.getX()+" "+e.getY());
 		if(getModel().hasEntitySelected()) {
 			//fleche gauche
-			if(e.getX() >= 855 && e.getX() <= 890 && e.getY() >= 740 && e.getY() <= 820) {
+			if(mouseXTransformed >= 855 && mouseXTransformed <= 890 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
 				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
 				getModel().setEntitySelected((getModel().getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getModel().getEntitySelectedId()-1);
 				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
 				return;
 			}
 			//fleche droite
-			else if(e.getX() >= 1510 && e.getX() <= 1545 && e.getY() >= 740 && e.getY() <= 820) {
+			else if(mouseXTransformed >= 1510 && mouseXTransformed <= 1545 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
 				getModel().getEntitySelected().setInfo(ShowState.NOINFO);
 				getModel().setEntitySelected((getModel().getEntitySelectedId()+1)%getModel().getEntities().size());
 				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
@@ -229,7 +243,7 @@ public class SpaceController {
 		}
 		
 		if(sm.hasVaisseau()) {
-			if(e.getX() >= 60 && e.getX() <= 150 && e.getY() >= 730 && e.getY() <= 815) {
+			if(mouseXTransformed >= 60 && mouseXTransformed <= 150 && mouseYTransformed >= 730 && mouseYTransformed <= 815) {
 				int k = 0;
 				for (Entity en : getModel().getEntities()) {
 					if(en.getType().equals(EntityType.VAISSEAU)) {
@@ -241,10 +255,6 @@ public class SpaceController {
 				}
 			}
 		}
-				
-			
-		
-		
 		
 		for (Entity en : getModel().getEntities()) {
 			double entityX = en.getPos().getX() + aff.getxOffset();
@@ -253,8 +263,8 @@ public class SpaceController {
 			double minX = entityX - en.getRadius() / 2, maxX = entityX + en.getRadius() / 2;
 			double minY = entityY - en.getRadius() / 2, maxY = entityY + en.getRadius() / 2;
 
-			if (!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseX > minX && mouseX < maxX && mouseY > minY
-					&& mouseY < maxY) {
+			if (!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
+					&& mouseYTransformed < maxY) {
 				getModel().setEntitySelected(idx);
 				en.setInfo(ShowState.SHOWINFO);
 				e.setDragDetect(false);
@@ -320,6 +330,14 @@ public class SpaceController {
 		return sm;
 	}
 
+	public void onKeyReleased(KeyEvent e) {
+		if(isRunning && getModel().hasVaisseau()) {
+			if(e.getCode().equals(KeyCode.Z)) {
+				this.isZPressed = false;
+			}
+		}
+	}
+
 	/**
 	 * Evenement permettant de controler le vaisseau de la simulation (s'il y en a
 	 * un) en fonction de la touche du clavier pressee.
@@ -329,14 +347,16 @@ public class SpaceController {
 	public void onKeyPressed(KeyEvent e) {
 		if(e.getCode().equals(KeyCode.SPACE)) {
 			toggleRunning();
-		} else if(e.getCode().equals(KeyCode.P)) {
-			saveSpace();
 		}
 		if (isRunning) {
-			if (e.getCode().equals(KeyCode.ADD) && getModel().getFa() < 200) {
-				getModel().setFa(getModel().getFa() + 1);
-			} else if (e.getCode().equals(KeyCode.SUBTRACT) && getModel().getFa() > 1) {
-				getModel().setFa(getModel().getFa() - 1);
+			if (e.getCode().equals(KeyCode.ADD)) {
+				getModel().setFa(Math.min(getModel().getFa() + 1, 500));
+			} else if (e.getCode().equals(KeyCode.SUBTRACT)) {
+				getModel().setFa(Math.max(getModel().getFa() - 1, 1));
+			} else if (e.getCode().equals(KeyCode.MULTIPLY)) {
+				getModel().setFa(Math.min(getModel().getFa() + 10, 500));
+			} else if (e.getCode().equals(KeyCode.DIVIDE)) {
+				getModel().setFa(Math.max(getModel().getFa() - 10, 1));
 			}
 			if (e.getCode().equals(KeyCode.Z)) {
 				getModel().getVaisseau().upThrottle();
@@ -370,14 +390,11 @@ public class SpaceController {
 		}
 	}
 
-	private void saveSpace() {
-		saveSpace("save.astro");
-	}
-	private void saveSpace(String path) {
+	public void saveSpace(File to) {
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		
-		try(PrintWriter bf = new PrintWriter(new File(path))) {
+		try(PrintWriter bf = new PrintWriter(to)) {
 
 			bf.println("# "+formatter.format(LocalDateTime.now()));
 			
@@ -400,10 +417,8 @@ public class SpaceController {
 			bf.flush();
 			
 		} catch(IOException ioe) {
-			
+			ioe.printStackTrace();
 		}
-		
-		System.out.println("Systeme sauvegardé.");
 	}
 
 }

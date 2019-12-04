@@ -91,10 +91,10 @@ public class MainMenuView implements Observer {
 		for (File systemesfile : systemesfolder.listFiles()) {
 			choicebox.getItems().add(systemesfile.getName().replaceAll(".astro", ""));
 		}
-		choicebox.getSelectionModel().select(systemesfolder.listFiles().length-1);
+		choicebox.getSelectionModel().select(0);
 
 		play.setOnMouseClicked(e -> {
-			mmc.start(choicebox.getSelectionModel().getSelectedItem(), (Stage) play.getScene().getWindow());
+			mmc.start("res/systemes/"+choicebox.getSelectionModel().getSelectedItem()+".astro", (Stage) play.getScene().getWindow());
 		});
 
 		quit = new Text("Quitter");
@@ -145,8 +145,8 @@ public class MainMenuView implements Observer {
 			double sx;
 			double sy;
 
-			sx = map((s.getPosition().getX() / s.getZ()), 0, 1, s.getOstartx(), s.getOstopx());
-			sy = map((s.getPosition().getY() / s.getZ()), 0, 1, s.getOstarty(), s.getOstopy());
+			sx = map(s.getPosition().getX() / s.getZ(), 0, 1, s.getOstartx(), s.getOstopx());
+			sy = map(s.getPosition().getY() / s.getZ(), 0, 1, s.getOstarty(), s.getOstopy());
 
 			gc.fillOval(sx, sy, s.getRayon(), s.getRayon());
 			gc.setGlobalAlpha(1);

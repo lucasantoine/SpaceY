@@ -1,12 +1,13 @@
 package fr.spacey.view;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.Affichage;
 import fr.spacey.model.SpaceModel;
@@ -31,6 +32,8 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 /**
@@ -69,12 +72,6 @@ public class SpaceView implements Observer {
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
 		this.isMenu = false;
-		try {
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix_bold.ttf")), 10);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
 
 		pane.setOnKeyPressed(e -> {
 			if(e.getCode().equals(KeyCode.ESCAPE)) {
@@ -84,9 +81,56 @@ public class SpaceView implements Observer {
 			}
 			sc.onKeyPressed(e);
 		});
+		
+		pane.setOnKeyReleased(e -> {
+			if(isMenu) return;
+			sc.onKeyReleased(e);
+		});
 
 		pane.setOnMouseReleased(e -> {
-			if(isMenu) return;
+			if(isMenu) {
+				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 270 && lastMousePos.getY() <= 350) {
+					this.isMenu = false;
+				}
+				
+				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 800 && lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
+					
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH'h'mm");
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.setTitle("Sauvegardez votre fichier ASTRO");
+					fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+					fileChooser.setInitialFileName(formatter.format(LocalDateTime.now())+".astro");
+					fileChooser.getExtensionFilters().addAll(new ExtensionFilter("ASTRO Files", "*.astro"));
+					File savedFile = fileChooser.showSaveDialog(stage);
+					 
+					if (savedFile != null) {
+					    sc.saveSpace(savedFile);
+					}
+				}
+				
+				if(lastMousePos.getX() >= 810 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.setTitle("Selectionnez votre fichier ASTRO");
+					fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+					fileChooser.getExtensionFilters().addAll(new ExtensionFilter("ASTRO Files", "*.astro"));
+					File opennedFile = fileChooser.showOpenDialog(stage);
+					 
+					if (opennedFile != null) {
+						sc.stopRunning();
+						SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+					}
+				}
+				
+				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 490 && lastMousePos.getY() <= 570) {
+					//TODO PARAMETRES
+				}
+				
+				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 600 && lastMousePos.getY() <= 680) {
+					sc.stopRunning();
+					SpaceY.getInstance().start(this.stage);
+				}
+				return;
+			}
 			sc.onMouseReleased(e);
 		});
 
@@ -95,9 +139,6 @@ public class SpaceView implements Observer {
 		 */
 
 		pane.setOnMousePressed(e -> {
-			if(isMenu) {
-				
-			}
 			sc.onMousePressed(e);
 		});
 
@@ -112,11 +153,14 @@ public class SpaceView implements Observer {
 			sc.onMouseDrag(e);
 		});
 
-		/*
-		 * pane.setOnScroll(e -> { double valeur = e.getDeltaY() > 0 ? 0.1 : -0.1; if
-		 * (this.zoom + valeur > 0.5 && this.zoom + valeur < 2) this.zoom += valeur; });
-		 */
-
+		pane.setOnScroll(e -> { 
+			Affichage aff = sc.getModel().getAffichage();
+			if(e.getDeltaY() > 0) {
+				aff.setZoom(Math.min(10, aff.getZoom()+0.1)); 
+			} else {
+				aff.setZoom(Math.max(0.5, aff.getZoom()-0.1)); 
+			}
+		});
 		can.widthProperty().bind(pane.widthProperty());
 		can.heightProperty().bind(pane.heightProperty());
 	}
@@ -135,8 +179,6 @@ public class SpaceView implements Observer {
 		gc.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 
 		// ZOOM
-		// gc.setTransform(zoom, 0, 0, zoom, (width - width * zoom) / 2.0,
-		// (height - height * zoom) / 2.0);
 		gc.setTransform(new Affine(new Scale(aff.getZoom(), aff.getZoom())));
 		gc.setFill(Color.WHITE);
 
@@ -182,8 +224,6 @@ public class SpaceView implements Observer {
 			} else {
 				gc.drawImage(img, planetX, planetY, e.getRadius(), e.getRadius());
 			}
-
-
 		}
 
 		// ENTITES INFOS
@@ -197,11 +237,9 @@ public class SpaceView implements Observer {
 				double startDescX = planetX + e.getRadius() + 25, startDescY = planetY + e.getRadius() + 25;
 
 				gc.setFill(new Color(.4, .4, .4, 0.7));
-				gc.fillRoundRect(startDescX, startDescY, 130, 100, 10, 10);
-
-				gc.setFill(Color.RED);
-				gc.setFont(new Font("Minecraftia", 15));
-				gc.fillText(e.getName(), startDescX + 5, startDescY + 17);
+				gc.fillRoundRect(startDescX, startDescY, 130, 100, 20, 20);
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+				gc.strokeRoundRect(startDescX+5, startDescY+5, 120, 90, 20, 20);
 
 				gc.setStroke(Color.MEDIUMAQUAMARINE);
 				gc.setLineWidth(5);
@@ -209,11 +247,18 @@ public class SpaceView implements Observer {
 				gc.setLineWidth(1);
 				gc.strokeLine(planetX + e.getRadius() + 3, planetY + e.getRadius() + 3, startDescX - 5, startDescY - 5);
 
+				
+				
+				gc.setFill(Color.RED);
+				gc.setFont(new Font("Minecraftia", 18));
+				gc.fillText(e.getName(), startDescX + 15, startDescY + 40);
+
+				startDescX += 25;
 				gc.setFill(Color.LIGHTGRAY);
-				gc.setFont(new Font("Minecraftia", 10));
-				gc.fillText("Type: " + e.getType().NOM, startDescX + 15, startDescY + 30);
-				gc.fillText("Masse: " + (int) e.getMasse(), startDescX + 15, startDescY + 42);
-				gc.fillText("Rayon: " + (int) e.getRadius(), startDescX + 15, startDescY + 54);
+				gc.setFont(new Font("Minecraftia", 12));
+				gc.fillText("Type: " + e.getType().NOM, startDescX, startDescY + 55);
+				gc.fillText("Masse: " + (int) e.getMasse(), startDescX, startDescY + 70);
+				gc.fillText("Rayon: " + (int) e.getRadius(), startDescX, startDescY + 85);
 
 			}
 		}
@@ -233,8 +278,9 @@ public class SpaceView implements Observer {
 		gc.fillText("G: " + String.format("%4.2e", SpaceModel.G), relatX, 43 - relatY);
 		gc.fillText("DT: " + String.format("%4.2e", sc.getModel().getDt()), relatX, 62 - relatY);
 		gc.fillText("FA: " + sc.getModel().getFa(), relatX, 80 - relatY);
-		gc.fillText("RAYON: " + sc.getModel().getRayon(), relatX, 97 - relatY);
-		gc.fillText("TEMPS: "+formatTimeFromSec(sc.getTime()), relatX, 115 - relatY);
+		gc.fillText("Taille: " + sc.getModel().getRayon(), relatX, 97 - relatY);
+		gc.fillText("Temps: "+formatTimeFromSec(sc.getTime()), relatX, 115 - relatY);
+		gc.fillText("Zoom: "+aff.getZoom(), relatX, 132 - relatY);
 
 		if (sc.getModel().hasEntitySelected()) {
 			drawSelectedEntity(gc);
@@ -272,7 +318,6 @@ public class SpaceView implements Observer {
 			gc.fillText("Paramètres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
 			gc.fillText("Menu Principal", aff.getWidth()/2-110, aff.getHeight()*0.66+65);
 
-			gc.setStroke(Color.RED);
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
 					&& lastMousePos.getY() >= 270 && lastMousePos.getY() <= 350) {
 				gc.setStroke(Color.WHITE);
@@ -280,12 +325,38 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.3+5, 490, 70, 20, 20);
+			
+			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 800 
+					&& lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
+				gc.setStroke(Color.WHITE);
+			} else {
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+			}
 			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.42+5, 230, 70, 20, 20);
+			
+			if(lastMousePos.getX() >= 810 && lastMousePos.getX() <= 1050 
+					&& lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
+				gc.setStroke(Color.WHITE);
+			} else {
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+			}
 			gc.strokeRoundRect(aff.getWidth()/2+15, aff.getHeight()*0.42+5, 230, 70, 20, 20);
+			
+			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
+					&& lastMousePos.getY() >= 490 && lastMousePos.getY() <= 570) {
+				gc.setStroke(Color.WHITE);
+			} else {
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+			}
 			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.54+5, 490, 70, 20, 20);
+			
+			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
+					&& lastMousePos.getY() >= 600 && lastMousePos.getY() <= 680) {
+				gc.setStroke(Color.WHITE);
+			} else {
+				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+			}
 			gc.strokeRoundRect(aff.getWidth()/2-245, aff.getHeight()*0.66+5, 490, 70, 20, 20);
-			
-			
 			
 		}
 
@@ -300,7 +371,8 @@ public class SpaceView implements Observer {
 	 * @return le temps ecoule dans la simulation sous la forme HH:MM:SS.
 	 */
 	private String formatTimeFromSec(int seconds) {
-		if (seconds <= 0)
+		int secs = seconds;
+		if (secs <= 0)
 			return "00:00:00";
 
 		String date = "";
@@ -308,7 +380,7 @@ public class SpaceView implements Observer {
 		int[] unitValues = { 604800, 86400, 3600, 60, 1 }; // semaine, jour, heure, minute, seconde
 
 		for (int i = 0; i < unitValues.length; i++) {
-			int quot = seconds / unitValues[i];
+			int quot = secs / unitValues[i];
 			if (quot > 0) {
 				if (i > 1) {
 					date += (quot < 10 ? "0" : "") + quot + ":";
@@ -317,7 +389,7 @@ public class SpaceView implements Observer {
 				} else {
 					date += quot + "s ";
 				}
-				seconds -= (quot * unitValues[i]);
+				secs -= quot * unitValues[i];
 			} else if (i > 1) {
 				date += "00:";
 			}
@@ -458,6 +530,8 @@ public class SpaceView implements Observer {
 	 */
 	private void centerCameraOnEntity(Entity e) {
 		Affichage aff = sc.getModel().getAffichage();
+		//aff.setxOffset((aff.getWidth() / aff.getZoom()) / 2 - e.getPos().getX() / aff.getZoom());
+		//aff.setyOffset((aff.getHeight() / aff.getZoom()) / 2 - e.getPos().getY() / aff.getZoom());
 		aff.setxOffset(aff.getWidth() / 2 - e.getPos().getX());
 		aff.setyOffset(aff.getHeight() / 2 - e.getPos().getY());
 	}
@@ -473,8 +547,8 @@ public class SpaceView implements Observer {
 		s.setTitle("SpaceY");
 		s.setScene(new Scene(pane, aff.getWidth(), aff.getHeight()));
 		s.setResizable(true);
-		 s.setFullScreen(true);
-		 s.setMaximized(true);
+		// s.setFullScreen(true);
+		// s.setMaximized(true);
 		// s.show();
 	}
 }

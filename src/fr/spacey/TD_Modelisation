@@ -1,0 +1,32 @@
+e'=f(e,t)
+
+e: Vector<Double>
+   taille 4 * nbObjetsSimulés
+e = (Px, Py, Vx, Vy)
+
+// EULER EXPLICITE
+classe EE {
+
+	Vector<Double e;
+	EDO edo;
+	double t;
+	double dt;
+	
+	void oneStep() {
+		e += dt * edo.f( e, t );
+		t += dt;
+	}
+}
+	
+interface EDO {
+	Vector<Double> f(Vector<D> e, double t);
+}
+
+// FORMULES
+RK4 (Range Kutta): calculer des points futurs: Kn
+	K1 = f(e_t, t);
+
+
+
+
+

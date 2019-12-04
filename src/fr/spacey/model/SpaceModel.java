@@ -43,7 +43,7 @@ public class SpaceModel extends Observable {
 	 *            Nom du fichier de configuration sans son extension.
 	 */
 	public SpaceModel(String filepath) {
-		this.entities = AstroParser.loadAstroFile(this, "res/systemes/" + filepath + ".astro");
+		this.entities = AstroParser.loadAstroFile(this, filepath);
 		for (Entity e : entities) {
 			if (e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImgId(4);
@@ -252,7 +252,7 @@ public class SpaceModel extends Observable {
 					distance -= eto.getRadius() / 2;
 
 					if (distance <= 0) {
-						 System.out.println(idxfrom+" "+idxto+" COLLISION ! "+efrom.getName()+"-> "+eto.getName()+": "+distance);
+						//System.out.println(idxfrom+" "+idxto+" COLLISION ! "+efrom.getName()+"-> "+eto.getName()+": "+distance);
 
 						if (efrom.getMasse() < eto.getMasse()) {
 

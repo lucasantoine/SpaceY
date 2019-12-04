@@ -49,7 +49,7 @@ public enum Sprite {
 	 */
 	public static Image getImage(int id) {
 		if (id < 0 || id >= values().length)
-			throw new Error("L'image " + id + " n'existe pas.");
+			return values()[0].img;
 		return values()[id].img;
 	}
 }
