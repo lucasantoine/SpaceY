@@ -44,7 +44,7 @@ public class MainMenuController {
 			@Override
 			public void run() {
 
-				int fps = 10;
+				int fps = 100;
 				double timePerTick = 1000 / fps;
 				double delta = 0;
 				long now = 0;
@@ -70,7 +70,7 @@ public class MainMenuController {
 						// ticks++;
 						delta--;
 					}
-					if (isRunning && timer >= 20) {
+					if (isRunning && timer >= 10) {
 						Platform.runLater(new Runnable() {
 
 							@Override
@@ -78,8 +78,14 @@ public class MainMenuController {
 								mmm.updatePositions();
 								if (mmm.isStart() && isRunning) {
 									if (wait >= 10) {
-										isRunning = false;
-										instanceY.startSimulation(mmm.getFilepath(), mmm.getStage());
+										try {
+											instanceY.startSimulation(mmm.getFilepath(), mmm.getStage());
+											isRunning = false;
+										} catch (Exception e) {
+											mmm.toggleStart();
+											mmm.setErrorMessage(e.getMessage());
+											wait = 0;
+										}
 									} else {
 										wait++;
 									}
@@ -104,7 +110,7 @@ public class MainMenuController {
 	 * @param stage    Scene de la simulation.
 	 */
 	public void start(Stage stage) {
-		mmm.setStart();
+		mmm.toggleStart();
 		mmm.setStage(stage);
 	}
 
