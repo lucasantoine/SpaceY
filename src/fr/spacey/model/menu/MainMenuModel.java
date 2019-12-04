@@ -20,6 +20,7 @@ public class MainMenuModel extends Observable {
 
 	private Set<Star> stars;
 	private boolean isStart;
+	private String errorMessage;
 	private Stage stage;
 	private String filepath;
 
@@ -46,8 +47,8 @@ public class MainMenuModel extends Observable {
 	/**
 	 * Demarre la simulation.
 	 */
-	public void setStart() {
-		isStart = true;
+	public void toggleStart() {
+		isStart = !isStart;
 	}
 
 	/**
@@ -116,4 +117,12 @@ public class MainMenuModel extends Observable {
 		return filepath;
 	}
 
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
 }

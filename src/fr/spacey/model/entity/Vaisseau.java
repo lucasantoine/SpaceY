@@ -1,5 +1,6 @@
 package fr.spacey.model.entity;
 
+import fr.spacey.SpaceY;
 import fr.spacey.utils.Vector;
 
 public class Vaisseau extends Simule {
@@ -75,6 +76,8 @@ public class Vaisseau extends Simule {
 	}
 	
 	public double getAngle() {
-		return this.angle;
+		double value = (Math.atan(getVel().getY() / getVel().getX())) * (180 / SpaceY.getInstance().PI);
+		if(getVel().getX() <= 0 || (getVel().getY() <= 0 && getVel().getX() <= 0)) return value + 180;
+		return value;
 	}
 }

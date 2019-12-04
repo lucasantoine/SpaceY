@@ -43,6 +43,7 @@ public class MainMenuView implements Observer {
 	public Text play;
 	public Label chooseFile;
 	public Text quit;
+	public Text errorMessage;
 
 	/**
 	 * Constructeur de MainMenuView prenant en parametre son controleur.
@@ -122,9 +123,16 @@ public class MainMenuView implements Observer {
 		quit.setOnMouseClicked(e -> {
 			mmc.leaveApplication((Stage) play.getScene().getWindow());
 		});
+		
+		errorMessage = new Text("");
+		errorMessage.setFont(Font.font(30));
+		errorMessage.setFill(Color.INDIANRED);
+		errorMessage.getTransforms().add(new Rotate(-50, 300, 100, 20, Rotate.X_AXIS));
+		errorMessage.setX(canvas.getWidth() / 2);
+		errorMessage.setY(canvas.getHeight() / 2 - 2000);
 
 		scene.setCamera(new PerspectiveCamera());
-		this.pane.getChildren().addAll(canvas, title, play, chooseFile, quit);
+		this.pane.getChildren().addAll(canvas, title, play, chooseFile, quit, errorMessage);
 	}
 
 	/**
@@ -148,6 +156,7 @@ public class MainMenuView implements Observer {
 	public void update(Observable obs, Object arg) {
 		if (!mmc.getModel().isStart()) {
 			printBackground();
+			errorMessage.setText(mmc.getModel().getErrorMessage());
 		}
 		for (Star s : mmc.getModel().getStars()) {
 			gc.setFill(s.getColor());

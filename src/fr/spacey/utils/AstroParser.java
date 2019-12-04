@@ -132,11 +132,11 @@ public class AstroParser {
 				nbLine++;
 			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			throw e;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw e;
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw e;
 		}
 		return entities;
 	}

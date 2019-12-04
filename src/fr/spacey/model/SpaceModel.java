@@ -35,14 +35,10 @@ public class SpaceModel extends Observable {
 	 * simulation.
 	 * 
 	 * @param filepath Nom du fichier de configuration sans son extension.
+	 * @throws Exception 
 	 */
-	public SpaceModel(String filepath) {
-		try {
-			this.entities = AstroParser.loadAstroFile(this,  filepath);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public SpaceModel(String filepath) throws Exception {
+		this.entities = AstroParser.loadAstroFile(this,  filepath);
 		for (Entity e : entities) {
 			if (e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImgId(4);

@@ -21,6 +21,8 @@ import javafx.stage.Stage;
  */
 public class SpaceY extends Application {
 
+	public final double PI = 3.14159265359;
+	
 	private static SpaceY instance;
 
 	private SpaceModel sm;
@@ -58,8 +60,9 @@ public class SpaceY extends Application {
 	 * @param filepath Chemin d'acces vers le fichier de configuration de la
 	 *                 simulation.
 	 * @param stage    Scene de la simulation.
+	 * @throws Exception 
 	 */
-	public void startSimulation(String filepath, Stage stage) {
+	public void startSimulation(String filepath, Stage stage) throws Exception {
 		
 		this.sm = new SpaceModel(filepath);
 		this.sc = new SpaceController(sm);
