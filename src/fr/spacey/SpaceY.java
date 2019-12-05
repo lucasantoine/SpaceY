@@ -1,11 +1,5 @@
 package fr.spacey;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
@@ -46,14 +40,8 @@ public class SpaceY extends Application {
 	@Override
 	public void start(Stage stage) {
 		// FONT
-		try(InputStream fileInputSteam = getClass().getResourceAsStream("res/fonts/pixelmix.ttf")) {
-			Font.loadFont(fileInputSteam, 10);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		Font f = Font.loadFont(getClass().getClassLoader().getResourceAsStream("fonts/Minecraftia.ttf"), 10);
+		System.out.println(f);
 		
 		// MODELES
 		MainMenuModel mmd = new MainMenuModel(); 
@@ -65,7 +53,6 @@ public class SpaceY extends Application {
 		MainMenuView mmv = new MainMenuView(mmc);
 
 		mmv.start(stage);
-
 		mmc.initRender();
 	}
 

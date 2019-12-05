@@ -117,7 +117,11 @@ public class SpaceView implements Observer {
 					 
 					if (opennedFile != null) {
 						sc.stopRunning();
-						SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						try {
+							SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 				
@@ -160,6 +164,9 @@ public class SpaceView implements Observer {
 			} else {
 				aff.setZoom(Math.max(0.5, aff.getZoom()-0.1)); 
 			}
+			
+			//aff.setxOffset(aff.getxOffset()+aff.getWidth()/aff.getZoom());
+			//aff.setyOffset(aff.getyOffset()+aff.getHeight()/aff.getZoom());
 		});
 		can.widthProperty().bind(pane.widthProperty());
 		can.heightProperty().bind(pane.heightProperty());
@@ -294,7 +301,7 @@ public class SpaceView implements Observer {
 		if(isMenu) {
 			gc.setTransform(1, 0, 0, 1, 0, 0);
 			gc.setFill(new Color(0,0,0, 0.8));
-			//GaussianBlur gaussianBlur = new GaussianBlur(); 
+			//GaussianBlur gaussianBlur = new GaussianBlur();
 		    //gaussianBlur.setRadius(10); 
 			//gc.setEffect(gaussianBlur);
 			gc.fillRect(0, 0, pane.getWidth(), pane.getHeight());
@@ -315,7 +322,7 @@ public class SpaceView implements Observer {
 			gc.fillText("Reprendre", aff.getWidth()/2-80, aff.getHeight()*0.3+65);
 			gc.fillText("Sauvegarder", aff.getWidth()/2-235, aff.getHeight()*0.42+65);
 			gc.fillText("Charger", aff.getWidth()/2+65, aff.getHeight()*0.42+65);
-			gc.fillText("Paramètres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
+			gc.fillText("ParamÃ¨tres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
 			gc.fillText("Menu Principal", aff.getWidth()/2-110, aff.getHeight()*0.66+65);
 
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
@@ -404,7 +411,7 @@ public class SpaceView implements Observer {
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {
 		Affichage aff = sc.getModel().getAffichage();
-		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
+		double relatX = 10, relatY = aff.getHeight()-900;
 
 		// HUD ROND VAISSEAU
 		gc.setFill(new Color(.3, .3, .3, 1));
