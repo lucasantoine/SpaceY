@@ -50,7 +50,8 @@ public class SpaceView implements Observer {
 	private Canvas can;
 	public Pane pane;
 	private GraphicsContext gc;
-
+	private Cryostase cryo=new Cryostase();
+	
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
 	 * 
@@ -110,6 +111,10 @@ public class SpaceView implements Observer {
 				sc.toggleRunning();
 			} else {
 				sc.onKeyPressed(e);
+			}
+			
+			if(e.getCode().equals(KeyCode.P)) {
+				cryo.switchActive();;
 			}
 		});
 
@@ -225,6 +230,8 @@ public class SpaceView implements Observer {
 				gc.fillText("Rayon: " + (int) e.getRadius(), startDescX + 15, startDescY + 54);
 
 			}
+			
+
 		}
 
 		// COORD EN HAUT A GAUCHE
@@ -259,6 +266,9 @@ public class SpaceView implements Observer {
 
 		stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G
 				+ ", TIME=" + formatTimeFromSec(sc.getTime()));
+		
+		//CRYOSTASE
+		cryo.drawStase(gc);
 	}
 
 	/**
