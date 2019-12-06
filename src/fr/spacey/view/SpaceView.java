@@ -9,6 +9,7 @@ import java.util.Observer;
 
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.Affichage;
+import fr.spacey.model.Cryostase;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
@@ -268,7 +269,7 @@ public class SpaceView implements Observer {
 				+ ", TIME=" + formatTimeFromSec(sc.getTime()));
 		
 		//CRYOSTASE
-		cryo.drawStase(gc);
+		this.drawStase();
 	}
 
 	/**
@@ -419,5 +420,19 @@ public class SpaceView implements Observer {
 		// s.setFullScreen(true);
 		// s.setMaximized(true);
 		// s.show();
+	}
+	
+	/**
+	 * Methode gerant l'affichage de la stase selon le comportement de la classe Cryostase
+	 */
+	private void drawStase() {
+		if(cryo.isActive())this.cryo.freeze();
+		else this.cryo.unfreeze();
+			double alpha=gc.getGlobalAlpha();
+			gc.setGlobalAlpha(cryo.getFrostLevel());
+			gc.drawImage(cryo.SPRITE, 0, 0);
+			gc.setGlobalAlpha(alpha);
+			System.out.println(this.cryo.getFrostLevel());
+
 	}
 }
