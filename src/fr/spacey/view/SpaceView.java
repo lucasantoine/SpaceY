@@ -81,6 +81,11 @@ public class SpaceView implements Observer {
 					sc.toggleRunning();
 				this.isMenu = !this.isMenu;
 			}
+			if(e.getCode().equals(KeyCode.F11)) {
+				Stage s = (Stage) can.getScene().getWindow();
+				s.setFullScreen(!s.isFullScreen());
+			}
+			
 			sc.onKeyPressed(e);
 		});
 		
