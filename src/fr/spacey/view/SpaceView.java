@@ -117,7 +117,12 @@ public class SpaceView implements Observer {
 					 
 					if (opennedFile != null) {
 						sc.stopRunning();
-						SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						try {
+							SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 				
