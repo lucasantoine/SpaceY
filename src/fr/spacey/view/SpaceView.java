@@ -91,6 +91,7 @@ public class SpaceView implements Observer {
 			if(isMenu) {
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 270 && lastMousePos.getY() <= 350) {
 					this.isMenu = false;
+					sc.toggleRunning();
 				}
 				
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 800 && lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
@@ -113,11 +114,15 @@ public class SpaceView implements Observer {
 					fileChooser.setTitle("Selectionnez votre fichier ASTRO");
 					fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 					fileChooser.getExtensionFilters().addAll(new ExtensionFilter("ASTRO Files", "*.astro"));
-					File opennedFile = fileChooser.showOpenDialog(stage);
+					File openedFile = fileChooser.showOpenDialog(stage);
 					 
-					if (opennedFile != null) {
+					if (openedFile != null) {
 						sc.stopRunning();
-						SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						try {
+							SpaceY.getInstance().startSimulation(openedFile.getPath(), this.stage);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 				
@@ -193,7 +198,7 @@ public class SpaceView implements Observer {
 		// ENTITES TRAINEES
 		for (Entity e : sc.getModel().getEntities()) {
 			// TRAINEE
-			if (e.getType().equals(EntityType.SIMULE)) {
+			if (e.getType().equals(EntityType.SIMULE) && e.getInfoMode().equals(ShowState.SHOWINFO)) {
 				@SuppressWarnings("unchecked")
 				LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
 				for (Vector v : ll) {

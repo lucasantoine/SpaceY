@@ -5,20 +5,17 @@ import java.util.List;
 
 import fr.spacey.utils.Vector;
 
-public class Circle extends Simule {
+public class Circle extends Ellipse {
+
+	public Circle(String name, double masse, Vector pos, Fixe f1, Fixe f2) {
+		super(name, masse, pos, f1, f2);
+		// TODO Auto-generated constructor stub
+	}
 
 	private ArrayList<Entity> center;
 
-	public Circle(String name, double masse, Vector pos, Entity center) {
-		super(name, EntityType.CERCLE, masse, pos);
-		this.center = new ArrayList<Entity>();
-		this.center.add(center);
-	}
 
-	public void updatePosition(List<Entity> entities) {
-		super.previousPosition();
-		super.updateVelocity(center);
-		super.getPos().setVector(this.getPos().add(getVel()));
-	}
+
+	
 
 }

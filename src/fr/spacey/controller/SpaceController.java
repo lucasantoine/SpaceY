@@ -160,6 +160,9 @@ public class SpaceController {
 		aff.setxOffset(aff.getStartSceneX() + mouseXTransformed - aff.getStartDragX());
 		aff.setyOffset(aff.getStartSceneY() + mouseYTransformed - aff.getStartDragY());
 
+		if(sm.hasEntitySelected()) {
+			sm.getEntitySelected().setInfo(ShowState.NOINFO);
+		}
 		/*double rayon = sm.getRayon();
 		if (centerX > rayon) {
 			aff.setxOffset(aff.getWidth() / 2 + rayon);
@@ -239,6 +242,8 @@ public class SpaceController {
 				getModel().setEntitySelected((getModel().getEntitySelectedId()+1)%getModel().getEntities().size());
 				getModel().getEntitySelected().setInfo(ShowState.SHOWINFO);
 				return;
+			} else {
+				sm.getEntitySelected().setInfo(ShowState.NOINFO);
 			}
 		}
 		
@@ -305,6 +310,9 @@ public class SpaceController {
 	 * @param e Evenement de souris.
 	 */
 	public void onMousePressed(MouseEvent e) {
+		if(sm.hasEntitySelected()) {
+			sm.getEntitySelected().setInfo(ShowState.NOINFO);
+		}
 		Affichage aff = getModel().getAffichage();
 		aff.setStartDragX(e.getSceneX());
 		aff.setStartDragY(e.getSceneY());

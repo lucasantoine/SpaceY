@@ -2,8 +2,9 @@ package fr.spacey.model.entity;
 
 import java.util.List;
 
-import fr.spacey.SpaceY;
 import fr.spacey.model.SpaceModel;
+import fr.spacey.model.integration.EulerExplicite;
+import fr.spacey.model.integration.IntegrationStrategy;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Vector;
 
@@ -30,6 +31,7 @@ public abstract class Entity {
 	private ShowState infomode;
 	protected double radius;
 	private int imgId;
+	private IntegrationStrategy integrator;
 
 	/**
 	 * Constructeur d'une Entity avec son nom, son type, sa masse, sa position et sa
@@ -51,6 +53,7 @@ public abstract class Entity {
 		this.acc = new Vector(0, 0);
 		this.radius = masse * 2;
 		this.imgId = 3;
+		this.integrator = new EulerExplicite();
 	}
 
 	/**
@@ -244,6 +247,22 @@ public abstract class Entity {
 			return false;
 		return true;
 	}
+	
+	/**
+	 * Renvoie la methode d'integration de la simulation.
+	 * @return la methode d'integration de la simulation.
+	 */
+	public IntegrationStrategy getIntegrator() {
+		return this.integrator;
+	}
+
+	/**
+	 * Modifie la methode d'integration de la simulation.
+	 * @param integrator Nouvelle methode d'integration de la simulation.
+	 */
+	public void setIntegrator(IntegrationStrategy integrator) {
+		this.integrator = integrator;
+	}
 
 	/**
 	 * Methode abstraite permettant de modifier la position de chaque Entite en
@@ -251,5 +270,5 @@ public abstract class Entity {
 	 * 
 	 * @param entities Array contenant l'ensemble des Entites de la simulation.
 	 */
-	public abstract void updatePosition(List<Entity> entities);
+	public abstract void updatePosition(Entity e, List<Entity> entities);
 }

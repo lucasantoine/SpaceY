@@ -37,19 +37,6 @@ public class Simule extends Entity {
 		this.trail = new LinkedList<>();
 		this.timeForTrail = 0;
 	}
-	
-	/**
-	 * Constructeur de Simule prenant en parametre son nom, son type, sa masse et sa
-	 * position.
-	 * 
-	 * @param name  Nom de l'Entite.
-	 * @param type  Type de l'Entite.
-	 * @param masse Masse de l'Entite.
-	 * @param pos   Vecteur Position de l'Entite.
-	 */
-	protected Simule(String name, EntityType type, double masse, Vector pos) {
-		this(name, type, masse, pos, null);
-	}
 
 	/**
 	 * Constructeur derive de Simule prenant en parametre son nom, sa masse, sa
@@ -93,10 +80,9 @@ public class Simule extends Entity {
 	}
 
 	@Override
-	public void updatePosition(List<Entity> entities) {
+	public void updatePosition(Entity e, List<Entity> entities) {
 		previousPosition();
-		super.updateVelocity(entities);
-		super.getPos().setVector(this.getPos().add(getVel()));
+		super.getIntegrator().updatePosition(e, entities);
 	}
 
 	/**
@@ -105,10 +91,10 @@ public class Simule extends Entity {
 	 */
 	protected void previousPosition() {
 		Vector newPos = new Vector(getPos().getX(), getPos().getY());
-		if (this.timeForTrail++ > 100) {
+		if (this.timeForTrail++ > 200) {
 			this.trail.add(newPos);
-			if (this.trail.size() > 100) {
-				this.trail.removeFirst();
+			if(this.getTrail().size() > 1000) {
+				this.getTrail().removeFirst();
 			}
 			this.timeForTrail = 0;
 		}

@@ -227,7 +227,7 @@ public class SpaceModel extends Observable {
 	 */
 	public void updatePositions() {
 		for (Entity e : entities) {
-			e.updatePosition(entities);
+			e.updatePosition(e, entities);
 		}
 
 		Set<Entity> toRemove = new HashSet<Entity>();

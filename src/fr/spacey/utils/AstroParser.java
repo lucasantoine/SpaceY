@@ -104,7 +104,7 @@ public class AstroParser {
 								));
 								vaisseaualreadycreate = true;
 								break;
-							case CERCLE:
+							/*case CERCLE:
 								entities.add(new Circle(
 										name, 
 										masse, 
@@ -120,7 +120,7 @@ public class AstroParser {
 										getFixeEntity("f1", entities, values), 
 										getFixeEntity("f2", entities, values)
 								));
-								break;
+								break;*/
 							}
 						}else {
 							throw new AstroParserException("PARAMS is undefined");
