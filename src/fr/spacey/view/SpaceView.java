@@ -117,7 +117,11 @@ public class SpaceView implements Observer {
 					 
 					if (opennedFile != null) {
 						sc.stopRunning();
-						SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						try {
+							SpaceY.getInstance().startSimulation(opennedFile.getPath(), this.stage);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 				
@@ -315,7 +319,7 @@ public class SpaceView implements Observer {
 			gc.fillText("Reprendre", aff.getWidth()/2-80, aff.getHeight()*0.3+65);
 			gc.fillText("Sauvegarder", aff.getWidth()/2-235, aff.getHeight()*0.42+65);
 			gc.fillText("Charger", aff.getWidth()/2+65, aff.getHeight()*0.42+65);
-			gc.fillText("Paramètres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
+			gc.fillText("Paramï¿½tres", aff.getWidth()/2-90, aff.getHeight()*0.54+65);
 			gc.fillText("Menu Principal", aff.getWidth()/2-110, aff.getHeight()*0.66+65);
 
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 

@@ -1,5 +1,7 @@
 package fr.spacey.model.entity;
 
+import java.util.List;
+
 import fr.spacey.SpaceY;
 import fr.spacey.utils.Vector;
 
@@ -13,6 +15,7 @@ public class Vaisseau extends Simule {
 	private double rocketActivity;
 	private double maxForce;
 	private double fuel;
+	private int facteur = -1;
 	
 	public Vaisseau(String name, double masse, Vector pos, Vector vel, double pretro, double maxForce) {
 		super(name, EntityType.VAISSEAU, masse, pos, vel);
@@ -25,6 +28,14 @@ public class Vaisseau extends Simule {
 		this.fuel = 10000;
 	}
 	
+	@Override
+	public void updatePosition(List<Entity> entities) {
+		rocketActivity += facteur;
+		if(rocketActivity < 0) rocketActivity = 0;
+		if(rocketActivity > 100) rocketActivity = 100;
+		super.updatePosition(entities);
+	}
+	
 	public void fullThrottle() {
 		this.rocketActivity=100;
 	}
@@ -35,12 +46,14 @@ public class Vaisseau extends Simule {
 	
 	public void upThrottle() {
 		if((int)this.getFuel() != 0)
-			this.rocketActivity=rocketActivity+1.0;
-			if(this.rocketActivity>100) { this.rocketActivity=100; }
+			this.facteur = 1;
+			/*this.rocketActivity=rocketActivity+1.0;
+			if(this.rocketActivity>100) { this.rocketActivity=100; }*/
 	}
 	public void downThrottle() {
-		this.rocketActivity=rocketActivity-1.0;
-		if(this.rocketActivity<0)this.rocketActivity=0;
+		this.facteur = -1;
+		/*this.rocketActivity=rocketActivity-1.0;
+		if(this.rocketActivity<0)this.rocketActivity=0;*/
 	}
 	
 	public void incAngle(double d) {
@@ -79,7 +92,7 @@ public class Vaisseau extends Simule {
 	
 	public double getAngle() {
 		double value = (Math.atan(getVel().getY() / getVel().getX())) * (180 / SpaceY.getInstance().PI);
-		if(getVel().getX() <= 0 || (getVel().getY() <= 0 && getVel().getX() <= 0)) return value + 180;
+		if(getVel().getX() <= 0) return value + 180;
 		return value;
 	}
 }
