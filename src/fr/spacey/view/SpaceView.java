@@ -123,6 +123,7 @@ public class SpaceView implements Observer {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+
 					}
 				}
 				
@@ -409,7 +410,7 @@ public class SpaceView implements Observer {
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {
 		Affichage aff = sc.getModel().getAffichage();
-		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
+		double relatX = 10, relatY = aff.getHeight()-900;
 
 		// HUD ROND VAISSEAU
 		gc.setFill(new Color(.3, .3, .3, 1));
