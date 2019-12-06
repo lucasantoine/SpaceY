@@ -1,9 +1,5 @@
 package fr.spacey;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
@@ -25,25 +21,27 @@ import javafx.stage.Stage;
  */
 public class SpaceY extends Application {
 
-	private static SpaceY instance;
+	public final double PI = 3.14159265359;
+	
+	private static SpaceY instance = new SpaceY();
 
-	private SpaceModel sm;
-	private SpaceController sc;
-	private SpaceView sv;
+	private transient SpaceModel sm;
+	private transient SpaceController sc;
+	private transient SpaceView sv;
+	
+	/**
+	 * Constructeur vide de l'application
+	 */
+	public SpaceY() {}
 
 	/**
 	 * Methode de demarrage de l'Application.
 	 */
 	@Override
-	public void start(Stage stage) throws Exception {
-		SpaceY.instance = this;
+	public void start(Stage stage) {
 		// FONT
-		try {
-			Font.loadFont(new FileInputStream(new File("res/fonts/pixelmix.ttf")), 10);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-
+		Font f = Font.loadFont(getClass().getClassLoader().getResourceAsStream("fonts/Minecraftia.ttf"), 10);
+		System.out.println(f);
 		
 		// MODELES
 		MainMenuModel mmd = new MainMenuModel(); 
@@ -55,7 +53,6 @@ public class SpaceY extends Application {
 		MainMenuView mmv = new MainMenuView(mmc);
 
 		mmv.start(stage);
-
 		mmc.initRender();
 	}
 
@@ -66,8 +63,9 @@ public class SpaceY extends Application {
 	 * @param filepath Chemin d'acces vers le fichier de configuration de la
 	 *                 simulation.
 	 * @param stage    Scene de la simulation.
+	 * @throws Exception 
 	 */
-	public void startSimulation(String filepath, Stage stage) {
+	public void startSimulation(String filepath, Stage stage) throws Exception {
 		
 		this.sm = new SpaceModel(filepath);
 		this.sc = new SpaceController(sm);

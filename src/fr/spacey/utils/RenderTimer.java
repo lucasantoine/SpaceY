@@ -1,4 +1,4 @@
-package fr.spacey.controller;
+package fr.spacey.utils;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre

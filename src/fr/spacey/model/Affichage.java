@@ -53,7 +53,7 @@ public class Affichage {
 	 * @return la largeur de l'Affichage.
 	 */
 	public double getWidth() {
-		return width;
+		return width / zoom;
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class Affichage {
 	 * @return la hauteur de l'Affichage.
 	 */
 	public double getHeight() {
-		return height;
+		return height / zoom;
 	}
 
 	/**
@@ -215,6 +215,7 @@ public class Affichage {
 	 */
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
+		System.out.println(width+" "+height+" "+zoom);
 	}
 
 	/**

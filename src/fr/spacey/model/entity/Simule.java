@@ -37,6 +37,19 @@ public class Simule extends Entity {
 		this.trail = new LinkedList<>();
 		this.timeForTrail = 0;
 	}
+	
+	/**
+	 * Constructeur de Simule prenant en parametre son nom, son type, sa masse et sa
+	 * position.
+	 * 
+	 * @param name  Nom de l'Entite.
+	 * @param type  Type de l'Entite.
+	 * @param masse Masse de l'Entite.
+	 * @param pos   Vecteur Position de l'Entite.
+	 */
+	protected Simule(String name, EntityType type, double masse, Vector pos) {
+		this(name, type, masse, pos, null);
+	}
 
 	/**
 	 * Constructeur derive de Simule prenant en parametre son nom, sa masse, sa
@@ -90,7 +103,7 @@ public class Simule extends Entity {
 	 * Ajoute une nouvelle Position à la liste des Positions precedentes et, s'il y
 	 * en a trop, supprime la plus ancienne.
 	 */
-	private void previousPosition() {
+	protected void previousPosition() {
 		Vector newPos = new Vector(getPos().getX(), getPos().getY());
 		if (this.timeForTrail++ > 100) {
 			this.trail.add(newPos);

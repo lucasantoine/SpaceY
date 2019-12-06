@@ -108,6 +108,17 @@ public class Vector {
 	/**
 	 * Additionne la valeur des parametres du Vecteur v passe en parametre a ceux de
 	 * ce Vecteur.
+	  * * @param v Vecteur ajoute a ce Vecteur.
+	 * @return l'addition des deux Vecteurs.
+	 */
+	public Vector add(double x, double y) {
+		System.out.println("add("+(this.x + x)+","+(this.y + y)+")");
+		return new Vector(this.x + x, this.y + y);
+	}
+	
+	/**
+	 * Additionne la valeur des parametres du Vecteur v passe en parametre a ceux de
+	 * ce Vecteur.
 	 * 
 	 * @param v Vecteur ajoute a ce Vecteur.
 	 * @return l'addition des deux Vecteurs.

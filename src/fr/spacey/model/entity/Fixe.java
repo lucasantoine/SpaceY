@@ -43,6 +43,6 @@ public class Fixe extends Entity {
 	 * @return une copie de cette Entite Fixe.
 	 */
 	public Entity clone() {
-		return new Fixe(this.getName(), this.getMasse(), this.getPos());
+		return new Fixe(new String(getName()), this.getMasse(), new Vector(getPos().getX(), getPos().getY()));
 	}
 }

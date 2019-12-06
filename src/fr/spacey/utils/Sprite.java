@@ -1,6 +1,9 @@
 
 package fr.spacey.utils;
 
+import java.io.InputStream;
+
+import fr.spacey.SpaceY;
 import javafx.scene.image.Image;
 
 /**
@@ -14,10 +17,16 @@ import javafx.scene.image.Image;
  */
 public enum Sprite {
 
-	TERRE("file:res/images/Terre.png"), LUNE("file:res/images/Lune.png"), MARS("file:res/images/Mars.png"),
-	MERCURE("file:res/images/Mercure.png"), SOLEIL("file:res/images/Soleil.png"), VENUS("file:res/images/Venus.png"),
-	JUPITER("file:res/images/Jupiter.png"), VAISSEAU("file:res/images/Vaisseau.png"), LOGO("file:res/images/fusee.png");
-
+	TERRE(SpaceY.class.getClassLoader().getResourceAsStream("images/Terre.png")), 
+	LUNE(SpaceY.class.getClassLoader().getResourceAsStream("images/Lune.png")), 
+	MARS(SpaceY.class.getClassLoader().getResourceAsStream("images/Mars.png")),
+	MERCURE(SpaceY.class.getClassLoader().getResourceAsStream("images/Mercure.png")), 
+	SOLEIL(SpaceY.class.getClassLoader().getResourceAsStream("images/Soleil.png")), 
+	VENUS(SpaceY.class.getClassLoader().getResourceAsStream("images/Venus.png")),
+	JUPITER(SpaceY.class.getClassLoader().getResourceAsStream("images/Jupiter.png")), 
+	VAISSEAU(SpaceY.class.getClassLoader().getResourceAsStream("images/Vaisseau.png")), 
+	LOGO(SpaceY.class.getClassLoader().getResourceAsStream("images/fusee.png"));
+	
 	private Image img;
 
 	/**
@@ -26,7 +35,7 @@ public enum Sprite {
 	 * 
 	 * @param url Chemin d'acces vers une image.
 	 */
-	private Sprite(String url) {
+	private Sprite(InputStream url) {
 		this.img = new Image(url);
 	}
 
@@ -49,7 +58,7 @@ public enum Sprite {
 	 */
 	public static Image getImage(int id) {
 		if (id < 0 || id >= values().length)
-			throw new Error("L'image " + id + " n'existe pas.");
+			return values()[0].img;
 		return values()[id].img;
 	}
 }

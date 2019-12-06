@@ -2,6 +2,7 @@ package fr.spacey.model.entity;
 
 import java.util.List;
 
+import fr.spacey.SpaceY;
 import fr.spacey.model.SpaceModel;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Vector;

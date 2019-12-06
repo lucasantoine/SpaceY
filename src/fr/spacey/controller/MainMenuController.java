@@ -1,5 +1,6 @@
 package fr.spacey.controller;
 
+import java.io.File;
 import java.util.Observer;
 
 import fr.spacey.SpaceY;
@@ -43,7 +44,7 @@ public class MainMenuController {
 			@Override
 			public void run() {
 
-				int fps = 10;
+				int fps = 100;
 				double timePerTick = 1000 / fps;
 				double delta = 0;
 				long now = 0;
@@ -69,16 +70,22 @@ public class MainMenuController {
 						// ticks++;
 						delta--;
 					}
-					if (isRunning && timer >= 20) {
+					if (isRunning && timer >= 10) {
 						Platform.runLater(new Runnable() {
 
 							@Override
 							public void run() {
 								mmm.updatePositions();
 								if (mmm.isStart() && isRunning) {
-									if (wait >= 1) {
-										isRunning = false;
-										instanceY.startSimulation(mmm.getFilepath(), mmm.getStage());
+									if (wait >= 10) {
+										try {
+											instanceY.startSimulation(mmm.getFilepath(), mmm.getStage());
+											isRunning = false;
+										} catch (Exception e) {
+											mmm.toggleStart();
+											mmm.setErrorMessage(e.getMessage());
+											wait = 0;
+										}
 									} else {
 										wait++;
 									}
@@ -100,13 +107,11 @@ public class MainMenuController {
 	/**
 	 * Permet de demarrer le menu principal.
 	 * 
-	 * @param filepath Chemin d'acces au fichier de configuration de la simulation.
 	 * @param stage    Scene de la simulation.
 	 */
-	public void start(String filepath, Stage stage) {
-		mmm.setStart();
+	public void start(Stage stage) {
+		mmm.toggleStart();
 		mmm.setStage(stage);
-		mmm.setFilepath(filepath);
 	}
 
 	/**
@@ -134,6 +139,10 @@ public class MainMenuController {
 	 */
 	public void leaveApplication(Stage stage) {
 		stage.close();
+	}
+
+	public void chooseFile(File file) {
+		mmm.setFilepath(file.getAbsolutePath());
 	}
 
 }

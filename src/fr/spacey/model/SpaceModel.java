@@ -1,11 +1,15 @@
 package fr.spacey.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
+import java.util.Set;
 
 import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.AstroParser;
+import fr.spacey.utils.Vector;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -26,18 +30,20 @@ public class SpaceModel extends Observable {
 	private Affichage affichage;
 
 	public static double G; // constante gravitationelle
-	private double dt; // nb d'update() qui sera reparti par le nombre d'image par seconde
+	private double dt; // nb d'update() qui sera reparti par le nombre d'image
+						// par seconde
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
 
 	/**
-	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de la
-	 * simulation.
+	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de
+	 * la simulation.
 	 * 
 	 * @param filepath Nom du fichier de configuration sans son extension.
+	 * @throws Exception 
 	 */
-	public SpaceModel(String filepath) {
-		this.entities = AstroParser.loadAstroFile(this, "res/systemes/" + filepath + ".astro");
+	public SpaceModel(String filepath) throws Exception {
+		this.entities = AstroParser.loadAstroFile(this,  filepath);
 		for (Entity e : entities) {
 			if (e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImgId(4);
@@ -76,7 +82,6 @@ public class SpaceModel extends Observable {
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
-				this.vaisseau.fullThrottle();;
 			}
 		}
 	}
@@ -118,12 +123,21 @@ public class SpaceModel extends Observable {
 	}
 
 	/**
+	 * Renvoie le numéro de l'entite selectionnee.
+	 * 
+	 * @return le numéro de l'entite selectionnee.
+	 */
+	public int getEntitySelectedId() {
+		return selected;
+	}
+
+	/**
 	 * Renvoie l'entite selectionnee, null sinon.
 	 * 
 	 * @return l'entite selectionnee, null sinon.
 	 */
 	public Entity getEntitySelected() {
-		if (this.hasEntitySelected()) {
+		if (hasEntitySelected()) {
 			return entities.get(selected);
 		}
 		return null;
@@ -176,8 +190,8 @@ public class SpaceModel extends Observable {
 	}
 
 	/**
-	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la valeur
-	 * passee en parametre.
+	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la
+	 * valeur passee en parametre.
 	 * 
 	 * @param rayon Nouvelle hauteur et largeur de l'univers de la simulation.
 	 */
@@ -214,6 +228,58 @@ public class SpaceModel extends Observable {
 	public void updatePositions() {
 		for (Entity e : entities) {
 			e.updatePosition(entities);
+		}
+
+		Set<Entity> toRemove = new HashSet<Entity>();
+		int idxfrom = 0, idxto = 0;
+
+		for (Entity efrom : entities) {
+			idxto = 0;
+			for (Entity eto : entities) {
+				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {
+					Vector from = efrom.getPos();
+					Vector to = eto.getPos();
+
+					int distance = (int) Math.sqrt((to.getX() - from.getX()) * (to.getX() - from.getX())
+							+ (to.getY() - from.getY()) * (to.getY() - from.getY()));
+					distance -= efrom.getRadius() / 2;
+					distance -= eto.getRadius() / 2;
+
+					if (distance <= 0) {
+						//System.out.println(idxfrom+" "+idxto+" COLLISION ! "+efrom.getName()+"-> "+eto.getName()+": "+distance);
+
+						if (efrom.getMasse() < eto.getMasse()) {
+
+							toRemove.add(efrom);
+							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX()/efrom.getMasse(), efrom.getVel().getY()/efrom.getMasse()));
+
+							if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
+								setEntitySelected(-1);
+							}
+						} else {
+
+							toRemove.add(eto);
+							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
+									eto.getVel().getY() / eto.getMasse()));
+
+							if (hasEntitySelected() && getEntitySelectedId() == idxto) {
+								setEntitySelected(-1);
+							}
+						}
+					}
+				}
+				idxto++;
+			}
+			idxfrom++;
+		}
+
+		if (toRemove.size() > 0) {
+			for (Entity entity : toRemove) {
+				if (entity.getType().equals(EntityType.VAISSEAU)) {
+					this.vaisseau = null;
+				}
+				entities.remove(entity);
+			}
 		}
 		render();
 	}
