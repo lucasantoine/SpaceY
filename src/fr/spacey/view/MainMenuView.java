@@ -60,9 +60,48 @@ public class MainMenuView implements Observer {
 		this.gc = canvas.getGraphicsContext2D();
 		this.mmc.register(this);
 
-		scene.getStylesheets().add(getClass().getClassLoader().getResource("styles/MainMenuStyle.css").toExternalForm());
+		scene.getStylesheets()
+				.add(getClass().getClassLoader().getResource("styles/MainMenuStyle.css").toExternalForm());
 
-		title = new Text("S p a c e Y");
+		title = this.createTitle();
+
+		play = this.createText("Démarrer", -300);
+
+		chooseFile = this.createLabel("Choisir un fichier ...", -700);
+
+		quit = this.createText("Quitter", -900);
+
+		chooseFile.setOnMouseClicked(e -> {
+			FileChooser filechooser = new FileChooser();
+			filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Aastro File", "*.astro"));
+			File file = filechooser.showOpenDialog((Stage) play.getScene().getWindow());
+			if (file != null) {
+				chooseFile.setText(file.getName());
+				mmc.chooseFile(file);
+			}
+		});
+
+		play.setOnMouseClicked(e -> {
+			mmc.start((Stage) play.getScene().getWindow());
+		});
+
+		quit.setOnMouseClicked(e -> {
+			mmc.leaveApplication((Stage) play.getScene().getWindow());
+		});
+
+		errorMessage = this.createError("", -2000);
+
+		scene.setCamera(new PerspectiveCamera());
+		this.pane.getChildren().addAll(canvas, title, play, chooseFile, quit, errorMessage);
+	}
+
+	/**
+	 * Cree le titre du menu.
+	 * 
+	 * @return le titre du menu.
+	 */
+	private Text createTitle() {
+		Text title = new Text("S p a c e Y");
 		title.setFont(Font.font(100));
 		title.setStroke(Color.YELLOW);
 		title.setStrokeWidth(2);
@@ -70,69 +109,67 @@ public class MainMenuView implements Observer {
 		title.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
 		title.setX(canvas.getWidth() / 2);
 		title.setY(canvas.getHeight() / 2);
+		return title;
+	}
 
-		play = new Text("Démarrer");
-		play.setFont(Font.font(60));
-		play.setFill(Color.YELLOW);
-		play.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
-		play.setX(canvas.getWidth() / 2);
-		play.setY(canvas.getHeight() / 2 - 300);
-		play.setId("handCursor");
-		play.setOnMouseEntered(e -> {
-			play.setText("> " + play.getText() + " <");
-		});
-		play.setOnMouseExited(e -> {
-			play.setText(play.getText().replaceAll("[<> ]", ""));
-		});
-		
-		chooseFile = new Label("Choisir un fichier ...");
-		chooseFile.setFont(Font.font(40));
-		chooseFile.setTextFill(Color.YELLOW);
-		chooseFile.getTransforms().add(new Rotate(-50, 300, 400, 20, Rotate.X_AXIS));
-		chooseFile.setLayoutX(canvas.getWidth() / 2);
-		chooseFile.setLayoutY(canvas.getHeight() / 2 - 700);
-		chooseFile.setId("chooseFile");
-		
-		chooseFile.setOnMouseClicked(e -> {
-			FileChooser filechooser = new FileChooser();
-			filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Aastro File", "*.astro"));
-            File file = filechooser.showOpenDialog((Stage)play.getScene().getWindow());
-            if (file != null) {
-            	chooseFile.setText(file.getName());
-            	mmc.chooseFile(file);
-            }
-		});
-		
-		play.setOnMouseClicked(e -> {
-			mmc.start((Stage) play.getScene().getWindow());
-		});
+	/**
+	 * Cree le message d'erreur du menu.
+	 * 
+	 * @param text   Texte d'erreur par defaut.
+	 * @param offset Decalage pour bien placer le message d'erreur
+	 * @return le message d'erreur du menu.
+	 */
+	private Text createError(String text, int offset) {
+		Text error = new Text("");
+		error.setFont(Font.font(30));
+		error.setFill(Color.INDIANRED);
+		error.getTransforms().add(new Rotate(-50, 300, 100, 20, Rotate.X_AXIS));
+		error.setX(canvas.getWidth() / 2);
+		error.setY(canvas.getHeight() / 2 + offset);
+		return error;
+	}
 
-		quit = new Text("Quitter");
-		quit.setFont(Font.font(60));
-		quit.setFill(Color.YELLOW);
-		quit.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
-		quit.setX(canvas.getWidth() / 2);
-		quit.setY(canvas.getHeight() / 2 - 900);
-		quit.setId("handCursor");
-		quit.setOnMouseEntered(e -> {
-			quit.setText("> " + quit.getText() + " <");
+	/**
+	 * Cree une partie du menu.
+	 * 
+	 * @param text   Texte de la partie.
+	 * @param offset Decalage pour bien placer la partie.
+	 * @return une partie du menu.
+	 */
+	private Text createText(String text, int offset) {
+		Text res = new Text(text);
+		res.setFont(Font.font(60));
+		res.setFill(Color.YELLOW);
+		res.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
+		res.setX(canvas.getWidth() / 2);
+		res.setY(canvas.getHeight() / 2 + offset);
+		res.setId("handCursor");
+		res.setOnMouseEntered(e -> {
+			res.setText("> " + res.getText() + " <");
 		});
-		quit.setOnMouseExited(e -> {
-			quit.setText(quit.getText().replaceAll("[<> ]", ""));
+		res.setOnMouseExited(e -> {
+			res.setText(res.getText().replaceAll("[<> ]", ""));
 		});
-		quit.setOnMouseClicked(e -> {
-			mmc.leaveApplication((Stage) play.getScene().getWindow());
-		});
-		
-		errorMessage = new Text("");
-		errorMessage.setFont(Font.font(30));
-		errorMessage.setFill(Color.INDIANRED);
-		errorMessage.getTransforms().add(new Rotate(-50, 300, 100, 20, Rotate.X_AXIS));
-		errorMessage.setX(canvas.getWidth() / 2);
-		errorMessage.setY(canvas.getHeight() / 2 - 2000);
+		return res;
+	}
 
-		scene.setCamera(new PerspectiveCamera());
-		this.pane.getChildren().addAll(canvas, title, play, chooseFile, quit, errorMessage);
+	/**
+	 * Cree le selecteur de fichier.
+	 * 
+	 * @param text   Texte du selecteur de fichier.
+	 * @param offset Decalage pour bien placer le selecteur de fichier.
+	 * @return le selecteur de fichier.
+	 */
+	private Label createLabel(String text, int offset) {
+		Label label = new Label(text);
+		label.setFont(Font.font(40));
+		label.setTextFill(Color.YELLOW);
+		label.getTransforms().add(new Rotate(-50, 300, 400, 20, Rotate.X_AXIS));
+		label.setLayoutX(canvas.getWidth() / 2);
+		label.setLayoutY(canvas.getHeight() / 2 + offset);
+		label.setId("chooseFile");
+		return label;
+
 	}
 
 	/**
@@ -201,11 +238,11 @@ public class MainMenuView implements Observer {
 	/**
 	 * TODO
 	 * 
-	 * @param value TODO
+	 * @param value  TODO
 	 * @param istart TODO
-	 * @param istop TODO
+	 * @param istop  TODO
 	 * @param ostart TODO
-	 * @param ostop TODO
+	 * @param ostop  TODO
 	 * @return TODO
 	 */
 	public double map(double value, double istart, double istop, double ostart, double ostop) {
