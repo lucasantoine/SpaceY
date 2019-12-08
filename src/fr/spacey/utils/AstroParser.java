@@ -14,8 +14,6 @@ import java.util.stream.IntStream;
 import fr.spacey.exceptions.AstroParserException;
 import fr.spacey.exceptions.TypeUnknownException;
 import fr.spacey.model.SpaceModel;
-import fr.spacey.model.entity.Circle;
-import fr.spacey.model.entity.Ellipse;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Fixe;
@@ -39,7 +37,7 @@ public class AstroParser {
 		double posy;
 		
 		nbLine = 1;
-		System.out.println(filepath);
+		if(filepath == null) throw new AstroParserException("No file selected");
 		
 		try (BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filepath)), "UTF8"))) {
 			String line = "";
