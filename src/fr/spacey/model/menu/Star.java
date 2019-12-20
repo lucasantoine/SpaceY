@@ -2,7 +2,7 @@ package fr.spacey.model.menu;
 
 import java.util.Random;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -17,7 +17,7 @@ import javafx.scene.paint.Paint;
  */
 public class Star {
 
-	private Vector pos;
+	private Vecteur pos;
 	public double z;
 	private int factorX;
 	private int factorY;
@@ -39,7 +39,7 @@ public class Star {
 	 * @param width  Largeur de l'etoile.
 	 * @param height Hauteur de l'etoile.
 	 */
-	public Star(Vector pos, double inc, double z, double width, double height) {
+	public Star(Vecteur pos, double inc, double z, double width, double height) {
 		this.pos = pos;
 		this.factorX = Math.random() < 0.5 ? 1 : -1;
 		this.factorY = Math.random() > 0.5 ? 1 : -1;
@@ -83,7 +83,7 @@ public class Star {
 	 * @param height Hauteur de l'etoile.
 	 */
 	public Star(double x, double y, double inc, double z, double width, double height) {
-		this(new Vector(x, y), inc, z, width, height);
+		this(new Vecteur(x, y), inc, z, width, height);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class Star {
 	 * 
 	 * @return le Vecteur Position de l'etoile.
 	 */
-	public Vector getPosition() {
+	public Vecteur getPosition() {
 		return pos;
 	}
 

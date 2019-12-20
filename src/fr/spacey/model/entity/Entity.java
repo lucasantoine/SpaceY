@@ -1,12 +1,8 @@
 package fr.spacey.model.entity;
 
-import java.util.List;
-
-import fr.spacey.model.SpaceModel;
-import fr.spacey.model.integration.EulerExplicite;
-import fr.spacey.model.integration.IntegrationStrategy;
 import fr.spacey.utils.ShowState;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -25,13 +21,10 @@ public abstract class Entity {
 	private final String NAME;
 	private final EntityType TYPE;
 	private double masse;
-	private Vector pos;
-	private Vector vel;
-	private Vector acc;
+	private State state;
 	private ShowState infomode;
 	protected double radius;
 	private int imgId;
-	private IntegrationStrategy integrator;
 
 	/**
 	 * Constructeur d'une Entity avec son nom, son type, sa masse, sa position et sa
@@ -43,17 +36,14 @@ public abstract class Entity {
 	 * @param pos   Vecteur position de l'Entite
 	 * @param vel   Vecteur vitesse de l'Entite
 	 */
-	public Entity(String name, EntityType type, double masse, Vector pos, Vector vel) {
+	public Entity(String name, EntityType type, double masse, Vecteur pos, Vecteur vel) {
 		this.TYPE = type;
 		this.NAME = name;
 		this.masse = masse;
-		this.pos = pos;
-		this.vel = vel;
+		this.state = new State(pos, vel);
 		this.infomode = ShowState.NOINFO;
-		this.acc = new Vector(0, 0);
 		this.radius = masse * 2;
 		this.imgId = 3;
-		this.integrator = new EulerExplicite();
 	}
 
 	/**
@@ -79,12 +69,12 @@ public abstract class Entity {
 	 * 
 	 * @return le Vecteur position de l'Entite.
 	 */
-	public Vector getPos() {
-		return pos;
+	public Vecteur getPos() {
+		return this.state.getPosition();
 	}
 
-	public Vector getVel() {
-		return vel;
+	public Vecteur getVel() {
+		return this.state.getVelocity();
 	}
 
 	/**
@@ -130,74 +120,6 @@ public abstract class Entity {
 	 */
 	public int getImgId() {
 		return imgId;
-	}
-
-	/**
-	 * Modifie le Vecteur vitesse de l'Entite en fonction de son Vecteur
-	 * acceleration.
-	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
-	 */
-	protected void updateVelocity(List<Entity> entities) {
-		updateAcceleration(entities);
-		vel.setVector(vel.add(acc));
-	}
-
-	/**
-	 * Modifie le Vecteur acceleration de l'Entite en fonction de la force exercee
-	 * par les autres Entites de la simulation sur elle.
-	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
-	 */
-	private void updateAcceleration(List<Entity> entities) {
-		Vector force = new Vector(0, 0);
-		for (Entity e : entities) {
-			if (e != this) {
-				force.setVector(force.add(new Vector(this.getForceX(e), this.getForceY(e))));
-			} else if(this instanceof Vaisseau) {
-				Vaisseau vaisseau=(Vaisseau) e;
-				if(vaisseau.getFuel()>=0) {
-				force.setVector(force.add(new Vector(vaisseau.getXForce(),vaisseau.getYForce())));
-				vaisseau.consumeFuel();
-				}
-			}
-		}
-		acc.setVector(force.getX() / this.masse, force.getY() / this.masse);
-	}
-
-	/**
-	 * Renvoie le Vecteur acceleration de l'Entite.
-	 * 
-	 * @return le Vecteur acceleration de l'Entite.
-	 */
-	public Vector getAcc() {
-		return acc;
-	}
-
-	/**
-	 * Renvoie la force exercee en X par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en X par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceX(Entity entity) {
-		return (SpaceModel.G * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(this.pos).getX();
-	}
-
-	/**
-	 * Renvoie la force exercee en Y par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en Y par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceY(Entity entity) {
-		return (SpaceModel.G * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(this.pos).getY();
 	}
 
 	/**
@@ -248,20 +170,12 @@ public abstract class Entity {
 		return true;
 	}
 	
-	/**
-	 * Renvoie la methode d'integration de la simulation.
-	 * @return la methode d'integration de la simulation.
-	 */
-	public IntegrationStrategy getIntegrator() {
-		return this.integrator;
+	public State getState() {
+		return this.state;
 	}
-
-	/**
-	 * Modifie la methode d'integration de la simulation.
-	 * @param integrator Nouvelle methode d'integration de la simulation.
-	 */
-	public void setIntegrator(IntegrationStrategy integrator) {
-		this.integrator = integrator;
+	
+	public void setState(State s) {
+		this.state = s;
 	}
 
 	/**
@@ -270,5 +184,5 @@ public abstract class Entity {
 	 * 
 	 * @param entities Array contenant l'ensemble des Entites de la simulation.
 	 */
-	public abstract void updatePosition(Entity e, List<Entity> entities);
+	public abstract void updateState(State s);
 }

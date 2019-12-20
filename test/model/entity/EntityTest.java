@@ -17,7 +17,7 @@ import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.ShowState;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class EntityTest {
 
@@ -31,9 +31,9 @@ public class EntityTest {
 
 	@Before
 	public void avantUnTest() {
-		e1 = new Fixe("Soleil", 30, new Vector(0, 0));
-		e2 = new Simule("Terre", 10, new Vector(5, 7), new Vector(4, 4));
-		e3 = new Vaisseau("Faucon Millenium", 1, new Vector(6, 7), new Vector(2, 2), 0.00001, 0.0000001);
+		e1 = new Fixe("Soleil", 30, new Vecteur(0, 0));
+		e2 = new Simule("Terre", 10, new Vecteur(5, 7), new Vecteur(4, 4));
+		e3 = new Vaisseau("Faucon Millenium", 1, new Vecteur(6, 7), new Vecteur(2, 2), 0.00001, 0.0000001);
 		System.out.print("Debut du test ");
 	}
 
@@ -68,17 +68,17 @@ public class EntityTest {
 	@Test
 	public void testGetPos() {
 		System.out.println("testGetPos");
-		assertTrue(e1.getPos().equals(new Vector(0,0)));
-		assertTrue(e2.getPos().equals(new Vector(5,7)));
-		assertTrue(e3.getPos().equals(new Vector(6,7)));
+		assertTrue(e1.getPos().equals(new Vecteur(0,0)));
+		assertTrue(e2.getPos().equals(new Vecteur(5,7)));
+		assertTrue(e3.getPos().equals(new Vecteur(6,7)));
 	}
 	
 	@Test
 	public void testGetVel() {
 		System.out.println("testGetVel");
-		assertTrue(e1.getVel().equals(new Vector(0,0)));
-		assertTrue(e2.getVel().equals(new Vector(4,4)));
-		assertTrue(e3.getVel().equals(new Vector(2,2)));
+		assertTrue(e1.getVel().equals(new Vecteur(0,0)));
+		assertTrue(e2.getVel().equals(new Vecteur(4,4)));
+		assertTrue(e3.getVel().equals(new Vecteur(2,2)));
 	}
 	
 	@Test
@@ -146,9 +146,9 @@ public class EntityTest {
 	@Test
 	public void testGetAcc() {
 		System.out.println("testGetAcc");
-		assertTrue(e1.getAcc().equals(new Vector(0,0)));
-		assertTrue(e2.getAcc().equals(new Vector(0,0)));
-		assertTrue(e3.getAcc().equals(new Vector(0,0)));
+		assertTrue(e1.getAcc().equals(new Vecteur(0,0)));
+		assertTrue(e2.getAcc().equals(new Vecteur(0,0)));
+		assertTrue(e3.getAcc().equals(new Vecteur(0,0)));
 	}	
 	
 	@Test
@@ -156,6 +156,6 @@ public class EntityTest {
 		System.out.println("testEquals");
 		assertTrue(e1.equals(e1));
 		assertFalse(e2.equals(e1));
-		assertTrue(e3.equals(new Vaisseau("Faucon Millenium", 1, new Vector(6, 7), new Vector(2, 2), 0.00001, 0.0000001)));
+		assertTrue(e3.equals(new Vaisseau("Faucon Millenium", 1, new Vecteur(6, 7), new Vecteur(2, 2), 0.00001, 0.0000001)));
 	}
 }

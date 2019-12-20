@@ -1,11 +1,8 @@
 package fr.spacey.model.integration;
 
-import java.util.List;
+import java.util.Vector;
 
 import fr.spacey.model.SpaceModel;
-import fr.spacey.model.entity.Entity;
-import fr.spacey.model.entity.Vaisseau;
-import fr.spacey.utils.Vector;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -15,70 +12,31 @@ import fr.spacey.utils.Vector;
  */
 public class EulerExplicite implements IntegrationStrategy {
 
-	@Override
-	public void updatePosition(Entity e, List<Entity> entities) {
-		updateVelocity(e, entities);
-		e.getPos().setVector(e.getPos().add(e.getVel()));
+	private Integrator integrator;
+	private SpaceModel model;
 
+	public EulerExplicite(SpaceModel model) {
+		this.integrator = new Integrator();
+		this.model = model;
 	}
 
-	/**
-	 * Modifie le Vecteur vitesse de l'Entite en fonction de son Vecteur
-	 * acceleration.
-	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
-	 */
-	private void updateVelocity(Entity e, List<Entity> entities) {
-		updateAcceleration(e, entities);
-		e.getVel().setVector(e.getVel().add(e.getAcc()));
+	public void setModel(SpaceModel model) {
+		this.model = model;
+	}
+	
+	public Vector<Double> f(Vector<Double> e, double t) {
+		Vector<Double> newStates = integrator.getDerivative(e, model.getEntities());
+		newStates = this.muladd(model.getDt(), newStates, e);
+		return newStates;
 	}
 
-	/**
-	 * Modifie le Vecteur acceleration de l'Entite en fonction de la force exercee
-	 * par les autres Entites de la simulation sur elle.
-	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
-	 */
-	private void updateAcceleration(Entity e, List<Entity> entities) {
-		Vector force = new Vector(0, 0);
-		for (Entity e2 : entities) {
-			if (e2 != e) {
-				force.setVector(force.add(new Vector(this.getForceX(e, e2), this.getForceY(e, e2))));
-			} else if (e instanceof Vaisseau) {
-				Vaisseau vaisseau = (Vaisseau) e2;
-				if (vaisseau.getFuel() >= 0) {
-					force.setVector(force.add(new Vector(vaisseau.getXForce(), vaisseau.getYForce())));
-					vaisseau.consumeFuel();
-				}
-			}
+	private Vector<Double> muladd(double dt, Vector<Double> newStates, Vector<Double> oldStates) {
+		Vector<Double> res = new Vector<Double>();
+		for (int i = 0; i < oldStates.size(); i++) {
+			res.add(oldStates.get(i) + (dt * newStates.get(i)));
 		}
-		e.getAcc().setVector(force.getX() / e.getMasse(), force.getY() / e.getMasse());
+		return res;
 	}
 
-	/**
-	 * Renvoie la force exercee en X par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en X par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceX(Entity e, Entity entity) {
-		return (SpaceModel.G * e.getMasse() * entity.getMasse() / Math.pow(e.getPos().getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(e.getPos()).getX();
-	}
-
-	/**
-	 * Renvoie la force exercee en Y par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en Y par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceY(Entity e, Entity entity) {
-		return (SpaceModel.G * e.getMasse() * entity.getMasse() / Math.pow(e.getPos().getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(e.getPos()).getY();
-	}
 
 }

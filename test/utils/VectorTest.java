@@ -9,11 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class VectorTest {
 
-	protected Vector v1, v2;
+	protected Vecteur v1, v2;
 	
 	@BeforeClass
 	public static void avantTest() {
@@ -23,8 +23,8 @@ public class VectorTest {
 
 	@Before
 	public void avantUnTest() {
-		v1 = new Vector(0, 0);
-		v2 = new Vector(1, 1);
+		v1 = new Vecteur(0, 0);
+		v2 = new Vecteur(1, 1);
 		System.out.print("Debut du test ");
 	}
 
@@ -56,52 +56,52 @@ public class VectorTest {
 	@Test
 	public void testSetVector() {
 		System.out.println("testSetVector");
-		assertTrue(v1.equals(new Vector(0,0)));
-		assertTrue(v2.equals(new Vector(1,1)));
-		v1.setVector(new Vector(5,5));
-		v2.setVector(new Vector(7,7));
-		assertTrue(v1.equals(new Vector(5,5)));
-		assertTrue(v2.equals(new Vector(7,7)));
+		assertTrue(v1.equals(new Vecteur(0,0)));
+		assertTrue(v2.equals(new Vecteur(1,1)));
+		v1.setVector(new Vecteur(5,5));
+		v2.setVector(new Vecteur(7,7));
+		assertTrue(v1.equals(new Vecteur(5,5)));
+		assertTrue(v2.equals(new Vecteur(7,7)));
 	}
 	
 	@Test
 	public void testSetVector2() {
 		System.out.println("testSetVector2");
-		assertTrue(v1.equals(new Vector(0,0)));
-		assertTrue(v2.equals(new Vector(1,1)));
+		assertTrue(v1.equals(new Vecteur(0,0)));
+		assertTrue(v2.equals(new Vecteur(1,1)));
 		v1.setVector(5,5);
 		v2.setVector(7,7);
-		assertTrue(v1.equals(new Vector(5,5)));
-		assertTrue(v2.equals(new Vector(7,7)));
+		assertTrue(v1.equals(new Vecteur(5,5)));
+		assertTrue(v2.equals(new Vecteur(7,7)));
 	}
 	
 	@Test
 	public void testSetX() {
 		System.out.println("testSetX");
-		assertTrue(v1.equals(new Vector(0,0)));
-		assertTrue(v2.equals(new Vector(1,1)));
+		assertTrue(v1.equals(new Vecteur(0,0)));
+		assertTrue(v2.equals(new Vecteur(1,1)));
 		v1.setX(5);
 		v2.setX(7);
-		assertTrue(v1.equals(new Vector(5,0)));
-		assertTrue(v2.equals(new Vector(7,1)));
+		assertTrue(v1.equals(new Vecteur(5,0)));
+		assertTrue(v2.equals(new Vecteur(7,1)));
 	}
 	
 	@Test
 	public void testSetY() {
 		System.out.println("testSetY");
-		assertTrue(v1.equals(new Vector(0,0)));
-		assertTrue(v2.equals(new Vector(1,1)));
+		assertTrue(v1.equals(new Vecteur(0,0)));
+		assertTrue(v2.equals(new Vecteur(1,1)));
 		v1.setY(5);
 		v2.setY(7);
-		assertTrue(v1.equals(new Vector(0,5)));
-		assertTrue(v2.equals(new Vector(1,7)));
+		assertTrue(v1.equals(new Vecteur(0,5)));
+		assertTrue(v2.equals(new Vecteur(1,7)));
 	}
 	
 	@Test
 	public void testEquals() {
 		System.out.println("testEquals");
-		assertTrue(v1.equals(new Vector(0,0)));
-		assertTrue(v2.equals(new Vector(1,1)));
+		assertTrue(v1.equals(new Vecteur(0,0)));
+		assertTrue(v2.equals(new Vecteur(1,1)));
 		assertTrue(v1.equals(v1));
 		assertTrue(v2.equals(v2));
 	}
@@ -109,19 +109,19 @@ public class VectorTest {
 	@Test
 	public void testAdd() {
 		System.out.println("testAdd");
-		assertTrue(v1.add(v2).equals(new Vector(1,1)));
-		assertTrue(v2.add(v1).equals(new Vector(1,1)));
-		assertTrue(v1.add(v1).equals(new Vector(0, 0)));
-		assertTrue(v2.add(v2).equals(new Vector(2,2)));
+		assertTrue(v1.add(v2).equals(new Vecteur(1,1)));
+		assertTrue(v2.add(v1).equals(new Vecteur(1,1)));
+		assertTrue(v1.add(v1).equals(new Vecteur(0, 0)));
+		assertTrue(v2.add(v2).equals(new Vecteur(2,2)));
 	}
 	
 	@Test
 	public void testMinus() {
 		System.out.println("testMinus");
-		assertTrue(v1.minus(v2).equals(new Vector(-1,-1)));
-		assertTrue(v2.minus(v1).equals(new Vector(1,1)));
-		assertTrue(v1.minus(v1).equals(new Vector(0, 0)));
-		assertTrue(v2.minus(v2).equals(new Vector(0,0)));
+		assertTrue(v1.minus(v2).equals(new Vecteur(-1,-1)));
+		assertTrue(v2.minus(v1).equals(new Vecteur(1,1)));
+		assertTrue(v1.minus(v1).equals(new Vecteur(0, 0)));
+		assertTrue(v2.minus(v2).equals(new Vecteur(0,0)));
 	}
 	
 	@Test
@@ -143,8 +143,8 @@ public class VectorTest {
 		System.out.println("testClone");
 		assertTrue(v1.clone().equals(v1));
 		assertTrue(v2.clone().equals(v2));
-		assertTrue(v1.clone().equals(new Vector(0, 0)));
-		assertTrue(v2.clone().equals(new Vector(1, 1)));
+		assertTrue(v1.clone().equals(new Vecteur(0, 0)));
+		assertTrue(v2.clone().equals(new Vecteur(1, 1)));
 	}
 	
 	@Test

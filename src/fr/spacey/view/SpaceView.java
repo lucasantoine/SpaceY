@@ -17,7 +17,7 @@ import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Sprite;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -54,7 +54,7 @@ public class SpaceView implements Observer {
 	private Canvas can;
 	public Pane pane;
 	private GraphicsContext gc;
-	private Vector lastMousePos;
+	private Vecteur lastMousePos;
 	private boolean isMenu;
 
 	/**
@@ -67,7 +67,7 @@ public class SpaceView implements Observer {
 		this.pane = new Pane();
 		this.can = new Canvas(1, 1);
 		this.gc = can.getGraphicsContext2D();
-		this.lastMousePos = new Vector(0, 0);
+		this.lastMousePos = new Vecteur(0, 0);
 		this.can.setFocusTraversable(true);
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
@@ -148,7 +148,7 @@ public class SpaceView implements Observer {
 		});
 
 		pane.setOnMouseMoved(e -> {
-			lastMousePos = new Vector(e.getSceneX(), e.getSceneY());
+			lastMousePos = new Vecteur(e.getSceneX(), e.getSceneY());
 			if(isMenu) return;
 			sc.onMouseMoved(e);
 		});
@@ -176,7 +176,7 @@ public class SpaceView implements Observer {
 	 */
 	@Override
 	public void update(Observable obs, Object obj) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = ((SpaceModel)obs).getAffichage();
 
 		// FOND DECRAN
 		gc.setTransform(1, 0, 0, 1, 0, 0);
@@ -196,12 +196,12 @@ public class SpaceView implements Observer {
 
 
 		// ENTITES TRAINEES
-		for (Entity e : sc.getModel().getEntities()) {
+		for (Entity e : ((SpaceModel)obs).getEntities()) {
 			// TRAINEE
 			if (e.getType().equals(EntityType.SIMULE) && e.getInfoMode().equals(ShowState.SHOWINFO)) {
 				@SuppressWarnings("unchecked")
-				LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
-				for (Vector v : ll) {
+				LinkedList<Vecteur> ll = (LinkedList<Vecteur>) ((Simule) e).getTrail().clone();
+				for (Vecteur v : ll) {
 					gc.setFill(Color.GREY);
 					gc.fillOval(v.getX() + aff.getxOffset(), v.getY() + aff.getyOffset(), 2, 2);
 				}
@@ -210,7 +210,7 @@ public class SpaceView implements Observer {
 
 
 		// ENTITES
-		for (Entity e : sc.getModel().getEntities()) {
+		for (Entity e : ((SpaceModel)obs).getEntities()) {
 			double planetX = e.getPos().getX() + aff.getxOffset() - e.getRadius() / 2;
 			double planetY = e.getPos().getY() + aff.getyOffset() - e.getRadius() / 2;
 
@@ -525,7 +525,6 @@ public class SpaceView implements Observer {
 		gc.fillText("Rayon: " + String.format("%4.2e", e.getRadius()) + " m", TEXTX, SELECTY + 85);
 		gc.fillText("Pos: " + e.getPos().toStringScientific(), TEXTX, SELECTY + 100);
 		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", TEXTX, SELECTY + 115);
-		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", TEXTX, SELECTY + 130);
 	}
  
 	/**

@@ -14,12 +14,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.spacey.model.entity.Simule;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class SimuleTest {
 
 	protected Simule s1;
-	protected LinkedList<Vector> ll;
+	protected LinkedList<Vecteur> ll;
 	
 	@BeforeClass
 	public static void avantTest() {
@@ -29,8 +29,8 @@ public class SimuleTest {
 
 	@Before
 	public void avantUnTest() {
-		s1 = new Simule("Terre", 10, new Vector(5, 7), new Vector(4, 4));
-		ll = new LinkedList<Vector>();
+		s1 = new Simule("Terre", 10, new Vecteur(5, 7), new Vecteur(4, 4));
+		ll = new LinkedList<Vecteur>();
 		System.out.print("Debut du test ");
 	}
 
@@ -48,30 +48,30 @@ public class SimuleTest {
 	@Test
 	public void testSetPos() {
 		System.out.println("testSetPos");
-		assertTrue(s1.getPos().equals(new Vector(5,7)));
-		s1.setPos(new Vector(1,1));
-		assertFalse(s1.getPos().equals(new Vector(5,7)));
-		assertTrue(s1.getPos().equals(new Vector(1,1)));
+		assertTrue(s1.getPos().equals(new Vecteur(5,7)));
+		s1.setPos(new Vecteur(1,1));
+		assertFalse(s1.getPos().equals(new Vecteur(5,7)));
+		assertTrue(s1.getPos().equals(new Vecteur(1,1)));
 	}
 	
 	@Test
 	public void testSetVel() {
 		System.out.println("testSetVel");
-		assertTrue(s1.getVel().equals(new Vector(4,4)));
-		s1.setVel(new Vector(1,1));
-		assertFalse(s1.getVel().equals(new Vector(4,4)));
-		assertTrue(s1.getVel().equals(new Vector(1,1)));
+		assertTrue(s1.getVel().equals(new Vecteur(4,4)));
+		s1.setVel(new Vecteur(1,1));
+		assertFalse(s1.getVel().equals(new Vecteur(4,4)));
+		assertTrue(s1.getVel().equals(new Vecteur(1,1)));
 	}
 	
 	@Test
 	public void testGetTrail() {
 		System.out.println("testGetTrail");
 		assertEquals(ll.size(), s1.getTrail().size());
-		ll.add(new Vector(2,2));
-		ll.add(new Vector(3,3));
+		ll.add(new Vecteur(2,2));
+		ll.add(new Vecteur(3,3));
 		assertNotEquals(ll.size(), s1.getTrail().size());
-		s1.getTrail().add(new Vector(2,2));
-		s1.getTrail().add(new Vector(3,3));
+		s1.getTrail().add(new Vecteur(2,2));
+		s1.getTrail().add(new Vecteur(3,3));
 		assertEquals(ll.size(), s1.getTrail().size());
 		int i =0;
 		while(i < s1.getTrail().size()) {

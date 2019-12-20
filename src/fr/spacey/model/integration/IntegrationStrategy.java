@@ -1,8 +1,6 @@
 package fr.spacey.model.integration;
 
-import java.util.List;
-
-import fr.spacey.model.entity.Entity;
+import java.util.Vector;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -17,5 +15,5 @@ public interface IntegrationStrategy {
 	 * 
 	 * @param entities Liste des entites presentes dans la simulation.
 	 */
-	public void updatePosition(Entity e, List<Entity> entities);
+	public Vector<Double> f(Vector<Double> e, double t);
 }

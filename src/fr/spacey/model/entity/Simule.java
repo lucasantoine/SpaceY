@@ -1,9 +1,9 @@
 package fr.spacey.model.entity;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -19,7 +19,7 @@ import fr.spacey.utils.Vector;
  */
 public class Simule extends Entity {
 
-	private LinkedList<Vector> trail;
+	private LinkedList<Vecteur> trail;
 	private int timeForTrail;
 
 	/**
@@ -32,7 +32,7 @@ public class Simule extends Entity {
 	 * @param pos   Vecteur Position de l'Entite.
 	 * @param vel   Vecteur Vitesse de l'Entite.
 	 */
-	protected Simule(String name, EntityType type, double masse, Vector pos, Vector vel) {
+	protected Simule(String name, EntityType type, double masse, Vecteur pos, Vecteur vel) {
 		super(name, type, masse, pos, vel);
 		this.trail = new LinkedList<>();
 		this.timeForTrail = 0;
@@ -47,7 +47,7 @@ public class Simule extends Entity {
 	 * @param pos   Vecteur Position de l'Entite.
 	 * @param vel   Vecteur Vitesse de l'Entite.
 	 */
-	public Simule(String name, double masse, Vector pos, Vector vel) {
+	public Simule(String name, double masse, Vecteur pos, Vecteur vel) {
 		this(name, EntityType.SIMULE, masse, pos, vel);
 		super.radius = masse * 10;
 	}
@@ -57,7 +57,7 @@ public class Simule extends Entity {
 	 * 
 	 * @param vel Nouvelle vitesse de l'Entite.
 	 */
-	public void setVel(Vector vel) {
+	public void setVel(Vecteur vel) {
 		this.getVel().setVector(vel);
 	}
 
@@ -66,7 +66,7 @@ public class Simule extends Entity {
 	 * 
 	 * @param pos Nouvelle position de l'Entite.
 	 */
-	public void setPos(Vector pos) {
+	public void setPos(Vecteur pos) {
 		this.getPos().setVector(pos);
 	}
 
@@ -75,14 +75,13 @@ public class Simule extends Entity {
 	 * 
 	 * @return la liste des Positions precedentes de l'Entite.
 	 */
-	public LinkedList<Vector> getTrail() {
+	public LinkedList<Vecteur> getTrail() {
 		return trail;
 	}
 
 	@Override
-	public void updatePosition(Entity e, List<Entity> entities) {
-		previousPosition();
-		super.getIntegrator().updatePosition(e, entities);
+	public void updateState(State s) {
+		super.setState(s);
 	}
 
 	/**
@@ -90,7 +89,7 @@ public class Simule extends Entity {
 	 * en a trop, supprime la plus ancienne.
 	 */
 	protected void previousPosition() {
-		Vector newPos = new Vector(getPos().getX(), getPos().getY());
+		Vecteur newPos = new Vecteur(getPos().getX(), getPos().getY());
 		if (this.timeForTrail++ > 200) {
 			this.trail.add(newPos);
 			if(this.getTrail().size() > 1000) {

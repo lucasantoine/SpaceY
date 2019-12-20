@@ -72,7 +72,7 @@ public class AstroParser {
 							if(posx < -spaceModel.getRayon() || posy < -spaceModel.getRayon() || posx > spaceModel.getRayon() || posy > spaceModel.getRayon()) {
 								throw new AstroParserException("One of the positions is outside the radius - line : " + nbLine);
 							}
-							Vector position = new Vector(posx, posy);
+							Vecteur position = new Vecteur(posx, posy);
 							switch (entityType) {
 							case FIXE:
 								entities.add(new Fixe(name, // Name
@@ -84,7 +84,7 @@ public class AstroParser {
 								entities.add(new Simule(name, // name
 										masse, // masse
 										position, // position
-										new Vector( // Velocity
+										new Vecteur( // Velocity
 												getDouble("vitx", values), // Velocity X
 												getDouble("vity", values)) // Velocity Y
 								));
@@ -94,7 +94,7 @@ public class AstroParser {
 								entities.add(new Vaisseau(name, // name
 										masse, // masse
 										position, // position
-										new Vector( // Velocity
+										new Vecteur( // Velocity
 												getDouble("vitx", values), // Velocity X
 												getDouble("vity", values)), // Velocity Y
 										getDouble("pprincipal", values), // Propulseur principal

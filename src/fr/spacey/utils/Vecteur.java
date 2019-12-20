@@ -9,7 +9,7 @@ package fr.spacey.utils;
  *         d'instancier les positions, les normes, les vitesses et les
  *         accelerations utilises par les Entites de la simulation.
  */
-public class Vector {
+public class Vecteur {
 
 	private double x, y;
 
@@ -19,9 +19,13 @@ public class Vector {
 	 * @param x Valeur du premier parametre du Vecteur
 	 * @param y Valeur du second parametre du Vecteur.
 	 */
-	public Vector(double x, double y) {
+	public Vecteur(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Vecteur(Vecteur v) {
+		this(v.getX(), v.getY());
 	}
 
 	/**
@@ -47,7 +51,7 @@ public class Vector {
 	 * 
 	 * @param v Vecteur utilise pour modifier les parametres de ce Vecteur.
 	 */
-	public void setVector(Vector v) {
+	public void setVector(Vecteur v) {
 		this.setX(v.x);
 		this.setY(v.y);
 	}
@@ -91,7 +95,7 @@ public class Vector {
 	 * @return vrai si il s'agit de la meme instance, ou si la valeur de leurs
 	 *         parametres est identique, renvoie faux sinon.
 	 */
-	public boolean equals(Vector v) {
+	public boolean equals(Vecteur v) {
 		if (this == v)
 			return true;
 		if (v == null)
@@ -111,9 +115,9 @@ public class Vector {
 	  * * @param v Vecteur ajoute a ce Vecteur.
 	 * @return l'addition des deux Vecteurs.
 	 */
-	public Vector add(double x, double y) {
+	public Vecteur add(double x, double y) {
 		System.out.println("add("+(this.x + x)+","+(this.y + y)+")");
-		return new Vector(this.x + x, this.y + y);
+		return new Vecteur(this.x + x, this.y + y);
 	}
 	
 	/**
@@ -123,8 +127,8 @@ public class Vector {
 	 * @param v Vecteur ajoute a ce Vecteur.
 	 * @return l'addition des deux Vecteurs.
 	 */
-	public Vector add(Vector v) {
-		return new Vector(this.x + v.x, this.y + v.y);
+	public Vecteur add(Vecteur v) {
+		return new Vecteur(this.x + v.x, this.y + v.y);
 	}
 
 	/**
@@ -134,8 +138,8 @@ public class Vector {
 	 * @param v Vecteur soustrait a ce Vecteur.
 	 * @return la soustraction des deux Vecteurs.
 	 */
-	public Vector minus(Vector v) {
-		return new Vector(this.x - v.x, this.y - v.y);
+	public Vecteur minus(Vecteur v) {
+		return new Vecteur(this.x - v.x, this.y - v.y);
 	}
 
 	/*
@@ -148,7 +152,7 @@ public class Vector {
 	 * @param v Vecteur utilise pour calculer la distance.
 	 * @return la distance entre ce Vecteur et le Vecteur passe en parametre.
 	 */
-	public double getDistanceTo(Vector v) {
+	public double getDistanceTo(Vecteur v) {
 		return Math.sqrt(Math.pow(this.x - v.x, 2) + Math.pow(this.y - v.y, 2));
 	}
 
@@ -166,8 +170,8 @@ public class Vector {
 	 * 
 	 * @return une copie de ce Vecteur.
 	 */
-	public Vector clone() {
-		return new Vector(this.getX(), this.getY());
+	public Vecteur clone() {
+		return new Vecteur(this.getX(), this.getY());
 	}
 
 	/**

@@ -2,7 +2,7 @@ package fr.spacey.model;
 
 import java.util.Random;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -25,7 +25,7 @@ public class Affichage {
 	private double startSceneY;
 	private double zoom;
 
-	private Vector[] stars;
+	private Vecteur[] stars;
 
 	/**
 	 * Constructeur d'Affichage initialisant chaque variable avec une valeur par
@@ -40,10 +40,10 @@ public class Affichage {
 		this.yOffset = height / 2;
 		this.zoom = 1;
 
-		this.stars = new Vector[500];
+		this.stars = new Vecteur[500];
 		Random r = new Random();
 		for (int i = 0; i < stars.length; i++) {
-			this.stars[i] = new Vector(r.nextInt((int) (width * 4)) - width*2, r.nextInt((int) (height * 4)) - height*2);
+			this.stars[i] = new Vecteur(r.nextInt((int) (width * 4)) - width*2, r.nextInt((int) (height * 4)) - height*2);
 		}
 	}
 
@@ -225,7 +225,7 @@ public class Affichage {
 	 * @return un Array contenant la position des etoiles sur le fond de
 	 *         l'Affichage.
 	 */
-	public Vector[] getStars() {
+	public Vecteur[] getStars() {
 		return stars;
 	}
 }
