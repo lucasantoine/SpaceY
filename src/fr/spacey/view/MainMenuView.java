@@ -71,7 +71,7 @@ public class MainMenuView implements Observer {
 		title.setX(canvas.getWidth() / 2);
 		title.setY(canvas.getHeight() / 2);
 
-		play = new Text("Démarrer");
+		play = new Text("Dï¿½marrer");
 		play.setFont(Font.font(60));
 		play.setFill(Color.YELLOW);
 		play.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
@@ -95,7 +95,7 @@ public class MainMenuView implements Observer {
 		
 		chooseFile.setOnMouseClicked(e -> {
 			FileChooser filechooser = new FileChooser();
-			filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Aastro File", "*.astro"));
+			filechooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Astro File", "*.astro"));
             File file = filechooser.showOpenDialog((Stage)play.getScene().getWindow());
             if (file != null) {
             	chooseFile.setText(file.getName());
