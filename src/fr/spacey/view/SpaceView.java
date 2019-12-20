@@ -57,7 +57,7 @@ public class SpaceView implements Observer {
 	private GraphicsContext gc;
 	private Vector lastMousePos;
 	private boolean isMenu;
-	private Cryostase cryo=new Cryostase();
+	private Cryostase cryo;
 	
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
@@ -74,6 +74,8 @@ public class SpaceView implements Observer {
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
 		this.isMenu = false;
+		
+		this.cryo=new Cryostase(sc);
 
 		pane.setOnKeyPressed(e -> {
 			if(e.getCode().equals(KeyCode.ESCAPE)) {
@@ -573,16 +575,19 @@ public class SpaceView implements Observer {
 	}
 	
 	/**
-	 * Methode gerant l'affichage de la stase selon le comportement de la classe Cryostase
+	 * Methode gerant l'affichage de la stase et demandant l'arrêt du rendu selon le comportement de la classe Cryostase
 	 */
 	private void drawStase() {
 		if(cryo.isActive())this.cryo.freeze();
 		else this.cryo.unfreeze();
+		
+			System.out.println(cryo.getFrostLevel()+":"+sc.isFrozen());
+			/*
 			double alpha=gc.getGlobalAlpha();
 			gc.setGlobalAlpha(cryo.getFrostLevel());
 			gc.drawImage(cryo.SPRITE, 0, 0);
 			gc.setGlobalAlpha(alpha);
 			System.out.println(this.cryo.getFrostLevel());
-
+			*/
 	}
 }

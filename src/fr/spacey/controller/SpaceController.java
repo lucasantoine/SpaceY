@@ -37,6 +37,7 @@ public class SpaceController {
 
 	private boolean isRunning = false;
 	private boolean isStopped = false;
+	private boolean isFrozen = false;
 	private int time;
 
 	private Thread renderThread;
@@ -92,7 +93,8 @@ public class SpaceController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							sm.render();
+							System.out.println(isFrozen());
+							if(!isFrozen())sm.render(); //ICI ?
 						}
 					});
 
@@ -141,6 +143,23 @@ public class SpaceController {
 	 */
 	public boolean isRunning() {
 		return isRunning;
+	}
+	
+	/**
+	 * Permet de mettre en pause ou de reprendre le cours de l'affichage
+	 */
+	public void toggleFreezing() {
+		this.isFrozen=!this.isFrozen;
+	}
+	
+	
+	/**
+	 * Renvoie vrai si le rendu est désactivé mais que la simulation continue en arrière plan
+	 * 
+	 * @return l'état du rendu
+	 */
+	public boolean isFrozen() {
+		return this.isFrozen;
 	}
 
 	/**
