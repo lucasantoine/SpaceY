@@ -26,4 +26,5 @@ public class Cryostase {
 		if(this.frostLevel<0.0)this.frostLevel=0.0;	
 	}
 	
+	
 }
