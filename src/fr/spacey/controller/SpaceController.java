@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Observer;
 
 import fr.spacey.model.Affichage;
@@ -50,6 +51,7 @@ public class SpaceController {
 	
 	private Affichage affichage;
 	private int selected;
+	private HashMap<Entity, ShowState> showstates;
 
 	/**
 	 * Constructeur de SpaceController prenant en parametre le modele de la
@@ -63,6 +65,10 @@ public class SpaceController {
 		this.isRunning = true;
 		this.affichage = new Affichage();
 		this.selected = -1;
+		this.showstates = new HashMap<Entity, ShowState>();
+		for (Entity e : space.getEntities()) {
+			showstates.put(e, ShowState.NOINFO);
+		}
 	}
 
 	public Affichage getAffichage() {
@@ -215,11 +221,18 @@ public class SpaceController {
 			double minX = entityX - en.getRadius() / 2, maxX = entityX + en.getRadius() / 2;
 			double minY = entityY - en.getRadius() / 2, maxY = entityY + en.getRadius() / 2;
 
-			if (!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX
+//			if (!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX
+//					&& mouseYTransformed > minY && mouseYTransformed < maxY) {
+//				en.setInfo(ShowState.HOVERING);
+//			} else if (en.getInfoMode().equals(ShowState.HOVERING)) {
+//				en.setInfo(ShowState.NOINFO);
+//			}
+			
+			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX
 					&& mouseYTransformed > minY && mouseYTransformed < maxY) {
-				en.setInfo(ShowState.HOVERING);
-			} else if (en.getInfoMode().equals(ShowState.HOVERING)) {
-				en.setInfo(ShowState.NOINFO);
+				showstates.put(en, ShowState.HOVERING);
+			} else if (showstates.get(en).equals(ShowState.HOVERING)) {
+				showstates.put(en, ShowState.NOINFO);
 			}
 		}
 	}
@@ -241,16 +254,16 @@ public class SpaceController {
 		if(hasEntitySelected()) {
 			//fleche gauche
 			if(mouseXTransformed >= 855 && mouseXTransformed <= 890 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
-				getEntitySelected().setInfo(ShowState.NOINFO);
+				showstates.put(getEntitySelected(), ShowState.NOINFO);
 				setEntitySelected((getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getEntitySelectedId()-1);
-				getEntitySelected().setInfo(ShowState.SHOWINFO);
+				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
 			}
 			//fleche droite
 			else if(mouseXTransformed >= 1510 && mouseXTransformed <= 1545 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
-				getEntitySelected().setInfo(ShowState.NOINFO);
+				showstates.put(getEntitySelected(), ShowState.NOINFO);
 				setEntitySelected((getEntitySelectedId()+1)%getModel().getEntities().size());
-				getEntitySelected().setInfo(ShowState.SHOWINFO);
+				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
 			}
 		}
@@ -261,7 +274,7 @@ public class SpaceController {
 				for (Entity en : getModel().getEntities()) {
 					if(en.getType().equals(EntityType.VAISSEAU)) {
 						setEntitySelected(k);
-						en.setInfo(ShowState.SHOWINFO);
+						showstates.put(en, ShowState.SHOWINFO);
 						return;
 					}
 					k++;
@@ -276,26 +289,27 @@ public class SpaceController {
 			double minX = entityX - en.getRadius() / 2, maxX = entityX + en.getRadius() / 2;
 			double minY = entityY - en.getRadius() / 2, maxY = entityY + en.getRadius() / 2;
 
-			if (!en.getInfoMode().equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
+			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
 					&& mouseYTransformed < maxY) {
 				if(e.getClickCount() >= 2) {
-					System.out.println("DOUBLE CLICK GRoS FDP");
+					final int focus = idx;
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
 							SpaceController newsc = new SpaceController(sm);
+							newsc.setEntitySelected(focus);
 							SpaceView newsp = new SpaceView(newsc);
 							newsp.start(new Stage());
 						}
 					});
 				}else {
 					setEntitySelected(idx);
-					en.setInfo(ShowState.SHOWINFO);
+					showstates.put(en, ShowState.SHOWINFO);
 					e.setDragDetect(false);
 					nouvelleSelection = true;
 				}
 			} else {
-				en.setInfo(ShowState.NOINFO);
+				showstates.put(en, ShowState.NOINFO);
 			}
 			idx++;
 		}
@@ -487,6 +501,10 @@ public class SpaceController {
 		} else {
 			this.selected = -1;
 		}
+	}
+	
+	public ShowState getShowStateOf(Entity e) {
+		return showstates.get(e);
 	}
 
 }

@@ -233,7 +233,7 @@ public class SpaceView implements Observer {
 		// ENTITES INFOS
 		for (Entity e : sc.getModel().getEntities()) {
 			// INFOS SUR ENTITE
-			if (e.getInfoMode().equals(ShowState.HOVERING) || e.getInfoMode().equals(ShowState.SHOWINFO)) {
+			if (sc.getShowStateOf(e).equals(ShowState.HOVERING) || sc.getShowStateOf(e).equals(ShowState.SHOWINFO)) {
 
 				double planetX = e.getPos().getX() + aff.getxOffset() - e.getRadius() / 2;
 				double planetY = e.getPos().getY() + aff.getyOffset() - e.getRadius() / 2;

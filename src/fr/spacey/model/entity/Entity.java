@@ -27,7 +27,6 @@ public abstract class Entity {
 	private Vector pos;
 	private Vector vel;
 	private Vector acc;
-	private ShowState infomode;
 	protected double radius;
 	private int imgId;
 
@@ -47,7 +46,6 @@ public abstract class Entity {
 		this.masse = masse;
 		this.pos = pos;
 		this.vel = vel;
-		this.infomode = ShowState.NOINFO;
 		this.acc = new Vector(0, 0);
 		this.radius = masse * 2;
 		this.imgId = 3;
@@ -111,14 +109,6 @@ public abstract class Entity {
 		this.masse = masse;
 	}
 
-	/**
-	 * Renvoie l'etat de l'affichage des informations de l'Entite.
-	 * 
-	 * @return l'etat de l'affichage des informations de l'Entite.
-	 */
-	public ShowState getInfoMode() {
-		return this.infomode;
-	}
 
 	/**
 	 * Renvoie l'indice de l'image de l'Entite.
@@ -195,16 +185,6 @@ public abstract class Entity {
 	private double getForceY(Entity entity) {
 		return (SpaceModel.G * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 3))
 				* entity.getPos().minus(this.pos).getY();
-	}
-
-	/**
-	 * Modifie l'etat de l'affichage des informations de cette Entite avec celui
-	 * passe en parametres.
-	 * 
-	 * @param b Nouvel etat d'affichage des informations pour cette Entite.
-	 */
-	public void setInfo(ShowState b) {
-		this.infomode = b;
 	}
 
 	/**
