@@ -1,4 +1,4 @@
-package fr.spacey.model.integration;
+package fr.spacey.model.integrator;
 
 import java.util.List;
 import java.util.Vector;
@@ -9,12 +9,17 @@ import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.Vecteur;
 
 public class Integrator {
+	private SpaceModel model;
+	
+	public Integrator(SpaceModel model) {
+		this.model = model;
+	}
 
-	public Vector<Double> getDerivative(Vector<Double> states, List<Entity> entities) {
+	public Vector<Double> getDerivative(Vector<Double> states, double t) {
 		@SuppressWarnings("unchecked")
 		Vector<Double> derivative = (Vector<Double>)states.clone();
 		this.getVelocity(derivative);
-		this.getAcceleration(derivative, entities);
+		this.getAcceleration(derivative, model.getEntities());
 		return derivative;
 	}
 

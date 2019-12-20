@@ -37,7 +37,6 @@ public class SpaceController {
 
 	private boolean isRunning = false;
 	private boolean isStopped = false;
-	private int time;
 
 	private Thread renderThread;
 	private RenderTimer rendertimer;
@@ -52,7 +51,6 @@ public class SpaceController {
 	 */
 	public SpaceController(SpaceModel space) {
 		this.sm = space;
-		this.time = 0;
 		this.rendertimer = new RenderTimer();
 		this.isRunning = true;
 	}
@@ -78,7 +76,7 @@ public class SpaceController {
 					accu += ellapsedTime;
 
 					while (isRunning && accu >= sm.getDt() / sm.getFa()) {
-						time++;
+						sm.setTime(sm.getTime()+1);
 						Platform.runLater(new Runnable() {
 							@Override
 							public void run() {
@@ -290,7 +288,7 @@ public class SpaceController {
 	 * @return le temps de la simulation.
 	 */
 	public int getTime() {
-		return time;
+		return sm.getTime();
 	}
 
 	/**

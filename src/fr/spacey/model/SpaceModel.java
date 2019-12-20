@@ -11,6 +11,7 @@ import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.model.integration.EulerExplicite;
 import fr.spacey.model.integration.IntegrationStrategy;
+import fr.spacey.model.integrator.Integrator;
 import fr.spacey.utils.AstroParser;
 import fr.spacey.utils.State;
 import fr.spacey.utils.Vecteur;
@@ -37,7 +38,9 @@ public class SpaceModel extends Observable {
 
 	public static double G; // constante gravitationelle
 	private double dt; // nb d'update() qui sera reparti par le nombre d'image
-						// par seconde
+		// par seconde
+	private int time;
+
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
 
@@ -88,6 +91,7 @@ public class SpaceModel extends Observable {
 		if (G == 0)
 			G = 0.005;
 
+		this.time = 0;
 		this.selected = -1;
 		this.affichage = new Affichage();
 		for (Entity e : entities) {
@@ -95,7 +99,7 @@ public class SpaceModel extends Observable {
 				this.vaisseau = (Vaisseau) e;
 			}
 		}
-		this.integrator = new EulerExplicite(this);
+		this.integrator = new EulerExplicite(new Integrator(this));
 	}
 
 	/**
@@ -238,7 +242,7 @@ public class SpaceModel extends Observable {
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
-		this.states = integrator.f(states, 0);
+		this.states = integrator.newStates(states, time, dt);
 		for (int i = 0; i < entities.size(); i++) {
 			State s = new State(new Vecteur(this.states.get(i * 4), this.states.get((i * 4) + 1)),
 					new Vecteur(this.states.get((i * 4) + 2), this.states.get((i * 4) + 3)));
@@ -319,6 +323,14 @@ public class SpaceModel extends Observable {
 	public void render() {
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void setTime(int time) {
+		this.time = time;
+	}
+	
+	public int getTime() {
+		return time;
 	}
 
 }
