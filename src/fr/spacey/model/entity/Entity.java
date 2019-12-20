@@ -251,5 +251,5 @@ public abstract class Entity {
 	 * 
 	 * @param entities Array contenant l'ensemble des Entites de la simulation.
 	 */
-	public abstract void updatePosition(List<Entity> entities);
+	public abstract void updatePosition(List<Entity> entities, double dt);
 }

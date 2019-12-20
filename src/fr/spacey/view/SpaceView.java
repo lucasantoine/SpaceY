@@ -158,7 +158,7 @@ public class SpaceView implements Observer {
 		});
 
 		pane.setOnScroll(e -> { 
-			Affichage aff = sc.getModel().getAffichage();
+			Affichage aff = sc.getAffichage();
 			if(e.getDeltaY() > 0) {
 				aff.setZoom(Math.min(10, aff.getZoom()+0.1)); 
 			} else {
@@ -175,7 +175,7 @@ public class SpaceView implements Observer {
 	 */
 	@Override
 	public void update(Observable obs, Object obj) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 
 		// FOND DECRAN
 		gc.setTransform(1, 0, 0, 1, 0, 0);
@@ -286,9 +286,9 @@ public class SpaceView implements Observer {
 		gc.fillText("Temps: "+formatTimeFromSec(sc.getTime()), relatX, 115 - relatY);
 		gc.fillText("Zoom: "+aff.getZoom(), relatX, 132 - relatY);
 
-		if (sc.getModel().hasEntitySelected()) {
+		if (sc.hasEntitySelected()) {
 			drawSelectedEntity(gc);
-			centerCameraOnEntity(sc.getModel().getEntitySelected());
+			centerCameraOnEntity(sc.getEntitySelected());
 		}
 
 		if (sc.getModel().hasVaisseau()) {
@@ -407,7 +407,7 @@ public class SpaceView implements Observer {
 	 * @param gc Contexte Graphique de la simulation.
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		double relatX = 10 - gc.getTransform().getTx(), relatY = gc.getTransform().getTy();
 
 		// HUD ROND VAISSEAU
@@ -473,7 +473,14 @@ public class SpaceView implements Observer {
 	 * @param gc2 Contexte Graphique de la simulation.
 	 */
 	private void drawSelectedEntity(GraphicsContext gc) {
-		Entity e = sc.getModel().getEntitySelected();
+		Entity e = null;
+		try {
+			e = sc.getEntitySelected();
+		}catch(Exception exception) {
+			sc.setEntitySelected(-1);
+			return;
+		}
+
 
 		gc.setFill(new Color(.3, .3, .3, 1));
 		gc.fillRoundRect(SELECTX, SELECTY, SELECTWIDTH, SELECTHEIGHT, 20, 20);
@@ -533,7 +540,7 @@ public class SpaceView implements Observer {
 	 * @param e Entite selectionnee.
 	 */
 	private void centerCameraOnEntity(Entity e) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		//aff.setxOffset((aff.getWidth() / aff.getZoom()) / 2 - e.getPos().getX() / aff.getZoom());
 		//aff.setyOffset((aff.getHeight() / aff.getZoom()) / 2 - e.getPos().getY() / aff.getZoom());
 		aff.setxOffset(aff.getWidth() / 2 - e.getPos().getX());
@@ -547,12 +554,12 @@ public class SpaceView implements Observer {
 	 */
 	public void start(Stage s) {
 		this.stage = s;
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		s.setTitle("SpaceY");
 		s.setScene(new Scene(pane, aff.getWidth(), aff.getHeight()));
 		s.setResizable(true);
 		// s.setFullScreen(true);
 		// s.setMaximized(true);
-		// s.show();
+		 s.show();
 	}
 }

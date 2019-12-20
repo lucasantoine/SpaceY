@@ -93,14 +93,14 @@ public class Simule extends Entity {
 	}
 
 	@Override
-	public void updatePosition(List<Entity> entities) {
+	public void updatePosition(List<Entity> entities, double dt) {
 		previousPosition();
 		super.updateVelocity(entities);
-		super.getPos().setVector(this.getPos().add(getVel()));
+		super.getPos().setVector(this.getPos().add(dt * getVel().getX(), dt * getVel().getY()));
 	}
 
 	/**
-	 * Ajoute une nouvelle Position à la liste des Positions precedentes et, s'il y
+	 * Ajoute une nouvelle Position ï¿½ la liste des Positions precedentes et, s'il y
 	 * en a trop, supprime la plus ancienne.
 	 */
 	protected void previousPosition() {

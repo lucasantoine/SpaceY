@@ -33,7 +33,7 @@ public class Fixe extends Entity {
 	 * Ne modifie pas la Position de l'Entite.
 	 */
 	@Override
-	public void updatePosition(List<Entity> entities) {
+	public void updatePosition(List<Entity> entities, double dt) {
 		return;
 	}
 
