@@ -419,7 +419,7 @@ public class SpaceView implements Observer {
 
 	/**
 	 * Methode permettant de dessiner le HUD du Vaisseau.
-	 * 
+	 *  
 	 * @param gc Contexte Graphique de la simulation.
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {

@@ -24,7 +24,7 @@ public class SpaceY extends Application {
 	public final double PI = 3.14159265359;
 	
 	private static SpaceY instance = new SpaceY();
-
+	
 	private transient SpaceModel sm;
 	private transient SpaceController sc;
 	private transient SpaceView sv;
@@ -63,7 +63,7 @@ public class SpaceY extends Application {
 	 * @param filepath Chemin d'acces vers le fichier de configuration de la
 	 *                 simulation.
 	 * @param stage    Scene de la simulation.
-	 * @throws Exception 
+	 * @throws Exception s
 	 */
 	public void startSimulation(String filepath, Stage stage) throws Exception {
 		

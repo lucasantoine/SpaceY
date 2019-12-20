@@ -335,6 +335,9 @@ public class SpaceController {
 			if(e.getCode().equals(KeyCode.Z)) {
 				this.isZPressed = false;
 			}
+			if (e.getCode().equals(KeyCode.Z)) {
+				sm.getVaisseau().downThrottle();
+			}
 		}
 	}
 
