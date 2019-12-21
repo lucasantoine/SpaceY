@@ -2,7 +2,6 @@ package fr.spacey.model.integration;
 
 import java.util.Vector;
 
-import fr.spacey.model.SpaceModel;
 import fr.spacey.model.integrator.Integrator;
 
 /**
@@ -17,9 +16,9 @@ public class EulerExplicite extends IntegrationStrategy {
 		super(i);
 	}
 
-	public Vector<Double> newStates(Vector<Double> e, double t, double dt) {
-		Vector<Double> newStates = i.getDerivative(e, t);
-		return this.muladd(dt, newStates, e);
+	public Vector<Double> newStates(Vector<Double> states, double t, double dt) {
+		Vector<Double> newStates = i.getDerivative(states, t);
+		return this.muladd(dt, newStates, states);
 	}
 	
 

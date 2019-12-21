@@ -12,5 +12,5 @@ public abstract class IntegrationStrategy {
 		this.i = i;
 	}
 	
-	public abstract Vector<Double> newStates(Vector<Double> e, double t, double dt);
+	public abstract Vector<Double> newStates(Vector<Double> states, double t, double dt);
 }

@@ -11,6 +11,7 @@ import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.model.integration.EulerExplicite;
 import fr.spacey.model.integration.IntegrationStrategy;
+import fr.spacey.model.integration.Rk4;
 import fr.spacey.model.integrator.Integrator;
 import fr.spacey.utils.AstroParser;
 import fr.spacey.utils.State;
@@ -99,7 +100,7 @@ public class SpaceModel extends Observable {
 				this.vaisseau = (Vaisseau) e;
 			}
 		}
-		this.integrator = new EulerExplicite(new Integrator(this));
+		this.integrator = new Rk4(new Integrator(this));
 	}
 
 	/**
