@@ -55,6 +55,10 @@ public class Affichage {
 	public double getWidth() {
 		return width / zoom;
 	}
+	
+	public double getAbsoluteWidth() {
+		return width;
+	}
 
 	/**
 	 * Modifie la largeur de l'Affichage par la valeur passee en parametre.
@@ -72,6 +76,10 @@ public class Affichage {
 	 */
 	public double getHeight() {
 		return height / zoom;
+	}
+	
+	public double getAbsoluteHeight() {
+		return height;
 	}
 
 	/**
