@@ -24,6 +24,8 @@ public class Affichage {
 	private double startSceneX;
 	private double startSceneY;
 	private double zoom;
+	
+
 
 	private Vector[] stars;
 
@@ -45,6 +47,7 @@ public class Affichage {
 		for (int i = 0; i < stars.length; i++) {
 			this.stars[i] = new Vector(r.nextInt((int) (width * 4)) - width*2, r.nextInt((int) (height * 4)) - height*2);
 		}
+		
 	}
 
 	/**
@@ -169,7 +172,7 @@ public class Affichage {
 		this.startDragY = startDragY;
 	}
 
-	/**
+	/**	
 	 * Renvoie la position en X du debut de la Scene.
 	 * 
 	 * @return la position en X du debut de la Scene.
@@ -236,4 +239,6 @@ public class Affichage {
 	public Vector[] getStars() {
 		return stars;
 	}
+	
+
 }

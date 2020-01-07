@@ -58,7 +58,7 @@ public class SpaceView implements Observer {
 	private Vector lastMousePos;
 	private boolean isMenu;
 	private Cryostase cryo=new Cryostase();
-	
+
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
 	 * 
@@ -85,14 +85,14 @@ public class SpaceView implements Observer {
 				Stage s = (Stage) can.getScene().getWindow();
 				s.setFullScreen(!s.isFullScreen());
 			}
-			
+
 			sc.onKeyPressed(e);
 		});
-		
+
 		pane.setOnKeyReleased(e -> {
 			if(isMenu) return;
 			sc.onKeyReleased(e);
-			
+
 			if(e.getCode().equals(KeyCode.P)) {
 				cryo.switchActive();;
 			}
@@ -103,9 +103,9 @@ public class SpaceView implements Observer {
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 270 && lastMousePos.getY() <= 350) {
 					this.isMenu = false;
 				}
-				
+
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 800 && lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
-					
+
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH'h'mm");
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.setTitle("Sauvegardez votre fichier ASTRO");
@@ -113,19 +113,19 @@ public class SpaceView implements Observer {
 					fileChooser.setInitialFileName(formatter.format(LocalDateTime.now())+".astro");
 					fileChooser.getExtensionFilters().addAll(new ExtensionFilter("ASTRO Files", "*.astro"));
 					File savedFile = fileChooser.showSaveDialog(stage);
-					 
+
 					if (savedFile != null) {
-					    sc.saveSpace(savedFile);
+						sc.saveSpace(savedFile);
 					}
 				}
-				
+
 				if(lastMousePos.getX() >= 810 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.setTitle("Selectionnez votre fichier ASTRO");
 					fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 					fileChooser.getExtensionFilters().addAll(new ExtensionFilter("ASTRO Files", "*.astro"));
 					File opennedFile = fileChooser.showOpenDialog(stage);
-					 
+
 					if (opennedFile != null) {
 						sc.stopRunning();
 						try {
@@ -137,11 +137,11 @@ public class SpaceView implements Observer {
 
 					}
 				}
-				
+
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 490 && lastMousePos.getY() <= 570) {
 					//TODO PARAMETRES
 				}
-				
+
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 600 && lastMousePos.getY() <= 680) {
 					sc.stopRunning();
 					SpaceY.getInstance().start(this.stage);
@@ -172,7 +172,7 @@ public class SpaceView implements Observer {
 
 		pane.setOnScroll(e -> { 
 			if(isMenu) return;
-			Affichage aff = sc.getModel().getAffichage();
+			Affichage aff = sc.getAffichage();
 			if(e.getDeltaY() > 0) {
 				aff.setZoom(Math.min(10, aff.getZoom()+0.1)); 
 			} else {
@@ -189,7 +189,7 @@ public class SpaceView implements Observer {
 	 */
 	@Override
 	public void update(Observable obs, Object obj) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 
 		// FOND DECRAN
 		gc.setTransform(1, 0, 0, 1, 0, 0);
@@ -204,7 +204,7 @@ public class SpaceView implements Observer {
 		for (int i = 0; i < aff.getStars().length; i++) {
 			gc.fillOval(aff.getStars()[i].getX() + aff.getxOffset(), aff.getStars()[i].getY() + aff.getyOffset(), 3, 3);
 		}
-		
+
 
 
 
@@ -247,11 +247,11 @@ public class SpaceView implements Observer {
 		// ENTITES INFOS
 		for (Entity e : sc.getModel().getEntities()) {
 			// INFOS SUR ENTITE
-			if (e.getInfoMode().equals(ShowState.HOVERING) || e.getInfoMode().equals(ShowState.SHOWINFO)) {
+			if (sc.getShowStateOf(e).equals(ShowState.HOVERING) || sc.getShowStateOf(e).equals(ShowState.SHOWINFO)) {
 
 				double planetX = e.getPos().getX() + aff.getxOffset() - e.getRadius() / 2;
 				double planetY = e.getPos().getY() + aff.getyOffset() - e.getRadius() / 2;
-				
+
 				double startDescX = planetX + e.getRadius() + 25, startDescY = planetY + e.getRadius() + 25;
 
 				gc.setFill(new Color(.4, .4, .4, 0.7));
@@ -265,8 +265,8 @@ public class SpaceView implements Observer {
 				gc.setLineWidth(1);
 				gc.strokeLine(planetX + e.getRadius() + 3, planetY + e.getRadius() + 3, startDescX - 5, startDescY - 5);
 
-				
-				
+
+
 				gc.setFill(Color.RED);
 				gc.setFont(new Font("Minecraftia", 18));
 				gc.fillText(e.getName(), startDescX + 15, startDescY + 40);
@@ -300,24 +300,24 @@ public class SpaceView implements Observer {
 		gc.fillText("Temps: "+formatTimeFromSec(sc.getTime()), relatX, 115 - relatY);
 		gc.fillText("Zoom: "+aff.getZoom(), relatX, 132 - relatY);
 
-		if (sc.getModel().hasEntitySelected()) {
+		if (sc.hasEntitySelected()) {
 			drawSelectedEntity(gc);
-			centerCameraOnEntity(sc.getModel().getEntitySelected());
+			centerCameraOnEntity(sc.getEntitySelected());
 		}
 
 		if (sc.getModel().hasVaisseau()) {
 			drawSpaceshipHUD(gc);
 		}
-		
+
 		if(isMenu) {
 			gc.setTransform(1, 0, 0, 1, 0, 0);
 			gc.setFill(new Color(0,0,0, 0.8));
 			//GaussianBlur gaussianBlur = new GaussianBlur(); 
-		    //gaussianBlur.setRadius(10); 
+			//gaussianBlur.setRadius(10); 
 			//gc.setEffect(gaussianBlur);
 			gc.fillRect(0, 0, pane.getWidth(), pane.getHeight());
 			//gc.setEffect(null);
-			
+
 			gc.setFill(new Color(.3, .3, .3, 1));
 			gc.fillRoundRect(aff.getAbsoluteWidth()/2-250, aff.getAbsoluteHeight()*0.3, 500, 80, 20, 20);
 			gc.fillRoundRect(aff.getAbsoluteWidth()/2-250, aff.getAbsoluteHeight()*0.42, 240, 80, 20, 20);
@@ -343,7 +343,7 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getAbsoluteWidth()/2-245, aff.getAbsoluteHeight()*0.3+5, 490, 70, 20, 20);
-			
+
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 800 
 					&& lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
 				gc.setStroke(Color.WHITE);
@@ -351,7 +351,7 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getAbsoluteWidth()/2-245, aff.getAbsoluteHeight()*0.42+5, 230, 70, 20, 20);
-			
+
 			if(lastMousePos.getX() >= 810 && lastMousePos.getX() <= 1050 
 					&& lastMousePos.getY() >= 380 && lastMousePos.getY() <= 460) {
 				gc.setStroke(Color.WHITE);
@@ -359,7 +359,7 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getAbsoluteWidth()/2+15, aff.getAbsoluteHeight()*0.42+5, 230, 70, 20, 20);
-			
+
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
 					&& lastMousePos.getY() >= 490 && lastMousePos.getY() <= 570) {
 				gc.setStroke(Color.WHITE);
@@ -367,7 +367,7 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getAbsoluteWidth()/2-245, aff.getAbsoluteHeight()*0.54+5, 490, 70, 20, 20);
-			
+
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
 					&& lastMousePos.getY() >= 600 && lastMousePos.getY() <= 680) {
 				gc.setStroke(Color.WHITE);
@@ -375,11 +375,11 @@ public class SpaceView implements Observer {
 				gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
 			}
 			gc.strokeRoundRect(aff.getAbsoluteWidth()/2-245, aff.getAbsoluteHeight()*0.66+5, 490, 70, 20, 20);
-			
+
 		}
 
 		//stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G + ", TIME=" + formatTimeFromSec(sc.getTime()));
-		
+
 		//CRYOSTASE
 		this.drawStase();
 	}
@@ -424,7 +424,7 @@ public class SpaceView implements Observer {
 	 * @param gc Contexte Graphique de la simulation.
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		double relatX = 10, relatY = aff.getHeight()-900;
 
 		// HUD ROND VAISSEAU
@@ -490,11 +490,19 @@ public class SpaceView implements Observer {
 	 * @param gc2 Contexte Graphique de la simulation.
 	 */
 	private void drawSelectedEntity(GraphicsContext gc) {
-		Entity e = sc.getModel().getEntitySelected();
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		double startX = aff.getAbsoluteWidth() - SELECTWIDTH - 20;
 		double startY = aff.getAbsoluteHeight() - SELECTHEIGHT - 20;
 		double textX = startX + SELECTWIDTH / 6;
+		Entity e = null;
+		try {
+			e = sc.getEntitySelected();
+		}catch(Exception exception) {
+			sc.setEntitySelected(-1);
+			return;
+		}
+
+
 		gc.setFill(new Color(.3, .3, .3, 1));
 		gc.fillRoundRect(startX , startY, SELECTWIDTH, SELECTHEIGHT, 20, 20);
 		gc.setLineWidth(1);
@@ -502,7 +510,7 @@ public class SpaceView implements Observer {
 		gc.strokeRoundRect(startX + 5, startY + 5, SELECTWIDTH - 10, SELECTHEIGHT - 10, 20, 20);
 
 		double triangleCenterY = (startY + (startY + SELECTHEIGHT)) / 2;
-		
+
 		//fleche gauche
 		if(lastMousePos.getX() >= startX + 15 && lastMousePos.getX() <= startX + 30
 				&& lastMousePos.getY() >= triangleCenterY - 25 && lastMousePos.getY() <= triangleCenterY + 25) {
@@ -556,14 +564,14 @@ public class SpaceView implements Observer {
 		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", textX, startY + 115);
 		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", textX, startY + 130);
 	}
- 
+
 	/**
 	 * Methode permettant de centrer la camera sur l'Entite selectionnee.
 	 * 
 	 * @param e Entite selectionnee.
 	 */
 	private void centerCameraOnEntity(Entity e) {
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		//aff.setxOffset((aff.getWidth() / aff.getZoom()) / 2 - e.getPos().getX() / aff.getZoom());
 		//aff.setyOffset((aff.getHeight() / aff.getZoom()) / 2 - e.getPos().getY() / aff.getZoom());
 		aff.setxOffset(aff.getWidth() / 2 - e.getPos().getX());
@@ -577,7 +585,7 @@ public class SpaceView implements Observer {
 	 */
 	public void start(Stage s) {
 		this.stage = s;
-		Affichage aff = sc.getModel().getAffichage();
+		Affichage aff = sc.getAffichage();
 		s.setTitle("SpaceY");
 		Scene scene = new Scene(pane, aff.getWidth(), aff.getHeight());
 		s.setScene(scene);
@@ -585,7 +593,7 @@ public class SpaceView implements Observer {
 		// s.setFullScreen(true);
 		// s.setMaximized(true);
 		// s.show();
-		
+
 		scene.widthProperty().addListener((observable, oldValue, newValue) -> {
 			aff.setWidth(newValue.doubleValue());
 		});
@@ -593,18 +601,21 @@ public class SpaceView implements Observer {
 			aff.setHeight(newValue.doubleValue());
 		});
 	}
-	
+
 	/**
 	 * Methode gerant l'affichage de la stase selon le comportement de la classe Cryostase
 	 */
 	private void drawStase() {
-		if(cryo.isActive())this.cryo.freeze();
-		else this.cryo.unfreeze();
-			double alpha=gc.getGlobalAlpha();
-			gc.setGlobalAlpha(cryo.getFrostLevel());
-			gc.drawImage(cryo.SPRITE, 0, 0);
-			gc.setGlobalAlpha(alpha);
-			System.out.println(this.cryo.getFrostLevel());
+		if(cryo.isActive())
+			this.cryo.freeze();
+		else 
+			this.cryo.unfreeze();
 
+		double alpha=gc.getGlobalAlpha();
+		gc.setGlobalAlpha(cryo.getFrostLevel());
+		gc.drawImage(cryo.SPRITE, 0, 0);
+		gc.setGlobalAlpha(alpha);
+		System.out.println(this.cryo.getFrostLevel());
+//		s.show
 	}
 }

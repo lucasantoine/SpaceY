@@ -26,14 +26,23 @@ public class SpaceModel extends Observable {
 
 	private List<Entity> entities;
 	private Vaisseau vaisseau;
-	private int selected;
-	private Affichage affichage;
+
 
 	public static double G; // constante gravitationelle
 	private double dt; // nb d'update() qui sera reparti par le nombre d'image
 						// par seconde
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
+	
+	private int time;
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
 
 	/**
 	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de
@@ -77,13 +86,13 @@ public class SpaceModel extends Observable {
 		if (G == 0)
 			G = 0.005;
 
-		this.selected = -1;
-		this.affichage = new Affichage();
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
 			}
+			
 		}
+		this.time = 0;
 	}
 
 	/**
@@ -113,44 +122,9 @@ public class SpaceModel extends Observable {
 		return vaisseau != null;
 	}
 
-	/**
-	 * Renvoie vrai si une entite est selectionnee, faux sinon.
-	 * 
-	 * @return vrai si une entite est selectionnee, faux sinon.
-	 */
-	public boolean hasEntitySelected() {
-		return selected > -1;
-	}
 
-	/**
-	 * Renvoie le numéro de l'entite selectionnee.
-	 * 
-	 * @return le numéro de l'entite selectionnee.
-	 */
-	public int getEntitySelectedId() {
-		return selected;
-	}
 
-	/**
-	 * Renvoie l'entite selectionnee, null sinon.
-	 * 
-	 * @return l'entite selectionnee, null sinon.
-	 */
-	public Entity getEntitySelected() {
-		if (hasEntitySelected()) {
-			return entities.get(selected);
-		}
-		return null;
-	}
 
-	/**
-	 * Revoie les proprietes de l'affichage associe au modele.
-	 * 
-	 * @return les proprietes de l'affichage associe au modele.
-	 */
-	public Affichage getAffichage() {
-		return this.affichage;
-	}
 
 	/**
 	 * Renvoie le pas de temps de la simulation.
@@ -208,33 +182,21 @@ public class SpaceModel extends Observable {
 		return rayon;
 	}
 
-	/**
-	 * Change l'entite selectionnee en celle positionnee en idx dans la List
-	 * entities.
-	 * 
-	 * @param idx designe l'index de l'entite dans la liste entities.
-	 */
-	public void setEntitySelected(int idx) {
-		if (idx >= 0 && idx < entities.size()) {
-			this.selected = idx;
-		} else {
-			this.selected = -1;
-		}
-	}
+
 
 	/**
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
 		for (Entity e : entities) {
-			e.updatePosition(entities);
+			e.updatePosition(entities, dt);
 		}
 
 		Set<Entity> toRemove = new HashSet<Entity>();
-		int idxfrom = 0, idxto = 0;
+		//int idxfrom = 0, idxto = 0;
 
 		for (Entity efrom : entities) {
-			idxto = 0;
+			//idxto = 0;
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {
 					Vector from = efrom.getPos();
@@ -253,24 +215,24 @@ public class SpaceModel extends Observable {
 							toRemove.add(efrom);
 							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX()/efrom.getMasse(), efrom.getVel().getY()/efrom.getMasse()));
 
-							if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
+							/*if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
 								setEntitySelected(-1);
-							}
+							}*/
 						} else {
 
 							toRemove.add(eto);
 							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
 									eto.getVel().getY() / eto.getMasse()));
 
-							if (hasEntitySelected() && getEntitySelectedId() == idxto) {
+							/*if (hasEntitySelected() && getEntitySelectedId() == idxto) {
 								setEntitySelected(-1);
-							}
+							}*/
 						}
 					}
 				}
-				idxto++;
+				//idxto++;
 			}
-			idxfrom++;
+			//idxfrom++;
 		}
 
 		if (toRemove.size() > 0) {

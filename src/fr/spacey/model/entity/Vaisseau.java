@@ -29,11 +29,11 @@ public class Vaisseau extends Simule {
 	}
 	
 	@Override
-	public void updatePosition(List<Entity> entities) {
+	public void updatePosition(List<Entity> entities, double dt) {
 		rocketActivity += facteur;
 		if(rocketActivity < 0) rocketActivity = 0;
 		if(rocketActivity > 100) rocketActivity = 100;
-		super.updatePosition(entities);
+		super.updatePosition(entities, dt);
 	}
 	
 	public void fullThrottle() {

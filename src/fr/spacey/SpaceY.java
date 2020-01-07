@@ -1,5 +1,9 @@
 package fr.spacey;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.controller.SpaceController;
 import fr.spacey.model.SpaceModel;
@@ -29,7 +33,7 @@ public class SpaceY extends Application {
 	private transient SpaceController sc;
 	private transient SpaceView sv;
 	
-	/**
+	/** 
 	 * Constructeur vide de l'application
 	 */
 	public SpaceY() {}
@@ -40,8 +44,14 @@ public class SpaceY extends Application {
 	@Override
 	public void start(Stage stage) {
 		// FONT
-		Font f = Font.loadFont(getClass().getClassLoader().getResourceAsStream("fonts/Minecraftia.ttf"), 10);
-		System.out.println(f);
+		try(InputStream fileInputSteam = getClass().getResourceAsStream("res/fonts/pixelmix.ttf")) {
+			Font.loadFont(fileInputSteam, 10);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		
 		// MODELES
 		MainMenuModel mmd = new MainMenuModel(); 

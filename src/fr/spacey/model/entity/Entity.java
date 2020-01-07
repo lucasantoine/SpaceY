@@ -27,7 +27,6 @@ public abstract class Entity {
 	private Vector pos;
 	private Vector vel;
 	private Vector acc;
-	private ShowState infomode;
 	protected double radius;
 	private int imgId;
 
@@ -47,7 +46,6 @@ public abstract class Entity {
 		this.masse = masse;
 		this.pos = pos;
 		this.vel = vel;
-		this.infomode = ShowState.NOINFO;
 		this.acc = new Vector(0, 0);
 		this.radius = masse * 2;
 		this.imgId = 3;
@@ -111,14 +109,6 @@ public abstract class Entity {
 		this.masse = masse;
 	}
 
-	/**
-	 * Renvoie l'etat de l'affichage des informations de l'Entite.
-	 * 
-	 * @return l'etat de l'affichage des informations de l'Entite.
-	 */
-	public ShowState getInfoMode() {
-		return this.infomode;
-	}
 
 	/**
 	 * Renvoie l'indice de l'image de l'Entite.
@@ -198,16 +188,6 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Modifie l'etat de l'affichage des informations de cette Entite avec celui
-	 * passe en parametres.
-	 * 
-	 * @param b Nouvel etat d'affichage des informations pour cette Entite.
-	 */
-	public void setInfo(ShowState b) {
-		this.infomode = b;
-	}
-
-	/**
 	 * Modifie l'indice de l'image de cette Entite avec celui passe en parametres.
 	 * 
 	 * @param i Nouvel indice d'image pour cette Entite.
@@ -251,5 +231,5 @@ public abstract class Entity {
 	 * 
 	 * @param entities Array contenant l'ensemble des Entites de la simulation.
 	 */
-	public abstract void updatePosition(List<Entity> entities);
+	public abstract void updatePosition(List<Entity> entities, double dt);
 }
