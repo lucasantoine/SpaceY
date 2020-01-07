@@ -39,7 +39,7 @@ public class AstroParser {
 		double posy;
 		
 		nbLine = 1;
-		System.out.println(filepath);
+		//System.out.println(filepath);
 		
 		try (BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filepath)), "UTF8"))) {
 			String line = "";

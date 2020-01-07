@@ -425,20 +425,22 @@ public class SpaceView implements Observer {
 	 */
 	private void drawSpaceshipHUD(GraphicsContext gc) {
 		Affichage aff = sc.getAffichage();
-		double relatX = 10, relatY = aff.getHeight()-900;
+		double relatX = 10, relatY = aff.getAbsoluteHeight() - 850;
+		
+		System.out.println(aff.getAbsoluteHeight());
 
 		// HUD ROND VAISSEAU
 		gc.setFill(new Color(.3, .3, .3, 1));
-		gc.fillOval(relatX+20, aff.getHeight() - 200 - relatY, 160, 160);
+		gc.fillOval(relatX+20, aff.getAbsoluteHeight() - 200 - relatY, 160, 160);
 
 		gc.setLineWidth(1);
 		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
-		gc.strokeOval(relatX + 27.5, aff.getHeight() - 192.5 - relatY, 145, 145);
+		gc.strokeOval(relatX + 27.5, aff.getAbsoluteHeight() - 192.5 - relatY, 145, 145);
 
 		// HUD IMAGE VAISSEAU
 		Vaisseau e = sc.getModel().getVaisseau();
 		double vaissX = relatX + 55 + 45;
-		double vaissY = aff.getHeight() - 165 - relatY + 45;
+		double vaissY = aff.getAbsoluteHeight() - 165 - relatY + 45;
 		Image img = Sprite.getImage(e.getImgId());
 
 		gc.save();
@@ -448,19 +450,19 @@ public class SpaceView implements Observer {
 		gc.restore();
 
 		// HUD BARRES VAISSEAU ACCELERATION
-		gc.fillRoundRect(relatX + 150, aff.getHeight() - 135 - relatY, 200, 35, 20, 20);
-		gc.strokeRoundRect(relatX + 155, aff.getHeight() - 130 - relatY, 190, 25, 20, 20);
+		gc.fillRoundRect(relatX + 150, aff.getAbsoluteHeight() - 135 - relatY, 200, 35, 20, 20);
+		gc.strokeRoundRect(relatX + 155, aff.getAbsoluteHeight() - 130 - relatY, 190, 25, 20, 20);
 
 		Stop[] stops = new Stop[] { new Stop(0, Color.YELLOW), new Stop(1, Color.RED) };
-		gc.setFill(new LinearGradient(relatX + 158, aff.getHeight() - 127 - relatY, relatX + 342,
+		gc.setFill(new LinearGradient(relatX + 158, aff.getAbsoluteHeight() - 127 - relatY, relatX + 342,
 				aff.getHeight() - 108 - relatY, false, CycleMethod.NO_CYCLE, stops));
-		gc.fillRoundRect(relatX + 158, aff.getHeight() - 127 - relatY,
+		gc.fillRoundRect(relatX + 158, aff.getAbsoluteHeight() - 127 - relatY,
 				sc.getModel().getVaisseau().getRocketActivity()*0.01 * 184, 19, 15, 15);
 
 		// HUD BARRES VAISSEAU FUEL
 		gc.setFill(new Color(.3, .3, .3, 1));
-		gc.fillRoundRect(relatX + 130, aff.getHeight() - 90 - relatY, 200, 35, 20, 20);
-		gc.strokeRoundRect(relatX + 135, aff.getHeight() - 85 - relatY, 190, 25, 20, 20);
+		gc.fillRoundRect(relatX + 130, aff.getAbsoluteHeight() - 90 - relatY, 200, 35, 20, 20);
+		gc.strokeRoundRect(relatX + 135, aff.getAbsoluteHeight() - 85 - relatY, 190, 25, 20, 20);
 
 		double val = (sc.getModel().getVaisseau().getFuel() * 100 / sc.getModel().getVaisseau().getTankSize()) / 100;
 		Color col = new Color(1, 1, 0, 1);
@@ -470,12 +472,12 @@ public class SpaceView implements Observer {
 			col = new Color(1, 0, 0, 1);
 		}
 		gc.setFill(col);
-		gc.fillRoundRect(relatX + 138, aff.getHeight() - 82 - relatY, val * 184, 19, 15, 15);
+		gc.fillRoundRect(relatX + 138, aff.getAbsoluteHeight() - 82 - relatY, val * 184, 19, 15, 15);
 
 		if (!sc.isRunning()) {
 			gc.setFill(Color.GREY);
-			gc.fillRect(aff.getWidth() - 50, 20, 10, 40);
-			gc.fillRect(aff.getWidth() - 30, 20, 10, 40);
+			gc.fillRect(aff.getAbsoluteWidth() - 50, 20, 10, 40);
+			gc.fillRect(aff.getAbsoluteWidth() - 30, 20, 10, 40);
 		}
 	}
 
@@ -600,6 +602,7 @@ public class SpaceView implements Observer {
 		scene.heightProperty().addListener((observable, oldValue, newValue) -> {
 			aff.setHeight(newValue.doubleValue());
 		});
+		s.show();
 	}
 
 	/**
@@ -615,7 +618,7 @@ public class SpaceView implements Observer {
 		gc.setGlobalAlpha(cryo.getFrostLevel());
 		gc.drawImage(cryo.SPRITE, 0, 0);
 		gc.setGlobalAlpha(alpha);
-		System.out.println(this.cryo.getFrostLevel());
+		//System.out.println(this.cryo.getFrostLevel());
 //		s.show
 	}
 }

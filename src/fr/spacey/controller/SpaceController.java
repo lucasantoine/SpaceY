@@ -289,20 +289,28 @@ public class SpaceController {
 			double minX = entityX - en.getRadius() / 2, maxX = entityX + en.getRadius() / 2;
 			double minY = entityY - en.getRadius() / 2, maxY = entityY + en.getRadius() / 2;
 
-			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
+			if(mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
 					&& mouseYTransformed < maxY) {
 				if(e.getClickCount() >= 2) {
+					System.out.println("DOUBLE CLICK");
 					final int focus = idx;
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							System.out.println("RUN !");
 							SpaceController newsc = new SpaceController(sm);
 							newsc.setEntitySelected(focus);
 							SpaceView newsp = new SpaceView(newsc);
 							newsp.start(new Stage());
 						}
 					});
-				}else {
+					return;
+				}
+			}
+			
+			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
+					&& mouseYTransformed < maxY) {
+				if(e.getClickCount() < 2) {
 					setEntitySelected(idx);
 					showstates.put(en, ShowState.SHOWINFO);
 					e.setDragDetect(false);

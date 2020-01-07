@@ -226,7 +226,7 @@ public class Affichage {
 	 */
 	public void setZoom(double zoom) {
 		this.zoom = zoom;
-		System.out.println(width+" "+height+" "+zoom);
+		//System.out.println(width+" "+height+" "+zoom);
 	}
 
 	/**

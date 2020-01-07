@@ -112,7 +112,7 @@ public class Vector {
 	 * @return l'addition des deux Vecteurs.
 	 */
 	public Vector add(double x, double y) {
-		System.out.println("add("+(this.x + x)+","+(this.y + y)+")");
+		//System.out.println("add("+(this.x + x)+","+(this.y + y)+")");
 		return new Vector(this.x + x, this.y + y);
 	}
 	
