@@ -26,12 +26,12 @@ public class Cryostase {
 	public void freeze() {		
 		if(this.frostLevel<1.0)this.frostLevel+=FREEZESPEED;
 		if(this.frostLevel>1.0)this.frostLevel=1.0;
-		if(this.frostLevel==1.0 && !sc.isFrozen())sc.toggleFreezing();
+		if(this.frostLevel==1.0 && sc.isRunning())sc.toggleRunning();
 	}
 	public void unfreeze() {
 		if(this.frostLevel>0.0)this.frostLevel-=FREEZESPEED;
 		if(this.frostLevel<0.0)this.frostLevel=0.0;
-		if(sc.isFrozen())sc.toggleFreezing();
+		if(frostLevel!=1.0 && !sc.isRunning())sc.toggleRunning();
 	}
 	
 	

@@ -619,10 +619,8 @@ public class SpaceView implements Observer {
 		if(cryo.isActive())this.cryo.freeze();
 		else this.cryo.unfreeze();
 		
-			System.out.println(cryo.getFrostLevel()+":"+sc.isFrozen());
-
 			double alpha=gc.getGlobalAlpha();
-			gc.setGlobalAlpha(cryo.getFrostLevel());
+			gc.setGlobalAlpha(cryo.getFrostLevel()/2);
 			gc.drawImage(cryo.SPRITE, 0, 0);
 			gc.setGlobalAlpha(alpha);
 			System.out.println(this.cryo.getFrostLevel());

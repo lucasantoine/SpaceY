@@ -33,7 +33,7 @@ public class MainMenuModel extends Observable {
 			stars.add(new Star(Math.random() * 1600, Math.random() * 900, Math.random(), 1600, 1600, 900));
 		}
 		this.isStart = false;
-		this.filepath = "/home/infoetu/barbierb/git/spacey-j1/res/systemes/test.astro";
+		this.filepath = "/home/infoetu/ryckebuc/git/spacey-j1/res/systemes/test.astro";
 	}
 
 	/**

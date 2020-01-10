@@ -197,7 +197,7 @@ public class SpaceModel extends Observable {
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
-		this.states = integrator.newStates(states, time, dt);
+		this.states = integrator.newStates(states, time, dt); // méthode cryostase appelant x fois ici puis update position + resume
 		for (int i = 0; i < entities.size(); i++) {
 			State s = new State(new Vecteur(this.states.get(i * 4), this.states.get((i * 4) + 1)),
 					new Vecteur(this.states.get((i * 4) + 2), this.states.get((i * 4) + 3)));
