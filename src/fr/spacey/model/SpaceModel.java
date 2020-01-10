@@ -4,12 +4,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 import java.util.Set;
+import java.util.Vector;
 
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Vaisseau;
+import fr.spacey.model.integration.IntegrationStrategy;
+import fr.spacey.model.integration.Rk4;
+import fr.spacey.model.integrator.Integrator;
 import fr.spacey.utils.AstroParser;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -22,10 +27,12 @@ import fr.spacey.utils.Vector;
  *        configuration et cree la simulation. Permet egalement de modifier la
  *        Position et l'Affichage des Entites.
  */
+@SuppressWarnings("deprecation")
 public class SpaceModel extends Observable {
 
 	private List<Entity> entities;
 	private Vector<Double> states;
+
 	private Vaisseau vaisseau;
 	private IntegrationStrategy integrator;
 
@@ -37,8 +44,8 @@ public class SpaceModel extends Observable {
 
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
+
 	
-	private int time;
 
 	/**
 	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de la
@@ -198,10 +205,8 @@ public class SpaceModel extends Observable {
 		}
 
 		Set<Entity> toRemove = new HashSet<Entity>();
-		int idxfrom = 0, idxto = 0;
 
 		for (Entity efrom : entities) {
-			idxto = 0;
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {
 					Vecteur from = efrom.getPos();
@@ -222,24 +227,17 @@ public class SpaceModel extends Observable {
 							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(),
 									efrom.getVel().getY() / efrom.getMasse()));
 
-							if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
-								setEntitySelected(-1);
-							}
+							
 						} else {
 
 							toRemove.add(eto);
 							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
 									eto.getVel().getY() / eto.getMasse()));
 
-							if (hasEntitySelected() && getEntitySelectedId() == idxto) {
-								setEntitySelected(-1);
-							}
 						}
 					}
 				}
-				idxto++;
 			}
-			idxfrom++;
 		}
 
 		if (toRemove.size() > 0) {
@@ -259,6 +257,14 @@ public class SpaceModel extends Observable {
 
 	public IntegrationStrategy getIntegrationStrategy() {
 		return this.integrator;
+	}
+	
+	public void setTime(int time) {
+		this.time = time;
+	}
+	
+	public int getTime() {
+		return time;
 	}
 
 	public Vector<Double> getStates() {

@@ -1,8 +1,7 @@
 package fr.spacey.model.entity;
 
-import java.util.List;
-
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -16,7 +15,7 @@ import fr.spacey.utils.Vector;
  */
 public class Fixe extends Entity {
 
-	public final static Vector VELOCITY_FIXE = new Vector(0, 0);
+	public final static Vecteur VELOCITY_FIXE = new Vecteur(0, 0);
 
 	/**
 	 * Constructeur de Fixe prenant en parametre son nom, sa masse et sa position.

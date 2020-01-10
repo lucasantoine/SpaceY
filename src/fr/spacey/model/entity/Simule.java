@@ -1,9 +1,9 @@
 package fr.spacey.model.entity;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -19,7 +19,7 @@ import fr.spacey.utils.Vector;
  */
 public class Simule extends Entity {
 
-	private LinkedList<Vector> trail;
+	private LinkedList<Vecteur> trail;
 	private int timeForTrail;
 
 	/**
@@ -47,7 +47,7 @@ public class Simule extends Entity {
 	 * @param pos   Vecteur Position de l'Entite.
 	 * @param vel   Vecteur Vitesse de l'Entite.
 	 */
-	public Simule(String name, double masse, Vector pos, Vector vel) {
+	public Simule(String name, double masse, Vecteur pos, Vecteur vel) {
 		this(name, EntityType.SIMULE, masse, pos, vel);
 		super.radius = masse * 10;
 	}
@@ -85,7 +85,7 @@ public class Simule extends Entity {
 	}
 
 	/**
-	 * Ajoute une nouvelle Position � la liste des Positions precedentes et, s'il y
+	 * Ajoute une nouvelle Position à la liste des Positions precedentes et, s'il y
 	 * en a trop, supprime la plus ancienne.
 	 */
 	protected void previousPosition() {

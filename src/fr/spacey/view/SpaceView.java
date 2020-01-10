@@ -18,6 +18,7 @@ import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Sprite;
+import fr.spacey.utils.Vecteur;
 import fr.spacey.utils.Vector;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -69,7 +70,7 @@ public class SpaceView implements Observer {
 		this.pane = new Pane();
 		this.can = new Canvas(1, 1);
 		this.gc = can.getGraphicsContext2D();
-		this.lastMousePos = new Vector(0, 0);
+		this.lastMousePos = new Vecteur(0, 0);
 		this.can.setFocusTraversable(true);
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
@@ -564,7 +565,7 @@ public class SpaceView implements Observer {
 		gc.fillText("Rayon: " + String.format("%4.2e", e.getRadius()) + " m", textX, startY + 85);
 		gc.fillText("Pos: " + e.getPos().toStringScientific(), textX, startY + 100);
 		gc.fillText("Vel: " + e.getVel().toStringScientific() + " m/s", textX, startY + 115);
-		gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", textX, startY + 130);
+		//gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", textX, startY + 130);
 	}
 
 	/**

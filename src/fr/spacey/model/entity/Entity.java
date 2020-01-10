@@ -1,11 +1,8 @@
 package fr.spacey.model.entity;
 
-import java.util.List;
-
-import fr.spacey.SpaceY;
-import fr.spacey.model.SpaceModel;
 import fr.spacey.utils.ShowState;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.State;
+import fr.spacey.utils.Vecteur;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -25,6 +22,7 @@ public abstract class Entity {
 	private final EntityType TYPE;
 	private double masse;
 	private State state;
+	private ShowState infomode;
 	protected double radius;
 	private int imgId;
 
@@ -43,6 +41,7 @@ public abstract class Entity {
 		this.NAME = name;
 		this.masse = masse;
 		this.state = new State(pos, vel);
+		this.infomode = ShowState.NOINFO;
 		this.radius = masse * 2;
 		this.imgId = 3;
 	}
@@ -105,6 +104,14 @@ public abstract class Entity {
 		this.masse = masse;
 	}
 
+	/**
+	 * Renvoie l'etat de l'affichage des informations de l'Entite.
+	 * 
+	 * @return l'etat de l'affichage des informations de l'Entite.
+	 */
+	public ShowState getInfoMode() {
+		return this.infomode;
+	}
 
 	/**
 	 * Renvoie l'indice de l'image de l'Entite.
@@ -116,71 +123,13 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Modifie le Vecteur vitesse de l'Entite en fonction de son Vecteur
-	 * acceleration.
+	 * Modifie l'etat de l'affichage des informations de cette Entite avec celui
+	 * passe en parametres.
 	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
+	 * @param b Nouvel etat d'affichage des informations pour cette Entite.
 	 */
-	protected void updateVelocity(List<Entity> entities) {
-		updateAcceleration(entities);
-		vel.setVector(vel.add(acc));
-	}
-
-	/**
-	 * Modifie le Vecteur acceleration de l'Entite en fonction de la force exercee
-	 * par les autres Entites de la simulation sur elle.
-	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
-	 */
-	private void updateAcceleration(List<Entity> entities) {
-		Vector force = new Vector(0, 0);
-		for (Entity e : entities) {
-			if (e != this) {
-				force.setVector(force.add(new Vector(this.getForceX(e), this.getForceY(e))));
-			} else if(this instanceof Vaisseau) {
-				Vaisseau vaisseau=(Vaisseau) e;
-				if(vaisseau.getFuel()>=0) {
-				force.setVector(force.add(new Vector(vaisseau.getXForce(),vaisseau.getYForce())));
-				vaisseau.consumeFuel();
-				}
-			}
-		}
-		acc.setVector(force.getX() / this.masse, force.getY() / this.masse);
-	}
-
-	/**
-	 * Renvoie le Vecteur acceleration de l'Entite.
-	 * 
-	 * @return le Vecteur acceleration de l'Entite.
-	 */
-	public Vector getAcc() {
-		return acc;
-	}
-
-	/**
-	 * Renvoie la force exercee en X par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en X par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceX(Entity entity) {
-		return (SpaceModel.G * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(this.pos).getX();
-	}
-
-	/**
-	 * Renvoie la force exercee en Y par l'Entite passee en parametre sur cette
-	 * Entite.
-	 * 
-	 * @param entity Entite exercant une force sur cette Entite.
-	 * @return la force exercee en Y par l'Entite passee en parametre sur cette
-	 *         Entite.
-	 */
-	private double getForceY(Entity entity) {
-		return (SpaceModel.G * this.masse * entity.getMasse() / Math.pow(this.pos.getDistanceTo(entity.getPos()), 3))
-				* entity.getPos().minus(this.pos).getY();
+	public void setInfo(ShowState b) {
+		this.infomode = b;
 	}
 
 	/**
