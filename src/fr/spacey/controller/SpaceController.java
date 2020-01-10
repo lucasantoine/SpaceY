@@ -42,7 +42,10 @@ public class SpaceController {
 
 	private boolean isRunning = false;
 	private boolean isStopped = false;
+<<<<<<< HEAD
 	
+=======
+>>>>>>> refs/heads/Lucas
 
 	private Thread renderThread;
 	private RenderTimer rendertimer;
@@ -70,7 +73,10 @@ public class SpaceController {
 			showstates.put(e, ShowState.NOINFO);
 		}
 	}
-
+	/*
+	 * Permet d'obtenir toutes les informations d'affiche
+	 * @return la configuration de l'affichage
+	 */
 	public Affichage getAffichage() {
 		return affichage;
 	}
@@ -96,6 +102,7 @@ public class SpaceController {
 					accu += ellapsedTime;
 
 					while (isRunning && accu >= sm.getDt() / sm.getFa()) {
+<<<<<<< HEAD
 						sm.setTime(sm.getTime() + 1);
 						if(renderThread.getName().equalsIgnoreCase("SpaceController-RenderThread-1")) {
 							Platform.runLater(new Runnable() {
@@ -105,6 +112,16 @@ public class SpaceController {
 								}
 							});
 						}
+=======
+						sm.setTime(sm.getTime()+1);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								sm.updatePositions();
+							}
+						});
+
+>>>>>>> refs/heads/Lucas
 						accu -= sm.getDt() / sm.getFa();
 					}
 
@@ -179,6 +196,9 @@ public class SpaceController {
 		aff.setxOffset(aff.getStartSceneX() + mouseXTransformed - aff.getStartDragX());
 		aff.setyOffset(aff.getStartSceneY() + mouseYTransformed - aff.getStartDragY());
 
+		if(sm.hasEntitySelected()) {
+			sm.getEntitySelected().setInfo(ShowState.NOINFO);
+		}
 		/*double rayon = sm.getRayon();
 		if (centerX > rayon) {
 			aff.setxOffset(aff.getWidth() / 2 + rayon);
@@ -265,6 +285,8 @@ public class SpaceController {
 				setEntitySelected((getEntitySelectedId()+1)%getModel().getEntities().size());
 				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
+			} else {
+				sm.getEntitySelected().setInfo(ShowState.NOINFO);
 			}
 		}
 		
@@ -352,7 +374,14 @@ public class SpaceController {
 	 * @param e Evenement de souris.
 	 */
 	public void onMousePressed(MouseEvent e) {
+<<<<<<< HEAD
 		Affichage aff = getAffichage();
+=======
+		if(sm.hasEntitySelected()) {
+			sm.getEntitySelected().setInfo(ShowState.NOINFO);
+		}
+		Affichage aff = getModel().getAffichage();
+>>>>>>> refs/heads/Lucas
 		aff.setStartDragX(e.getSceneX());
 		aff.setStartDragY(e.getSceneY());
 		aff.setStartSceneX(aff.getxOffset());

@@ -32,23 +32,10 @@ public class Simule extends Entity {
 	 * @param pos   Vecteur Position de l'Entite.
 	 * @param vel   Vecteur Vitesse de l'Entite.
 	 */
-	protected Simule(String name, EntityType type, double masse, Vector pos, Vector vel) {
+	protected Simule(String name, EntityType type, double masse, Vecteur pos, Vecteur vel) {
 		super(name, type, masse, pos, vel);
 		this.trail = new LinkedList<>();
 		this.timeForTrail = 0;
-	}
-	
-	/**
-	 * Constructeur de Simule prenant en parametre son nom, son type, sa masse et sa
-	 * position.
-	 * 
-	 * @param name  Nom de l'Entite.
-	 * @param type  Type de l'Entite.
-	 * @param masse Masse de l'Entite.
-	 * @param pos   Vecteur Position de l'Entite.
-	 */
-	protected Simule(String name, EntityType type, double masse, Vector pos) {
-		this(name, type, masse, pos, null);
 	}
 
 	/**
@@ -70,7 +57,7 @@ public class Simule extends Entity {
 	 * 
 	 * @param vel Nouvelle vitesse de l'Entite.
 	 */
-	public void setVel(Vector vel) {
+	public void setVel(Vecteur vel) {
 		this.getVel().setVector(vel);
 	}
 
@@ -79,7 +66,7 @@ public class Simule extends Entity {
 	 * 
 	 * @param pos Nouvelle position de l'Entite.
 	 */
-	public void setPos(Vector pos) {
+	public void setPos(Vecteur pos) {
 		this.getPos().setVector(pos);
 	}
 
@@ -88,15 +75,13 @@ public class Simule extends Entity {
 	 * 
 	 * @return la liste des Positions precedentes de l'Entite.
 	 */
-	public LinkedList<Vector> getTrail() {
+	public LinkedList<Vecteur> getTrail() {
 		return trail;
 	}
 
 	@Override
-	public void updatePosition(List<Entity> entities, double dt) {
-		previousPosition();
-		super.updateVelocity(entities);
-		super.getPos().setVector(this.getPos().add(dt * getVel().getX(), dt * getVel().getY()));
+	public void updateState(State s) {
+		super.setState(s);
 	}
 
 	/**
@@ -104,11 +89,11 @@ public class Simule extends Entity {
 	 * en a trop, supprime la plus ancienne.
 	 */
 	protected void previousPosition() {
-		Vector newPos = new Vector(getPos().getX(), getPos().getY());
-		if (this.timeForTrail++ > 100) {
+		Vecteur newPos = new Vecteur(getPos().getX(), getPos().getY());
+		if (this.timeForTrail++ > 200) {
 			this.trail.add(newPos);
-			if (this.trail.size() > 100) {
-				this.trail.removeFirst();
+			if(this.getTrail().size() > 1000) {
+				this.getTrail().removeFirst();
 			}
 			this.timeForTrail = 0;
 		}

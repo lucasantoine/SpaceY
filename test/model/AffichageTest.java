@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.spacey.model.Affichage;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class AffichageTest {
 
@@ -187,7 +187,7 @@ public class AffichageTest {
 	@Test
 	public void testGetStars() {
 		System.out.println("testGetStars");
-		Vector[] tmp = new Vector[a.getStars().length];
+		Vecteur[] tmp = new Vecteur[a.getStars().length];
 		assertEquals(tmp.length, a.getStars().length);
 		for (int i = 0; i < a.getStars().length; i++) {
 			tmp[i] = a.getStars()[i];

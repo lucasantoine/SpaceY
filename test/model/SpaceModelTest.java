@@ -14,7 +14,7 @@ import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class SpaceModelTest {
 
@@ -31,9 +31,9 @@ public class SpaceModelTest {
 
 	@Before
 	public void avantUnTest() {
-		f = new Fixe("Soleil", 40, new Vector(0, 0));
-		s = new Simule("Objet", 2, new Vector(0, 450), new Vector(0, 0));
-		v = new Vaisseau("V", 0.001, new Vector(75, 333), new Vector(0, 0.017), 0.0001, 0.0000001);
+		f = new Fixe("Soleil", 40, new Vecteur(0, 0));
+		s = new Simule("Objet", 2, new Vecteur(0, 450), new Vecteur(0, 0));
+		v = new Vaisseau("V", 0.001, new Vecteur(75, 333), new Vecteur(0, 0.017), 0.0001, 0.0000001);
 		sm = new SpaceModel("01_CorpsTombeSurSoleil");
 		System.out.print("Debut du test ");
 	}

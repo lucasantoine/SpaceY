@@ -25,34 +25,31 @@ import fr.spacey.utils.Vector;
 public class SpaceModel extends Observable {
 
 	private List<Entity> entities;
+	private Vector<Double> states;
 	private Vaisseau vaisseau;
+	private IntegrationStrategy integrator;
 
 
 	public static double G; // constante gravitationelle
 	private double dt; // nb d'update() qui sera reparti par le nombre d'image
-						// par seconde
+		// par seconde
+	private int time;
+
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
 	
 	private int time;
 
-	public int getTime() {
-		return time;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
 	/**
-	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de
-	 * la simulation.
+	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de la
+	 * simulation.
 	 * 
 	 * @param filepath Nom du fichier de configuration sans son extension.
 	 * @throws Exception 
 	 */
 	public SpaceModel(String filepath) throws Exception {
-		this.entities = AstroParser.loadAstroFile(this,  filepath);
+		this.entities = AstroParser.loadAstroFile(this, filepath);
+		this.states = new Vector<Double>();
 		for (Entity e : entities) {
 			if (e.getName().equalsIgnoreCase("SOLEIL")) {
 				e.setImgId(4);
@@ -71,6 +68,10 @@ public class SpaceModel extends Observable {
 			} else {
 				e.setImgId(3);
 			}
+			states.add(e.getState().getPosition().getX());
+			states.add(e.getState().getPosition().getY());
+			states.add(e.getState().getVelocity().getX());
+			states.add(e.getState().getVelocity().getY());
 		}
 		if (this.rayon == 0)
 			this.rayon = 500;
@@ -85,14 +86,15 @@ public class SpaceModel extends Observable {
 
 		if (G == 0)
 			G = 0.005;
-
+		
+		this.time = 0;
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
 			}
 			
 		}
-		this.time = 0;
+		this.integrator = new Rk4(new Integrator(this));
 	}
 
 	/**
@@ -188,19 +190,22 @@ public class SpaceModel extends Observable {
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
-		for (Entity e : entities) {
-			e.updatePosition(entities, dt);
+		this.states = integrator.newStates(states, time, dt);
+		for (int i = 0; i < entities.size(); i++) {
+			State s = new State(new Vecteur(this.states.get(i * 4), this.states.get((i * 4) + 1)),
+					new Vecteur(this.states.get((i * 4) + 2), this.states.get((i * 4) + 3)));
+			entities.get(i).updateState(s);
 		}
 
 		Set<Entity> toRemove = new HashSet<Entity>();
-		//int idxfrom = 0, idxto = 0;
+		int idxfrom = 0, idxto = 0;
 
 		for (Entity efrom : entities) {
-			//idxto = 0;
+			idxto = 0;
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {
-					Vector from = efrom.getPos();
-					Vector to = eto.getPos();
+					Vecteur from = efrom.getPos();
+					Vecteur to = eto.getPos();
 
 					int distance = (int) Math.sqrt((to.getX() - from.getX()) * (to.getX() - from.getX())
 							+ (to.getY() - from.getY()) * (to.getY() - from.getY()));
@@ -208,31 +213,33 @@ public class SpaceModel extends Observable {
 					distance -= eto.getRadius() / 2;
 
 					if (distance <= 0) {
-						//System.out.println(idxfrom+" "+idxto+" COLLISION ! "+efrom.getName()+"-> "+eto.getName()+": "+distance);
+						// System.out.println(idxfrom+" "+idxto+" COLLISION ! "+efrom.getName()+"->
+						// "+eto.getName()+": "+distance);
 
 						if (efrom.getMasse() < eto.getMasse()) {
 
 							toRemove.add(efrom);
-							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX()/efrom.getMasse(), efrom.getVel().getY()/efrom.getMasse()));
+							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(),
+									efrom.getVel().getY() / efrom.getMasse()));
 
-							/*if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
+							if (hasEntitySelected() && getEntitySelectedId() == idxfrom) {
 								setEntitySelected(-1);
-							}*/
+							}
 						} else {
 
 							toRemove.add(eto);
 							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
 									eto.getVel().getY() / eto.getMasse()));
 
-							/*if (hasEntitySelected() && getEntitySelectedId() == idxto) {
+							if (hasEntitySelected() && getEntitySelectedId() == idxto) {
 								setEntitySelected(-1);
-							}*/
+							}
 						}
 					}
 				}
-				//idxto++;
+				idxto++;
 			}
-			//idxfrom++;
+			idxfrom++;
 		}
 
 		if (toRemove.size() > 0) {
@@ -244,6 +251,18 @@ public class SpaceModel extends Observable {
 			}
 		}
 		render();
+	}
+	
+	public void setIntegrationStrategy(IntegrationStrategy is) {
+		this.integrator = is;
+	}
+
+	public IntegrationStrategy getIntegrationStrategy() {
+		return this.integrator;
+	}
+
+	public Vector<Double> getStates() {
+		return this.states;
 	}
 
 	/**

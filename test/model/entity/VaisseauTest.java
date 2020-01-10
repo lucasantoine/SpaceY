@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.spacey.model.entity.Vaisseau;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class VaisseauTest {
 
@@ -24,7 +24,7 @@ public class VaisseauTest {
 
 	@Before
 	public void avantUnTest() {
-		v1 = new Vaisseau("Faucon Millenium", 1, new Vector(6, 7), new Vector(2, 2), 0.00001, 0.0000001);
+		v1 = new Vaisseau("Faucon Millenium", 1, new Vecteur(6, 7), new Vecteur(2, 2), 0.00001, 0.0000001);
 		System.out.print("Debut du test ");
 	}
 

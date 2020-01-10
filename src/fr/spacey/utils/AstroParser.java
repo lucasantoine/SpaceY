@@ -26,6 +26,14 @@ public class AstroParser {
 
 	private static int nbLine;
 	
+	/**
+	 * Charge les differents elements d'un fichier .astro et retourne une liste.
+	 * 
+	 * @param spaceModel le model sur lequel travailler
+	 * @param filepath le fichier .astro a charger
+	 * 
+	 * @return List<Entity> la liste des entites du systeme charge
+	 */
 	public static List<Entity> loadAstroFile(SpaceModel spaceModel, String filepath) throws Exception {
 		List<Entity> entities = new ArrayList<Entity>();
 		String[] values;
@@ -104,7 +112,7 @@ public class AstroParser {
 								));
 								vaisseaualreadycreate = true;
 								break;
-							case CERCLE:
+							/*case CERCLE:
 								entities.add(new Circle(
 										name, 
 										masse, 
@@ -120,7 +128,7 @@ public class AstroParser {
 										getFixeEntity("f1", entities, values), 
 										getFixeEntity("f2", entities, values)
 								));
-								break;
+								break;*/
 							}
 						}else {
 							throw new AstroParserException("PARAMS is undefined");
@@ -140,7 +148,14 @@ public class AstroParser {
 		}
 		return entities;
 	}
-
+	
+	/**
+	 * Vérifie si le nom d'une ligne est correct pour une entite
+	 * 
+	 * @param values le nom
+	 * 
+	 * @return String le nom de l'entite
+	 */
 	private static String getName(String... values) throws Exception {
 		String name = values[0];
 		if(name.length() > 1 && !name.contains(" ") && name.contains(":") && name.indexOf(":") == name.length()-1) {
@@ -149,6 +164,7 @@ public class AstroParser {
 		}
 		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : formatage du nom");
 	}
+	
 	
 	private static EntityType getType(String... values) throws Exception {
 		for (String string : values) {
@@ -164,6 +180,14 @@ public class AstroParser {
 		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Type manquant");
 	}
 	
+	/**
+	 * Permet de retourner la value d'une chaine de forme key=value
+	 * 
+	 * @param label le label key 
+	 * @param values les morceaux de texte a alanyser
+	 * 
+	 * @return String la value obtenue
+	 */
 	private static String getValue(String label, String... values) throws Exception {
 		String[] temp;
 		String value;

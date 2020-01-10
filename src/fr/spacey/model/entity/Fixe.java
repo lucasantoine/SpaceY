@@ -25,7 +25,7 @@ public class Fixe extends Entity {
 	 * @param masse Masse de l'Entite.
 	 * @param pos   Vecteur Position de l'Entite.
 	 */
-	public Fixe(String name, double masse, Vector pos) {
+	public Fixe(String name, double masse, Vecteur pos) {
 		super(name, EntityType.FIXE, masse, pos, VELOCITY_FIXE);
 	}
 
@@ -33,7 +33,7 @@ public class Fixe extends Entity {
 	 * Ne modifie pas la Position de l'Entite.
 	 */
 	@Override
-	public void updatePosition(List<Entity> entities, double dt) {
+	public void updateState(State s) {
 		return;
 	}
 
@@ -43,6 +43,6 @@ public class Fixe extends Entity {
 	 * @return une copie de cette Entite Fixe.
 	 */
 	public Entity clone() {
-		return new Fixe(new String(getName()), this.getMasse(), new Vector(getPos().getX(), getPos().getY()));
+		return new Fixe(new String(getName()), this.getMasse(), new Vecteur(getPos().getX(), getPos().getY()));
 	}
 }

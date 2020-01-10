@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import fr.spacey.model.menu.Star;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 import javafx.scene.paint.Color;
 
 public class StarTest {
@@ -46,10 +46,10 @@ public class StarTest {
 	@Test
 	public void testGetPosition() {
 		System.out.println("testGetPosition");
-		assertTrue(s1.getPosition().equals(new Vector(0, 0)));
-		assertTrue(s2.getPosition().equals(new Vector(1, 1)));
-		assertTrue(s3.getPosition().equals(new Vector(2, 2)));
-		assertTrue(s4.getPosition().equals(new Vector(3, 3)));
+		assertTrue(s1.getPosition().equals(new Vecteur(0, 0)));
+		assertTrue(s2.getPosition().equals(new Vecteur(1, 1)));
+		assertTrue(s3.getPosition().equals(new Vecteur(2, 2)));
+		assertTrue(s4.getPosition().equals(new Vecteur(3, 3)));
 	}
 
 	@Test

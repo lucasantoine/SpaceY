@@ -3,23 +3,18 @@ package fr.spacey.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
-public class Ellipse extends Simule {
+public class Ellipse {
 	private ArrayList<Entity> centers;
 
-	public Ellipse(String name, double masse, Vector pos, Fixe f1, Fixe f2) {
-		super(name, EntityType.CERCLE, masse, pos);
+	public Ellipse(String name, double masse, Vecteur pos, Fixe f1, Fixe f2) {
 		this.centers = new ArrayList<>();
 		this.centers.add(f1);
 		this.centers.add(f2);
 	}
 	
-	public void updatePosition(List<Entity> entities) {
-		super.previousPosition();
-		super.updateVelocity(centers);
-		super.getPos().setVector(this.getPos().add(getVel()));
-	}
+	
 
 }
 

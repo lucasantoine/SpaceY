@@ -51,11 +51,11 @@ public class SpaceView implements Observer {
 	private Stage stage;
 	private SpaceController sc;
 
-	/* VARIABLES GRAPHIQUES */
+	/* VARIABLES GRAPHIQUES */ 
 	private Canvas can;
 	public Pane pane;
 	private GraphicsContext gc;
-	private Vector lastMousePos;
+	private Vecteur lastMousePos;
 	private boolean isMenu;
 	private Cryostase cryo=new Cryostase();
 
@@ -160,7 +160,7 @@ public class SpaceView implements Observer {
 		});
 
 		pane.setOnMouseMoved(e -> {
-			lastMousePos = new Vector(e.getSceneX(), e.getSceneY());
+			lastMousePos = new Vecteur(e.getSceneX(), e.getSceneY());
 			if(isMenu) return;
 			sc.onMouseMoved(e);
 		});
@@ -213,14 +213,14 @@ public class SpaceView implements Observer {
 			// TRAINEE
 			if (e.getType().equals(EntityType.SIMULE)) {
 				@SuppressWarnings("unchecked")
-				LinkedList<Vector> ll = (LinkedList<Vector>) ((Simule) e).getTrail().clone();
-				for (Vector v : ll) {
+				LinkedList<Vecteur> ll = (LinkedList<Vecteur>) ((Simule) e).getTrail().clone();
+				for (Vecteur v : ll) {
 					gc.setFill(Color.GREY);
 					gc.fillOval(v.getX() + aff.getxOffset(), v.getY() + aff.getyOffset(), 2, 2);
 				}
 			}
 		}
-
+ 
 
 		// ENTITES
 		for (Entity e : sc.getModel().getEntities()) {

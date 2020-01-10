@@ -17,7 +17,7 @@ import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class FixeTest {
 
@@ -32,9 +32,9 @@ public class FixeTest {
 
 	@Before
 	public void avantUnTest() {
-		f = new Fixe("Soleil", 30, new Vector(0, 0));
-		Entity s = new Simule("Terre", 10, new Vector(5, 7), new Vector(4, 4));
-		Entity v = new Vaisseau("Faucon Millenium", 1, new Vector(6, 7), new Vector(2, 2), 0.00001, 0.0000001);
+		f = new Fixe("Soleil", 30, new Vecteur(0, 0));
+		Entity s = new Simule("Terre", 10, new Vecteur(5, 7), new Vecteur(4, 4));
+		Entity v = new Vaisseau("Faucon Millenium", 1, new Vecteur(6, 7), new Vecteur(2, 2), 0.00001, 0.0000001);
 		entities = new ArrayList<Entity>();
 		entities.add(f);
 		entities.add(s);
@@ -56,9 +56,9 @@ public class FixeTest {
 	@Test
 	public void testUpdatePosition() {
 		System.out.println("testUpdatePosition");
-		assertTrue(f.getPos().equals(new Vector(0,0)));
+		assertTrue(f.getPos().equals(new Vecteur(0,0)));
 		f.updatePosition(entities);
-		assertTrue(f.getPos().equals(new Vector(0,0)));
+		assertTrue(f.getPos().equals(new Vecteur(0,0)));
 	}
 	
 	@Test

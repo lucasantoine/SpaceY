@@ -24,9 +24,7 @@ public abstract class Entity {
 	private final String NAME;
 	private final EntityType TYPE;
 	private double masse;
-	private Vector pos;
-	private Vector vel;
-	private Vector acc;
+	private State state;
 	protected double radius;
 	private int imgId;
 
@@ -40,13 +38,11 @@ public abstract class Entity {
 	 * @param pos   Vecteur position de l'Entite
 	 * @param vel   Vecteur vitesse de l'Entite
 	 */
-	public Entity(String name, EntityType type, double masse, Vector pos, Vector vel) {
+	public Entity(String name, EntityType type, double masse, Vecteur pos, Vecteur vel) {
 		this.TYPE = type;
 		this.NAME = name;
 		this.masse = masse;
-		this.pos = pos;
-		this.vel = vel;
-		this.acc = new Vector(0, 0);
+		this.state = new State(pos, vel);
 		this.radius = masse * 2;
 		this.imgId = 3;
 	}
@@ -74,12 +70,12 @@ public abstract class Entity {
 	 * 
 	 * @return le Vecteur position de l'Entite.
 	 */
-	public Vector getPos() {
-		return pos;
+	public Vecteur getPos() {
+		return this.state.getPosition();
 	}
 
-	public Vector getVel() {
-		return vel;
+	public Vecteur getVel() {
+		return this.state.getVelocity();
 	}
 
 	/**
@@ -224,6 +220,14 @@ public abstract class Entity {
 			return false;
 		return true;
 	}
+	
+	public State getState() {
+		return this.state;
+	}
+	
+	public void setState(State s) {
+		this.state = s;
+	}
 
 	/**
 	 * Methode abstraite permettant de modifier la position de chaque Entite en
@@ -231,5 +235,5 @@ public abstract class Entity {
 	 * 
 	 * @param entities Array contenant l'ensemble des Entites de la simulation.
 	 */
-	public abstract void updatePosition(List<Entity> entities, double dt);
+	public abstract void updateState(State s);
 }

@@ -3,7 +3,7 @@ package fr.spacey.model.entity;
 import java.util.List;
 
 import fr.spacey.SpaceY;
-import fr.spacey.utils.Vector;
+import fr.spacey.utils.Vecteur;
 
 public class Vaisseau extends Simule {
 
@@ -17,7 +17,7 @@ public class Vaisseau extends Simule {
 	private double fuel;
 	private int facteur = -1;
 	
-	public Vaisseau(String name, double masse, Vector pos, Vector vel, double pretro, double maxForce) {
+	public Vaisseau(String name, double masse, Vecteur pos, Vecteur vel, double pretro, double maxForce) {
 		super(name, EntityType.VAISSEAU, masse, pos, vel);
 		super.radius = masse * 10000;
 		this.pretro = pretro;
