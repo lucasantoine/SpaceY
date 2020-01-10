@@ -94,7 +94,10 @@ public class SpaceController {
 						@Override
 						public void run() {
 							System.out.println(isFrozen());
-							if(!isFrozen())sm.render(); //ICI ?
+							if(!isFrozen()) {
+								System.out.println("je rendu");
+								sm.render(); //ICI ?
+							}
 						}
 					});
 

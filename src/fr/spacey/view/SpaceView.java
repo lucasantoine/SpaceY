@@ -96,7 +96,7 @@ public class SpaceView implements Observer {
 			sc.onKeyReleased(e);
 			
 			if(e.getCode().equals(KeyCode.P)) {
-				cryo.switchActive();;
+				cryo.switchActive();
 			}
 		});
 
@@ -582,12 +582,12 @@ public class SpaceView implements Observer {
 		else this.cryo.unfreeze();
 		
 			System.out.println(cryo.getFrostLevel()+":"+sc.isFrozen());
-			/*
+
 			double alpha=gc.getGlobalAlpha();
 			gc.setGlobalAlpha(cryo.getFrostLevel());
 			gc.drawImage(cryo.SPRITE, 0, 0);
 			gc.setGlobalAlpha(alpha);
 			System.out.println(this.cryo.getFrostLevel());
-			*/
+
 	}
 }
