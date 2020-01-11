@@ -40,8 +40,8 @@ public class SpaceController {
 								// approximative
 	private final double LOOPSLOT = 1f / FPS;
 
-	private boolean isRunning = false;
-	private boolean isStopped = false;
+	private static boolean isRunning = false;
+	private static boolean isStopped = false;
 	
 	private Thread renderThread;
 	private RenderTimer rendertimer;
@@ -61,7 +61,7 @@ public class SpaceController {
 	public SpaceController(SpaceModel space) {
 		this.sm = space;
 		this.rendertimer = new RenderTimer();
-		this.isRunning = true;
+		isRunning = true;
 		this.affichage = new Affichage();
 		this.selected = -1;
 		this.showstates = new HashMap<Entity, ShowState>();
@@ -145,7 +145,7 @@ public class SpaceController {
 	 * Permet de mettre en pause, ou de reprendre la simulation.
 	 */
 	public void toggleRunning() {
-		this.isRunning = !this.isRunning;
+		isRunning = !isRunning;
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class SpaceController {
 	 * 
 	 * @return vrai si la simulation est en cours, renvoie faux sinon.
 	 */
-	public boolean isRunning() {
+	public static boolean isRunning() {
 		return isRunning;
 	}
 
@@ -515,6 +515,14 @@ public class SpaceController {
 	
 	public ShowState getShowStateOf(Entity e) {
 		return showstates.get(e);
+	}
+	
+	/**
+	 *Méthode déléguée appelant le updatePosition du SpaceModel
+	 *Notamment utilisée par les fonctions liées à la cryostase 
+	 */
+	public void updatePosition() {
+		this.sm.updatePositions();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Set;
 import java.util.Vector;
 
+import fr.spacey.controller.SpaceController;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Vaisseau;
@@ -248,7 +249,7 @@ public class SpaceModel extends Observable {
 				entities.remove(entity);
 			}
 		}
-		render();
+		if(SpaceController.isRunning())render();
 	}
 	
 	public void setIntegrationStrategy(IntegrationStrategy is) {
