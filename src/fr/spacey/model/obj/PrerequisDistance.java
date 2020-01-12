@@ -1,5 +1,36 @@
 package fr.spacey.model.obj;
 
-public class PrerequisDistance {
+import com.sun.tools.sjavac.server.SysInfo;
 
+import fr.spacey.model.SpaceModel;
+import fr.spacey.model.entity.Entity;
+import fr.spacey.model.entity.EntityType;
+import fr.spacey.model.entity.Vaisseau;
+import fr.spacey.utils.Vecteur;
+
+public class PrerequisDistance implements Prerequis {
+	
+	private double distance;
+	private Vecteur from = new Vecteur(0,0);
+
+	public PrerequisDistance(double dist) {
+		this.distance = dist;
+	}
+	
+	public boolean isComplete(Vaisseau e) {
+		Vecteur to = e.getPos();
+
+		int distanceParcourue = (int) Math.sqrt((to.getX() - from.getX()) * (to.getX() - from.getX())
+				+ (to.getY() - from.getY()) * (to.getY() - from.getY()));
+		System.out.println(distanceParcourue);
+
+		return distanceParcourue >= this.distance;
+	}
+
+	@Override
+	public void init(SpaceModel ref) {
+		for(Entity e : ref.getEntities())
+			if(e.getType().equals(EntityType.FIXE))
+				from = e.getPos().clone();
+	}
 }

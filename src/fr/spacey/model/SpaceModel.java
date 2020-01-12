@@ -13,6 +13,7 @@ import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.model.integration.IntegrationStrategy;
 import fr.spacey.model.integration.Rk4;
 import fr.spacey.model.integrator.Integrator;
+import fr.spacey.model.obj.Objectif;
 import fr.spacey.utils.AstroParser;
 import fr.spacey.utils.State;
 import fr.spacey.utils.Vecteur;
@@ -33,6 +34,7 @@ public class SpaceModel extends Observable {
 	private List<Entity> entities;
 	private Vector<Double> states;
 
+	private Objectif obj;
 	private Vaisseau vaisseau;
 	private IntegrationStrategy integrator;
 
@@ -100,6 +102,8 @@ public class SpaceModel extends Observable {
 			
 		}
 		this.integrator = new Rk4(new Integrator(this));
+		
+		this.obj.init(this);
 	}
 
 	/**
@@ -189,6 +193,10 @@ public class SpaceModel extends Observable {
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
+		
+		if(hasVaisseau())
+			this.obj.isComplete(vaisseau);
+		
 		this.states = integrator.newStates(states, time, dt);
 		for (int i = 0; i < entities.size(); i++) {
 			State s = new State(new Vecteur(this.states.get(i * 4), this.states.get((i * 4) + 1)),
@@ -220,10 +228,7 @@ public class SpaceModel extends Observable {
 							idxVecteursToRemove.add(idx*4+2);
 							idxVecteursToRemove.add(idx*4+3);
 							toRemove.add(efrom);
-							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(),
-									efrom.getVel().getY() / efrom.getMasse()));
-
-							
+							//eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(), efrom.getVel().getY() / efrom.getMasse()));
 						} else {
 
 							toRemove.add(eto);
@@ -233,8 +238,7 @@ public class SpaceModel extends Observable {
 							idxVecteursToRemove.add(idx*4+1);
 							idxVecteursToRemove.add(idx*4+2);
 							idxVecteursToRemove.add(idx*4+3);
-							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
-									eto.getVel().getY() / eto.getMasse()));
+							//efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),eto.getVel().getY() / eto.getMasse()));
 
 						}
 					}
@@ -286,6 +290,19 @@ public class SpaceModel extends Observable {
 	public void render() {
 		setChanged();
 		notifyObservers();
+	}
+
+	public void setObjectif(Objectif obj) {
+		this.obj = obj;
+	}
+	
+	/**
+	 * Renvoie vrai si il y a un objectif dans la simulation, faux sinon.
+	 * 
+	 * @return vrai si il y a un objectif dans la simulation, faux sinon.
+	 */
+	public boolean hasObjectif() {
+		return obj != null;
 	}
 
 }

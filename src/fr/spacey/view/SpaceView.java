@@ -440,8 +440,7 @@ public class SpaceView implements Observer {
 		Affichage aff = sc.getAffichage();
 		double relatX = 10, relatY = aff.getAbsoluteHeight() - 850;
 		
-		System.out.println(aff.getAbsoluteHeight());
-
+		
 		// HUD ROND VAISSEAU
 		gc.setFill(new Color(.3, .3, .3, 1));
 		gc.fillOval(relatX+20, aff.getAbsoluteHeight() - 200 - relatY, 160, 160);
@@ -630,14 +629,10 @@ public class SpaceView implements Observer {
 			this.cryo.unfreeze();
 		if(cryo.isActive())this.cryo.freeze();
 		else this.cryo.unfreeze();
-		
-			System.out.println(cryo.getFrostLevel()+":"+sc.isFrozen());
-
-			double alpha=gc.getGlobalAlpha();
+		double alpha=gc.getGlobalAlpha();
 			gc.setGlobalAlpha(cryo.getFrostLevel());
 			gc.drawImage(Cryostase.SPRITE, 0, 0);
 			gc.setGlobalAlpha(alpha);
-			System.out.println(this.cryo.getFrostLevel());
 
 	}
 }

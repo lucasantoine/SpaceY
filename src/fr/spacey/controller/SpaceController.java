@@ -116,11 +116,9 @@ public class SpaceController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println(isFrozen());
 							if(!isFrozen()) {
-								System.out.println("je rendu");
-								sm.render(); //ICI ?
-							}
+								sm.render();
+							} 
 						}
 					});
 
@@ -301,12 +299,10 @@ public class SpaceController {
 			if(mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
 					&& mouseYTransformed < maxY) {
 				if(e.getClickCount() >= 2) {
-					System.out.println("DOUBLE CLICK");
 					final int focus = idx;
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println("RUN !");
 							SpaceController newsc = new SpaceController(sm);
 							newsc.setEntitySelected(focus);
 							SpaceView newsp = new SpaceView(newsc);
@@ -482,6 +478,7 @@ public class SpaceController {
 	 * @return vrai si une entite est selectionnee, faux sinon.
 	 */
 	public boolean hasEntitySelected() {
+		try { getEntitySelected(); } catch(Exception e) { this.setEntitySelected(-1); return false; };
 		return selected > -1;
 	}
 	
@@ -500,10 +497,7 @@ public class SpaceController {
 	 * @return l'entite selectionnee, null sinon.
 	 */
 	public Entity getEntitySelected() {
-		if (hasEntitySelected()) {
-			return getModel().getEntities().get(selected);
-		}
-		return null;
+		return getModel().getEntities().get(selected);
 	}
 	
 	/**

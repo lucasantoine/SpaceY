@@ -1,5 +1,6 @@
 package fr.spacey.model.obj;
 
+import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Vaisseau;
 
 public interface Prerequis {
@@ -8,4 +9,5 @@ public interface Prerequis {
 		return false;
 	}
 	
+	public void init(SpaceModel ref);
 }
