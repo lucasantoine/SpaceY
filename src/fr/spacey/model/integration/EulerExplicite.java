@@ -8,12 +8,12 @@ import fr.spacey.model.integrator.Integrator;
  * SpaceY - IUT A de Lille - 3e Semestre
  * 
  * @author ANTOINE Lucas, BARBIER Benoit, POMIER Mathys, RYCKEBUSH Corentin
- * @since 6 déc. 2019
+ * @since 6 dï¿½c. 2019
  */
 public class EulerExplicite extends IntegrationStrategy {
 
 	public EulerExplicite(Integrator i) {
-		super(i);
+		super(i, "EulerExplicite");
 	}
 
 	public Vector<Double> newStates(Vector<Double> states, double t, double dt) {

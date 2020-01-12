@@ -7,7 +7,7 @@ import fr.spacey.model.integrator.Integrator;
 public class Rk4 extends IntegrationStrategy {
 
 	public Rk4(Integrator i) {
-		super(i);
+		super(i, "RK4");
 	}
 
 	@Override

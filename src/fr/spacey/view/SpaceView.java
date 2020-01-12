@@ -16,10 +16,12 @@ import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
+import fr.spacey.model.integration.EulerExplicite;
+import fr.spacey.model.integration.Rk4;
+import fr.spacey.model.integrator.Integrator;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Sprite;
 import fr.spacey.utils.Vecteur;
-import fr.spacey.utils.Vector;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -142,7 +144,14 @@ public class SpaceView implements Observer {
 				}
 
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 490 && lastMousePos.getY() <= 570) {
-					//TODO PARAMETRES
+					
+					if(sc.getModel().getIntegrationStrategy() instanceof Rk4) {
+						sc.getModel().setIntegrationStrategy(new EulerExplicite(new Integrator(sc.getModel())));
+					} else {
+						sc.getModel().setIntegrationStrategy(new Rk4(new Integrator(sc.getModel())));
+					}
+					
+					
 				}
 
 				if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 && lastMousePos.getY() >= 600 && lastMousePos.getY() <= 680) {
@@ -336,7 +345,8 @@ public class SpaceView implements Observer {
 			gc.fillText("Reprendre", aff.getAbsoluteWidth()/2-80, aff.getAbsoluteHeight()*0.3+65);
 			gc.fillText("Sauvegarder", aff.getAbsoluteWidth()/2-235, aff.getAbsoluteHeight()*0.42+65);
 			gc.fillText("Charger", aff.getAbsoluteWidth()/2+65, aff.getAbsoluteHeight()*0.42+65);
-			gc.fillText("Param�tres", aff.getAbsoluteWidth()/2-90, aff.getAbsoluteHeight()*0.54+65);
+			gc.fillText("Intégrateur: "+sc.getModel().getIntegrationStrategy().getName(), 
+					aff.getAbsoluteWidth()/2-130, aff.getAbsoluteHeight()*0.54+65);
 			gc.fillText("Menu Principal", aff.getAbsoluteWidth()/2-110, aff.getAbsoluteHeight()*0.66+65);
 
 			if(lastMousePos.getX() >= 550 && lastMousePos.getX() <= 1050 
