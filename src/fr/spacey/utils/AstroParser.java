@@ -14,8 +14,6 @@ import java.util.stream.IntStream;
 import fr.spacey.exceptions.AstroParserException;
 import fr.spacey.exceptions.TypeUnknownException;
 import fr.spacey.model.SpaceModel;
-import fr.spacey.model.entity.Circle;
-import fr.spacey.model.entity.Ellipse;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Fixe;
@@ -140,6 +138,8 @@ public class AstroParser {
 										getFixeEntity("f2", entities, values)
 								));
 								break;*/
+							default:
+								throw new TypeUnknownException("Not supported type - line : " + nbLine);
 							}
 						}else {
 							throw new AstroParserException("PARAMS is undefined");
@@ -173,7 +173,7 @@ public class AstroParser {
 			name = name.substring(0, name.length()-1);
 			return name;
 		}
-		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : formatage du nom");
+		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : formatage du nom - line : " + nbLine);
 	}
 	
 	
@@ -188,7 +188,7 @@ public class AstroParser {
 				}
 			}
 		}
-		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Type manquant");
+		throw new AstroParserException("Erreur lors de la cr�ation d'une entit� : Type manquant - line : " + nbLine);
 	}
 	
 	/**

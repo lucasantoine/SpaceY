@@ -116,7 +116,7 @@ public class SpaceController {
 						public void run() {
 							if(!isFrozen()) {
 								sm.render();
-							}
+							} 
 						}
 					});
 
