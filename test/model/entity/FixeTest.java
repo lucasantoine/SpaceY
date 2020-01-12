@@ -52,14 +52,6 @@ public class FixeTest {
 		System.out.println();
 		System.out.println("Fin de la serie de tests");
 	}
-
-	@Test
-	public void testUpdatePosition() {
-		System.out.println("testUpdatePosition");
-		assertTrue(f.getPos().equals(new Vecteur(0,0)));
-		f.updatePosition(entities);
-		assertTrue(f.getPos().equals(new Vecteur(0,0)));
-	}
 	
 	@Test
 	public void testClone() {

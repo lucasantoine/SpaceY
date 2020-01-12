@@ -8,7 +8,7 @@ public class Vaisseau extends Simule {
 
 	private final double TANKSIZE;
 	
-	private double angle;
+	public double angle;
 	@SuppressWarnings("unused")
 	private double pretro; //used for ship rotation
 	private double rocketActivity;
@@ -16,7 +16,7 @@ public class Vaisseau extends Simule {
 	private double fuel;
 	private int facteur = -1;
 	
-	public Vaisseau(String name, double masse, Vecteur pos, Vecteur vel, double pretro, double maxForce) {
+	public Vaisseau(String name, double masse, Vecteur pos, Vecteur vel, double maxForce, double pretro) {
 		super(name, EntityType.VAISSEAU, masse, pos, vel);
 		super.radius = masse * 10000;
 		this.pretro = pretro;
@@ -63,6 +63,10 @@ public class Vaisseau extends Simule {
 
 	public double getFuel() {
 		return this.fuel;
+	}
+
+	public int getFacteur() {
+		return facteur;
 	}
 
 	public double getTankSize() {

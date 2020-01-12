@@ -85,9 +85,7 @@ public class SpaceModel extends Observable {
 
 		if (this.dt == 0)
 			this.dt = 0.025f;
-
-		this.dt = 0.1f;
-
+		
 		if (this.fa == 0)
 			this.fa = 1;
 
@@ -130,10 +128,6 @@ public class SpaceModel extends Observable {
 	public boolean hasVaisseau() {
 		return vaisseau != null;
 	}
-
-
-
-
 
 	/**
 	 * Renvoie le pas de temps de la simulation.
@@ -191,8 +185,6 @@ public class SpaceModel extends Observable {
 		return rayon;
 	}
 
-
-
 	/**
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
@@ -206,7 +198,6 @@ public class SpaceModel extends Observable {
 
 		Set<Entity> toRemove = new HashSet<Entity>();
 		List<Integer> idxVecteursToRemove = new ArrayList<Integer>();
-		System.out.println(states.size());
 		for (Entity efrom : entities) {
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {

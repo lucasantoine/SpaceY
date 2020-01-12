@@ -41,7 +41,7 @@ public class SpaceController {
 	private final double LOOPSLOT = 1f / FPS;
 
 	private boolean isRunning = false;
-	private boolean isStopped = false;
+	public boolean isStopped = false;
 	private boolean isFrozen = false;
 	
 	private Thread renderThread;
@@ -71,7 +71,8 @@ public class SpaceController {
 			showstates.put(e, ShowState.NOINFO);
 		}
 	}
-	/*
+	
+	/**
 	 * Permet d'obtenir toutes les informations d'affiche
 	 * @return la configuration de l'affichage
 	 */
@@ -485,9 +486,9 @@ public class SpaceController {
 	}
 	
 	/**
-	 * Renvoie le num�ro de l'entite selectionnee.
+	 * Renvoie le numero de l'entite selectionnee.
 	 * 
-	 * @return le num�ro de l'entite selectionnee.
+	 * @return le numero de l'entite selectionnee.
 	 */
 	public int getEntitySelectedId() {
 		return selected;

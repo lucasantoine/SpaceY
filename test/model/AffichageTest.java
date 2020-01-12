@@ -45,6 +45,15 @@ public class AffichageTest {
 		System.out.println("testGetWidth");
 		assertTrue(a.getWidth() == 1600);
 		assertFalse(a.getWidth() != 1600);
+		a.setZoom(2);
+		assertTrue(a.getWidth() == 800);
+	}
+	
+	@Test
+	public void testGetAbsoluteWidth() {
+		System.out.println("testGetAbsoluteWidth");
+		assertTrue(a.getAbsoluteWidth() == 1600);
+		assertFalse(a.getAbsoluteWidth() != 1600);
 	}
 
 	@Test
@@ -61,6 +70,15 @@ public class AffichageTest {
 		System.out.println("testGetHeight");
 		assertTrue(a.getHeight() == 900);
 		assertFalse(a.getHeight() != 900);
+		a.setZoom(2);
+		assertTrue(a.getHeight() == 450);
+	}
+	
+	@Test
+	public void testGetAbsoluteHeight() {
+		System.out.println("testGetAbsoluteHeight");
+		assertTrue(a.getAbsoluteHeight() == 900);
+		assertFalse(a.getAbsoluteHeight() != 900);
 	}
 
 	@Test
@@ -194,5 +212,7 @@ public class AffichageTest {
 			assertTrue(tmp[i].equals(a.getStars()[i]));
 		}
 	}
+	
+	
 
 }

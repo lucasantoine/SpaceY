@@ -17,6 +17,7 @@ import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.utils.ShowState;
+import fr.spacey.utils.State;
 import fr.spacey.utils.Vecteur;
 
 public class EntityTest {
@@ -144,18 +145,42 @@ public class EntityTest {
 	}
 	
 	@Test
-	public void testGetAcc() {
-		System.out.println("testGetAcc");
-		assertTrue(e1.getAcc().equals(new Vecteur(0,0)));
-		assertTrue(e2.getAcc().equals(new Vecteur(0,0)));
-		assertTrue(e3.getAcc().equals(new Vecteur(0,0)));
-	}	
-	
-	@Test
 	public void testEquals() {
 		System.out.println("testEquals");
 		assertTrue(e1.equals(e1));
 		assertFalse(e2.equals(e1));
 		assertTrue(e3.equals(new Vaisseau("Faucon Millenium", 1, new Vecteur(6, 7), new Vecteur(2, 2), 0.00001, 0.0000001)));
+	}
+	
+	@Test
+	public void testGetState() {
+		System.out.println("testGetState");
+		State s = new State(new Vecteur(0,0), new Vecteur(0,0));
+		assertNotEquals(s, e1.getState());
+		e1.setState(s);
+		assertEquals(s, e1.getState());
+	}
+	
+	@Test
+	public void testSetState() {
+		System.out.println("testSetState");
+		State s = new State(new Vecteur(0,0), new Vecteur(0,0));
+		State s2 = new State(new Vecteur(0,2), new Vecteur(0,2));
+		assertNotEquals(s, e1.getState());
+		e1.setState(s);
+		assertEquals(s, e1.getState());
+		e1.setState(s2);
+		assertNotEquals(s, e1.getState());
+		assertEquals(s2, e1.getState());
+	}
+	
+	@Test
+	public void testUpdateState() {
+		System.out.println("testUpdateState");
+		State s = new State(new Vecteur(0,0), new Vecteur(0,0));
+		e1.updateState(s);
+		e2.updateState(s);
+		assertNotEquals(s, e1.getState());
+		assertEquals(s, e2.getState());
 	}
 }

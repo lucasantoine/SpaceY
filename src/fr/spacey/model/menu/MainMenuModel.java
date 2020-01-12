@@ -33,7 +33,7 @@ public class MainMenuModel extends Observable {
 			stars.add(new Star(Math.random() * 1600, Math.random() * 900, Math.random(), 1600, 1600, 900));
 		}
 		this.isStart = false;
-		this.filepath = "/home/infoetu/barbierb/git/spacey-j1/res/systemes/test.astro";
+		this.filepath = "";
 	}
 
 	/**
@@ -118,10 +118,20 @@ public class MainMenuModel extends Observable {
 		return filepath;
 	}
 
+	/**
+	 * Renvoie le message d'erreur de la simulation.
+	 * 
+	 * @return le message d'erreur de la simulation.
+	 */
 	public String getErrorMessage() {
 		return errorMessage;
 	}
 	
+	/**
+	 * Modifie le message d'erreur de la simulation.
+	 * 
+	 * @param errorMessage Nouveau message d'erreur de la simulation.
+	 */
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
