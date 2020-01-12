@@ -7,8 +7,6 @@ import java.util.Observer;
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.model.menu.Star;
 import fr.spacey.utils.Sprite;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -20,7 +18,6 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 

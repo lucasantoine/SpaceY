@@ -14,8 +14,6 @@ import java.util.stream.IntStream;
 import fr.spacey.exceptions.AstroParserException;
 import fr.spacey.exceptions.TypeUnknownException;
 import fr.spacey.model.SpaceModel;
-import fr.spacey.model.entity.Circle;
-import fr.spacey.model.entity.Ellipse;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Fixe;
@@ -235,6 +233,7 @@ public class AstroParser {
 		throw new AstroParserException(value + " entity doesn't exist - line : " + nbLine);
 	}
 	
+	@SuppressWarnings("unused")
 	private static Fixe getFixeEntity(String label, List<Entity> entities, String...values) throws Exception {
 		Entity entity = getEntity(label, entities, values);
 		if(entity.getType() == EntityType.FIXE) {

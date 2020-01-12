@@ -28,7 +28,6 @@ import fr.spacey.utils.Vecteur;
  *        configuration et cree la simulation. Permet egalement de modifier la
  *        Position et l'Affichage des Entites.
  */
-@SuppressWarnings("deprecation")
 public class SpaceModel extends Observable {
 
 	private List<Entity> entities;
