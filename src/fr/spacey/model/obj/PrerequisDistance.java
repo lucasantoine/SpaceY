@@ -1,7 +1,5 @@
 package fr.spacey.model.obj;
 
-import com.sun.tools.sjavac.server.SysInfo;
-
 import fr.spacey.model.SpaceModel;
 import fr.spacey.model.entity.Entity;
 import fr.spacey.model.entity.EntityType;

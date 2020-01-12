@@ -73,6 +73,11 @@ public abstract class Entity {
 		return this.state.getPosition();
 	}
 
+	/**
+	 * Renvoie le Vecteur vitesse de l'Entite.
+	 * 
+	 * @return le Vecteur vitesse de l'Entite.
+	 */
 	public Vecteur getVel() {
 		return this.state.getVelocity();
 	}
@@ -169,20 +174,29 @@ public abstract class Entity {
 			return false;
 		return true;
 	}
-	
+
+	/**
+	 * Renvoie l'etat de l'entite.
+	 * 
+	 * @return l'etat de l'entite.
+	 */
 	public State getState() {
 		return this.state;
 	}
-	
+
+	/**
+	 * Modifie l'etat de l'entite.
+	 * 
+	 * @param s Nouvel etat de l'entite.
+	 */
 	public void setState(State s) {
 		this.state = s;
 	}
 
 	/**
-	 * Methode abstraite permettant de modifier la position de chaque Entite en
-	 * fonction de sa vitesse.
+	 * Methode abstraite permettant de modifier l'etat de chaque Entite.
 	 * 
-	 * @param entities Array contenant l'ensemble des Entites de la simulation.
+	 * @param s Nouvel etat de l'entite
 	 */
 	public abstract void updateState(State s);
 }

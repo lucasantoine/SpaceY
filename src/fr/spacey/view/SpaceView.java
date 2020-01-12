@@ -503,7 +503,7 @@ public class SpaceView implements Observer {
 	/**
 	 * Methode permettant de dessiner l'affichage d'une Entite selectionnee.
 	 * 
-	 * @param gc2 Contexte Graphique de la simulation.
+	 * @param gc Contexte Graphique de la simulation.
 	 */
 	private void drawSelectedEntity(GraphicsContext gc) {
 		Affichage aff = sc.getAffichage();

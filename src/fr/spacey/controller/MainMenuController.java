@@ -107,7 +107,7 @@ public class MainMenuController {
 	/**
 	 * Permet de demarrer le menu principal.
 	 * 
-	 * @param stage    Scene de la simulation.
+	 * @param stage Scene de la simulation.
 	 */
 	public void start(Stage stage) {
 		mmm.toggleStart();
@@ -141,6 +141,11 @@ public class MainMenuController {
 		stage.close();
 	}
 
+	/**
+	 * Modifie le fichier de configuration de la simulation.
+	 * 
+	 * @param file Fichier de configuration de la simulation.
+	 */
 	public void chooseFile(File file) {
 		mmm.setFilepath(file.getAbsolutePath());
 	}
