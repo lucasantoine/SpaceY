@@ -21,6 +21,9 @@ import fr.spacey.model.entity.EntityType;
 import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
+import fr.spacey.model.obj.DistanceObjectif;
+import fr.spacey.model.obj.Objectif;
+import fr.spacey.model.obj.PrerequisDistance;
 
 public class AstroParser {
 
@@ -70,6 +73,14 @@ public class AstroParser {
 						spaceModel.setFa(fa);
 						spaceModel.setRayon((int) rayon);
 						paramsset = true;
+					} else if(line.startsWith("OBJECTIF_VOYAGER")) {
+						line = line.replace("OBJECTIF_VOYAGER ", "");
+						values = line.split(" ");
+						final double dist = getDouble("distance", values);
+						
+						DistanceObjectif obj = new DistanceObjectif();
+						obj.prerequis.add(new PrerequisDistance(dist));
+						spaceModel.setObjectif(obj);
 					}else if(line.contains(":") && count == 1){
 						if(paramsset) {
 							values = line.split(" ");
