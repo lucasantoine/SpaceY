@@ -207,7 +207,6 @@ public class SpaceModel extends Observable {
 
 		Set<Entity> toRemove = new HashSet<Entity>();
 		List<Integer> idxVecteursToRemove = new ArrayList<Integer>();
-		System.out.println(states.size());
 		for (Entity efrom : entities) {
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {

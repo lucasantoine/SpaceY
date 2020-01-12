@@ -52,9 +52,6 @@ public class SpaceY extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		for(String f : Font.getFamilies())
-			System.out.println(f);
 
 		
 		// MODELES

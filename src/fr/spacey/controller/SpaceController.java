@@ -114,9 +114,7 @@ public class SpaceController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println(isFrozen());
 							if(!isFrozen()) {
-								System.out.println("je rendu");
 								sm.render(); //ICI ?
 							}
 						}
@@ -256,18 +254,25 @@ public class SpaceController {
 		double mouseXTransformed = (e.getSceneX()) / aff.getZoom();
 		double mouseYTransformed = (e.getSceneY()) / aff.getZoom();
 		
+
+		final double SELECTWIDTH = 700, SELECTHEIGHT = 140;
+		
+		double startX = aff.getAbsoluteWidth() - SELECTWIDTH - 20;
+		double startY = aff.getAbsoluteHeight() - SELECTHEIGHT - 20;
+		double triangleCenterY = (startY + (startY + SELECTHEIGHT)) / 2;
+		
 		boolean nouvelleSelection = false;
 		int idx = 0;
 		if(hasEntitySelected()) {
 			//fleche gauche
-			if(mouseXTransformed >= 855 && mouseXTransformed <= 890 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
+			if(mouseXTransformed >= startX + 15 && mouseXTransformed <= startX + 30 && mouseYTransformed >= triangleCenterY - 25 && mouseYTransformed <= triangleCenterY + 25) {
 				showstates.put(getEntitySelected(), ShowState.NOINFO);
 				setEntitySelected((getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getEntitySelectedId()-1);
 				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
 			}
 			//fleche droite
-			else if(mouseXTransformed >= 1510 && mouseXTransformed <= 1545 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
+			else if(mouseXTransformed >= startX + 670 && mouseXTransformed <= startX + 685 && mouseYTransformed >= triangleCenterY - 25 && mouseYTransformed <= triangleCenterY + 25) {
 				showstates.put(getEntitySelected(), ShowState.NOINFO);
 				setEntitySelected((getEntitySelectedId()+1)%getModel().getEntities().size());
 				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
@@ -299,12 +304,10 @@ public class SpaceController {
 			if(mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
 					&& mouseYTransformed < maxY) {
 				if(e.getClickCount() >= 2) {
-					System.out.println("DOUBLE CLICK");
 					final int focus = idx;
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println("RUN !");
 							SpaceController newsc = new SpaceController(sm);
 							newsc.setEntitySelected(focus);
 							SpaceView newsp = new SpaceView(newsc);

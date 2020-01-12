@@ -116,7 +116,6 @@ public class Vecteur {
 	 * @return l'addition des deux Vecteurs.
 	 */
 	public Vecteur add(double x, double y) {
-		System.out.println("add("+(this.x + x)+","+(this.y + y)+")");
 		return new Vecteur(this.x + x, this.y + y);
 	}
 	
