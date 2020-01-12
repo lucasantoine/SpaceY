@@ -1,3 +1,4 @@
+
 package fr.spacey.model.entity;
 
 import fr.spacey.SpaceY;
@@ -9,7 +10,6 @@ public class Vaisseau extends Simule {
 	private final double TANKSIZE;
 	
 	private double angle;
-	@SuppressWarnings("unused")
 	private double pretro; //used for ship rotation
 	private double rocketActivity;
 	private double maxForce;
@@ -74,10 +74,10 @@ public class Vaisseau extends Simule {
 	}
 	
 	public double getXForce() {
-		return Math.cos(Math.toRadians(angle))*this.getForce();
+		return Math.cos(Math.toRadians(getAngle()))*this.getForce();
 	}
 	public double getYForce() {
-		return Math.sin(Math.toRadians(angle))*this.getForce();
+		return Math.sin(Math.toRadians(getAngle()))*this.getForce();
 	}
 
 	public void consumeFuel() {
@@ -90,4 +90,19 @@ public class Vaisseau extends Simule {
 		if(getVel().getX() <= 0 || (getVel().getY() <= 0 && getVel().getX() <= 0)) return value + 180;
 		return value;
 	}
+
+	public void turn(boolean left) {
+
+		Vecteur vel = this.getState().getVelocity();
+		
+		double fact = left ? -1 : 1;
+		
+		double x = (getVel().getY() > 0 ? pretro : -pretro) * fact;
+		double y = (getVel().getY() > 0 ? pretro : -pretro) * fact;
+
+		setVel(getVel().add(new Vecteur(x, y)));
+
+		
+	}
+
 }
