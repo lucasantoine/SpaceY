@@ -615,6 +615,10 @@ public class SpaceView implements Observer {
 			gc.setFill(Color.LIGHTGRAY);
 			gc.setFont(new Font("Minecraftia", 12));
 			for(Prerequis pr : obj.prerequis) {
+				if(pr.isComplete(sc.getModel().getVaisseau()))
+					gc.setFill(Color.GREEN);
+				else 
+					gc.setFill(Color.RED);
 				gc.fillText(pr.toString(sc.getModel()), startX + 15, texty);
 				texty += 20;
 			}

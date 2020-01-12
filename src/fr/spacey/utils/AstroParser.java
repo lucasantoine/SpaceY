@@ -20,8 +20,8 @@ import fr.spacey.model.entity.Fixe;
 import fr.spacey.model.entity.Simule;
 import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.model.obj.DistanceObjectif;
-import fr.spacey.model.obj.Objectif;
 import fr.spacey.model.obj.PrerequisDistance;
+import fr.spacey.model.obj.PrerequisTemps;
 
 public class AstroParser {
 
@@ -75,9 +75,11 @@ public class AstroParser {
 						line = line.replace("OBJECTIF_VOYAGER ", "");
 						values = line.split(" ");
 						final double dist = getDouble("distance", values);
+						final int time = getInt("tlimite", values);
 						
 						DistanceObjectif obj = new DistanceObjectif();
 						obj.prerequis.add(new PrerequisDistance(dist));
+						obj.prerequis.add(new PrerequisTemps(time));
 						spaceModel.setObjectif(obj);
 					}else if(line.contains(":") && count == 1){
 						if(paramsset) {
@@ -212,11 +214,11 @@ public class AstroParser {
 		throw new AstroParserException("valeur manquante (" + label + ") - line : " + nbLine);
 	}
 	
-	private static double getInt(String label, String... values) throws Exception {
+	private static int getInt(String label, String... values) throws Exception {
 		String value = getValue(label, values);
 		if(value == null) return -1;
 		try {
-			double d = Integer.parseInt(value);
+			int d = Integer.parseInt(value);
 			return d;
 		}catch (NumberFormatException e) {
 			throw new AstroParserException(value + " is not an int value - line : " + nbLine);
