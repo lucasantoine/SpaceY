@@ -19,6 +19,8 @@ import fr.spacey.model.entity.Vaisseau;
 import fr.spacey.model.integration.EulerExplicite;
 import fr.spacey.model.integration.Rk4;
 import fr.spacey.model.integrator.Integrator;
+import fr.spacey.model.obj.Objectif;
+import fr.spacey.model.obj.Prerequis;
 import fr.spacey.utils.ShowState;
 import fr.spacey.utils.Sprite;
 import fr.spacey.utils.Vecteur;
@@ -391,7 +393,9 @@ public class SpaceView implements Observer {
 
 		}
 
-		//stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G + ", TIME=" + formatTimeFromSec(sc.getTime()));
+		if(sc.getModel().hasObjectif()) {
+			drawObjectif(gc);
+		}
 		
 		//CRYOSTASE
 		this.drawStase();
@@ -439,7 +443,6 @@ public class SpaceView implements Observer {
 	private void drawSpaceshipHUD(GraphicsContext gc) {
 		Affichage aff = sc.getAffichage();
 		double relatX = 10, relatY = aff.getAbsoluteHeight() - 850;
-		
 		
 		// HUD ROND VAISSEAU
 		gc.setFill(new Color(.3, .3, .3, 1));
@@ -579,6 +582,51 @@ public class SpaceView implements Observer {
 		//gc.fillText("Acc: " + e.getAcc().toStringScientific() + " m/s", textX, startY + 130);
 	}
 
+	private final double OBJWIDTH = 200;
+	private final double OBJHEIGHT = 200;
+	private void drawObjectif(GraphicsContext gc) {
+		Affichage aff = sc.getAffichage();
+		double startX = aff.getAbsoluteWidth() - OBJWIDTH - 20;
+		double startY = 20;
+		
+		gc.setFill(new Color(.3, .3, .3, 1));
+		gc.fillRoundRect(startX , startY, OBJWIDTH, OBJHEIGHT, 20, 20);
+		gc.setLineWidth(1);
+		gc.setStroke(new Color(0.6, 0.6, 0.6, 1));
+		gc.strokeRoundRect(startX + 5, startY + 5, OBJWIDTH - 10, OBJHEIGHT - 10, 20, 20);
+		
+		if(sc.getModel().hasVaisseau()) {
+		
+			Objectif obj = sc.getModel().getObjectif();
+			boolean isCompleted = obj.isComplete(sc.getModel().getVaisseau());
+			
+			if(!isCompleted)
+				gc.setFill(Color.ORANGE);
+			else 
+				gc.setFill(Color.GREEN);
+			
+			gc.setFont(new Font("Minecraftia", 15));
+			gc.fillText(isCompleted?"Objectif completé":"Objectif en cours", startX + 15, startY + 40);
+	
+			gc.setFont(new Font("Minecraftia", 13));
+			gc.fillText(obj.name, startX + 60, startY + 60);
+			
+			double texty = startY + 80;
+			gc.setFill(Color.LIGHTGRAY);
+			gc.setFont(new Font("Minecraftia", 12));
+			for(Prerequis pr : obj.prerequis) {
+				gc.fillText(pr.toString(sc.getModel()), startX + 15, texty);
+				texty += 20;
+			}
+		} else {
+			gc.setFont(new Font("Minecraftia", 15));
+			gc.setFill(Color.RED);
+			gc.fillText("Objectif annulé", startX + 15, startY + 40);
+		}
+	}
+	
+	
+	
 	/**
 	 * Methode permettant de centrer la camera sur l'Entite selectionnee.
 	 * 

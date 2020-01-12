@@ -314,4 +314,8 @@ public class SpaceModel extends Observable {
 		return obj != null;
 	}
 
+	public Objectif getObjectif() {
+		return obj;
+	}
+
 }

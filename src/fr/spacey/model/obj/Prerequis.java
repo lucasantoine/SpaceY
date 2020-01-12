@@ -10,4 +10,6 @@ public interface Prerequis {
 	}
 	
 	public void init(SpaceModel ref);
+
+	public String toString(SpaceModel ref);
 }
