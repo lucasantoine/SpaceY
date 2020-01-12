@@ -58,7 +58,7 @@ public class SpaceView implements Observer {
 	private GraphicsContext gc;
 	private Vecteur lastMousePos;
 	private boolean isMenu;
-	private Cryostase cryo=new Cryostase();
+	private Cryostase cryo;
 
 	/**
 	 * Constructeur de la SpaceView prenant en parametre son controleur.
@@ -75,6 +75,8 @@ public class SpaceView implements Observer {
 		this.sc.register(this);
 		this.pane.getChildren().add(can);
 		this.isMenu = false;
+		
+		this.cryo=new Cryostase(sc);
 
 		pane.setOnKeyPressed(e -> {
 			if(e.getCode().equals(KeyCode.ESCAPE)) {
@@ -95,7 +97,7 @@ public class SpaceView implements Observer {
 			sc.onKeyReleased(e);
 
 			if(e.getCode().equals(KeyCode.P)) {
-				cryo.switchActive();;
+				cryo.switchActive();
 			}
 		});
 
@@ -380,7 +382,7 @@ public class SpaceView implements Observer {
 		}
 
 		//stage.setTitle("SpaceY  -  DT=" + sc.getModel().getDt() + ", FA=" + sc.getModel().getFa() + ", G=" + SpaceModel.G + ", TIME=" + formatTimeFromSec(sc.getTime()));
-
+		
 		//CRYOSTASE
 		this.drawStase();
 	}
@@ -614,12 +616,16 @@ public class SpaceView implements Observer {
 			this.cryo.freeze();
 		else 
 			this.cryo.unfreeze();
+		if(cryo.isActive())this.cryo.freeze();
+		else this.cryo.unfreeze();
+		
+			System.out.println(cryo.getFrostLevel()+":"+sc.isFrozen());
 
-		double alpha=gc.getGlobalAlpha();
-		gc.setGlobalAlpha(cryo.getFrostLevel());
-		gc.drawImage(cryo.SPRITE, 0, 0);
-		gc.setGlobalAlpha(alpha);
-		//System.out.println(this.cryo.getFrostLevel());
-//		s.show
+			double alpha=gc.getGlobalAlpha();
+			gc.setGlobalAlpha(cryo.getFrostLevel());
+			gc.drawImage(cryo.SPRITE, 0, 0);
+			gc.setGlobalAlpha(alpha);
+			System.out.println(this.cryo.getFrostLevel());
+
 	}
 }

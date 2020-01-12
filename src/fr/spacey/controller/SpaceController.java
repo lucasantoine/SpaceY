@@ -42,6 +42,7 @@ public class SpaceController {
 
 	private boolean isRunning = false;
 	private boolean isStopped = false;
+	private boolean isFrozen = false;
 	
 	private Thread renderThread;
 	private RenderTimer rendertimer;
@@ -113,7 +114,11 @@ public class SpaceController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							sm.render();
+							System.out.println(isFrozen());
+							if(!isFrozen()) {
+								System.out.println("je rendu");
+								sm.render(); //ICI ?
+							}
 						}
 					});
 
@@ -515,6 +520,14 @@ public class SpaceController {
 	
 	public ShowState getShowStateOf(Entity e) {
 		return showstates.get(e);
+	}
+	
+	public boolean isFrozen() {
+		return this.isFrozen;
+	}
+	
+	public void toggleFreezing() {
+		this.isFrozen=!this.isFrozen;
 	}
 
 }
