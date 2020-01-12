@@ -47,6 +47,7 @@ public class SpaceController {
 	private Thread renderThread;
 	private RenderTimer rendertimer;
 	private SpaceModel sm;
+	@SuppressWarnings("unused")
 	private boolean isZPressed;
 	
 	private Affichage affichage;
