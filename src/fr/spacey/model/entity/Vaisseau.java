@@ -1,6 +1,7 @@
 package fr.spacey.model.entity;
 
 import fr.spacey.SpaceY;
+import fr.spacey.utils.State;
 import fr.spacey.utils.Vecteur;
 
 public class Vaisseau extends Simule {
@@ -13,6 +14,7 @@ public class Vaisseau extends Simule {
 	private double rocketActivity;
 	private double maxForce;
 	private double fuel;
+	private int facteur = -1;
 	
 	public Vaisseau(String name, double masse, Vecteur pos, Vecteur vel, double pretro, double maxForce) {
 		super(name, EntityType.VAISSEAU, masse, pos, vel);
@@ -33,14 +35,20 @@ public class Vaisseau extends Simule {
 		this.rocketActivity=0;
 	}
 	
+	@Override
+	public void updateState(State s) {
+		rocketActivity += facteur;
+		if(rocketActivity < 0) rocketActivity = 0;
+		if(rocketActivity > 100) rocketActivity = 100;
+		super.updateState(s);
+	}
+	
 	public void upThrottle() {
 		if((int)this.getFuel() != 0)
-			this.rocketActivity=rocketActivity+1.0;
-			if(this.rocketActivity>100) { this.rocketActivity=100; }
+			this.facteur = 1;
 	}
 	public void downThrottle() {
-		this.rocketActivity=rocketActivity-1.0;
-		if(this.rocketActivity<0)this.rocketActivity=0;
+		this.facteur = -1;
 	}
 	
 	public void incAngle(double d) {

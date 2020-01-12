@@ -11,6 +11,7 @@ import fr.spacey.model.menu.MainMenuModel;
 import fr.spacey.view.MainMenuView;
 import fr.spacey.view.SpaceView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -100,6 +101,20 @@ public class SpaceY extends Application {
 	 * @param args Arguments de la methode principale (inutile dans ce cas).
 	 */
 	public static void main(String[] args) {
-		Application.launch(args);
+		if(args.length == 1) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							SpaceY.instance.startSimulation(args[0], new Stage());
+						} catch (Exception e) {
+							System.err.println("Une erreur est survenue : " + e.getMessage());
+						}
+						
+					}
+				});
+		}else {
+			Application.launch(args);
+		}
 	}
 }
