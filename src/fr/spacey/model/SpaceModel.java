@@ -1,5 +1,6 @@
 package fr.spacey.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
@@ -205,7 +206,8 @@ public class SpaceModel extends Observable {
 		}
 
 		Set<Entity> toRemove = new HashSet<Entity>();
-
+		List<Integer> idxVecteursToRemove = new ArrayList<Integer>();
+		System.out.println(states.size());
 		for (Entity efrom : entities) {
 			for (Entity eto : entities) {
 				if (!efrom.equals(eto) && !toRemove.contains(efrom) && !toRemove.contains(eto)) {
@@ -222,7 +224,11 @@ public class SpaceModel extends Observable {
 						// "+eto.getName()+": "+distance);
 
 						if (efrom.getMasse() < eto.getMasse()) {
-
+							int idx = entities.indexOf(efrom);
+							idxVecteursToRemove.add(idx*4);
+							idxVecteursToRemove.add(idx*4+1);
+							idxVecteursToRemove.add(idx*4+2);
+							idxVecteursToRemove.add(idx*4+3);
 							toRemove.add(efrom);
 							eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(),
 									efrom.getVel().getY() / efrom.getMasse()));
@@ -231,6 +237,12 @@ public class SpaceModel extends Observable {
 						} else {
 
 							toRemove.add(eto);
+
+							int idx = entities.indexOf(eto);
+							idxVecteursToRemove.add(idx*4);
+							idxVecteursToRemove.add(idx*4+1);
+							idxVecteursToRemove.add(idx*4+2);
+							idxVecteursToRemove.add(idx*4+3);
 							efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),
 									eto.getVel().getY() / eto.getMasse()));
 
@@ -248,6 +260,13 @@ public class SpaceModel extends Observable {
 				entities.remove(entity);
 			}
 		}
+		
+		if(idxVecteursToRemove.size() > 0) {
+			for(int idx : idxVecteursToRemove) {
+				states.remove(idx);
+			}
+		}
+		
 		render();
 	}
 	

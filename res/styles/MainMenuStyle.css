@@ -9,7 +9,7 @@
     -fx-border-insets: 10px;
     -fx-border-width: 2px;
     -fx-border-color: yellow;
-    -fx-padding: 10;
+    /*-fx-padding: 10;*/
 }
 
 #chooseFile:hover{

@@ -7,6 +7,8 @@ import java.util.Observer;
 import fr.spacey.controller.MainMenuController;
 import fr.spacey.model.menu.Star;
 import fr.spacey.utils.Sprite;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -18,6 +20,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -65,9 +68,10 @@ public class MainMenuView implements Observer {
 
 		title = this.createTitle();
 
-		play = this.createText("D�marrer", -300);
+		play = this.createText("Démarrer", -300);
 
 		chooseFile = this.createLabel("Choisir un fichier ...", -700);
+		chooseFile.setFont(new Font("Minecraftia", 30));
 
 		quit = this.createText("Quitter", -900);
 
@@ -102,7 +106,7 @@ public class MainMenuView implements Observer {
 	 */
 	private Text createTitle() {
 		Text title = new Text("S p a c e Y");
-		title.setFont(Font.font(100));
+		title.setFont(new Font("Minecraftia", 80));
 		title.setStroke(Color.YELLOW);
 		title.setStrokeWidth(2);
 		title.setStrokeType(StrokeType.OUTSIDE);
@@ -121,7 +125,7 @@ public class MainMenuView implements Observer {
 	 */
 	private Text createError(String text, int offset) {
 		Text error = new Text("");
-		error.setFont(Font.font(30));
+		error.setFont(new Font("Minecraftia", 30));
 		error.setFill(Color.INDIANRED);
 		error.getTransforms().add(new Rotate(-50, 300, 100, 20, Rotate.X_AXIS));
 		error.setX(canvas.getWidth() / 2);
@@ -138,7 +142,7 @@ public class MainMenuView implements Observer {
 	 */
 	private Text createText(String text, int offset) {
 		Text res = new Text(text);
-		res.setFont(Font.font(60));
+		res.setFont(new Font("Minecraftia", 60));
 		res.setFill(Color.YELLOW);
 		res.getTransforms().add(new Rotate(-50, 300, 200, 20, Rotate.X_AXIS));
 		res.setX(canvas.getWidth() / 2);
@@ -162,12 +166,13 @@ public class MainMenuView implements Observer {
 	 */
 	private Label createLabel(String text, int offset) {
 		Label label = new Label(text);
-		label.setFont(Font.font(40));
+		//label.setFont(Font.font(40));
 		label.setTextFill(Color.YELLOW);
 		label.getTransforms().add(new Rotate(-50, 300, 400, 20, Rotate.X_AXIS));
 		label.setLayoutX(canvas.getWidth() / 2);
 		label.setLayoutY(canvas.getHeight() / 2 + offset);
 		label.setId("chooseFile");
+		
 		return label;
 
 	}

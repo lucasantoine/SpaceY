@@ -44,13 +44,16 @@ public class SpaceY extends Application {
 	@Override
 	public void start(Stage stage) {
 		// FONT
-		try(InputStream fileInputSteam = getClass().getResourceAsStream("fonts/Minecraftia.ttf")) {
+		try(InputStream fileInputSteam = getClass().getClassLoader().getResourceAsStream("fonts/Minecraftia.ttf")) {
 			Font.loadFont(fileInputSteam, 10);
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		for(String f : Font.getFamilies())
+			System.out.println(f);
 
 		
 		// MODELES
