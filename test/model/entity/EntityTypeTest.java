@@ -41,8 +41,6 @@ public class EntityTypeTest {
 		try {
 			assertEquals(EntityType.FIXE, EntityType.getByName("Fixe"));
 			assertEquals(EntityType.SIMULE, EntityType.getByName("Simulé"));
-			assertEquals(EntityType.CERCLE, EntityType.getByName("Cercle"));
-			assertEquals(EntityType.ELLIPSE, EntityType.getByName("Ellipse"));
 			assertEquals(EntityType.VAISSEAU, EntityType.getByName("Vaisseau"));
 			EntityType.getByName("error");
 		} catch (Exception e) {

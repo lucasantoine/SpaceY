@@ -273,6 +273,6 @@ public class AstroParser {
 			formatedLine = formatedLine.replaceFirst("\\s*", "");
 		}
 		return formatedLine;
-	}
+	} 
 	
 }

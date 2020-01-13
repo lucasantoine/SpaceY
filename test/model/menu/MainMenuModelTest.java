@@ -48,24 +48,24 @@ public class MainMenuModelTest {
 	public void testSetStart() {
 		System.out.println("testSetStart");
 		assertFalse(mmm.isStart());
-		mmm.setStart();
+		mmm.toggleStart();
 		assertTrue(mmm.isStart());
-		mmm.setStart();
-		assertTrue(mmm.isStart());
+		mmm.toggleStart();
+		assertFalse(mmm.isStart());
 	}
 
 	@Test
 	public void testIsStart() {
 		System.out.println("testIsStart");
 		assertFalse(mmm.isStart());
-		mmm.setStart();
+		mmm.toggleStart();
 		assertTrue(mmm.isStart());
 	}
 	
 	@Test
 	public void testGetFilepath() {
 		System.out.println("testGetFilepath");
-		assertEquals(null, mmm.getFilepath());
+		assertEquals("", mmm.getFilepath());
 		mmm.setFilepath("test");
 		assertEquals("test", mmm.getFilepath());
 	}
@@ -73,10 +73,28 @@ public class MainMenuModelTest {
 	@Test
 	public void testSetFilepath() {
 		System.out.println("testSetFilepath");
-		assertEquals(null, mmm.getFilepath());
+		assertEquals("", mmm.getFilepath());
 		mmm.setFilepath("test");
 		assertEquals("test", mmm.getFilepath());
 		mmm.setFilepath("test2");
 		assertEquals("test2", mmm.getFilepath());
+	}
+	
+	@Test
+	public void testGetErrorMessage() {
+		System.out.println("testGetErrorMessage");
+		assertEquals(null, mmm.getErrorMessage());
+		mmm.setErrorMessage("test");
+		assertEquals("test", mmm.getErrorMessage());
+	}
+	
+	@Test
+	public void testSetErrorMessage() {
+		System.out.println("testSetErrorMessage");
+		assertEquals(null, mmm.getErrorMessage());
+		mmm.setErrorMessage("test");
+		assertEquals("test", mmm.getErrorMessage());
+		mmm.setErrorMessage("test2");
+		assertEquals("test2", mmm.getErrorMessage());
 	}
 }

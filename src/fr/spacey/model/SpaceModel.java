@@ -29,7 +29,6 @@ import fr.spacey.utils.Vecteur;
  *        configuration et cree la simulation. Permet egalement de modifier la
  *        Position et l'Affichage des Entites.
  */
-@SuppressWarnings("deprecation")
 public class SpaceModel extends Observable {
 
 	private List<Entity> entities;
@@ -39,23 +38,20 @@ public class SpaceModel extends Observable {
 	private Vaisseau vaisseau;
 	private IntegrationStrategy integrator;
 
-
 	public static double G; // constante gravitationelle
 	private double dt; // nb d'update() qui sera reparti par le nombre d'image
-		// par seconde
+	// par seconde
 	private int time;
 
 	private double fa; // facteur multiplicatif pour le nombre d'update()
 	private double rayon; // taille de l'univers
-
-	
 
 	/**
 	 * Constructeur de SpaceModel prenant en parametre la Liste des Entites de la
 	 * simulation.
 	 * 
 	 * @param filepath Nom du fichier de configuration sans son extension.
-	 * @throws Exception 
+	 * @throws Exception Exception sur le chemin vers le fichier de configuration.
 	 */
 	public SpaceModel(String filepath) throws Exception {
 		this.entities = AstroParser.loadAstroFile(this, filepath);
@@ -89,23 +85,21 @@ public class SpaceModel extends Observable {
 		if (this.dt == 0)
 			this.dt = 0.025f;
 
-		this.dt = 0.1f;
-
 		if (this.fa == 0)
 			this.fa = 1;
 
 		if (G == 0)
 			G = 0.005;
-		
+
 		this.time = 0;
 		for (Entity e : entities) {
 			if (e instanceof Vaisseau) {
 				this.vaisseau = (Vaisseau) e;
 			}
-			
+
 		}
 		this.integrator = new Rk4(new Integrator(this));
-		
+
 		this.obj.init(this);
 	}
 
@@ -135,10 +129,6 @@ public class SpaceModel extends Observable {
 	public boolean hasVaisseau() {
 		return vaisseau != null;
 	}
-
-
-
-
 
 	/**
 	 * Renvoie le pas de temps de la simulation.
@@ -178,8 +168,8 @@ public class SpaceModel extends Observable {
 	}
 
 	/**
-	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la
-	 * valeur passee en parametre.
+	 * Modifie la hauteur et la largeur de l'univers de la simulation avec la valeur
+	 * passee en parametre.
 	 * 
 	 * @param rayon Nouvelle hauteur et largeur de l'univers de la simulation.
 	 */
@@ -196,16 +186,14 @@ public class SpaceModel extends Observable {
 		return rayon;
 	}
 
-
-
 	/**
 	 * Modifie la position de chaque Entite presentes dans la simulation.
 	 */
 	public void updatePositions() {
-		
-		if(hasVaisseau())
+
+		if (hasVaisseau())
 			this.obj.isComplete(vaisseau);
-		
+
 		this.states = integrator.newStates(states, time, dt);
 		for (int i = 0; i < entities.size(); i++) {
 			State s = new State(new Vecteur(this.states.get(i * 4), this.states.get((i * 4) + 1)),
@@ -232,22 +220,24 @@ public class SpaceModel extends Observable {
 
 						if (efrom.getMasse() < eto.getMasse()) {
 							int idx = entities.indexOf(efrom);
-							idxVecteursToRemove.add(idx*4);
-							idxVecteursToRemove.add(idx*4+1);
-							idxVecteursToRemove.add(idx*4+2);
-							idxVecteursToRemove.add(idx*4+3);
+							idxVecteursToRemove.add(idx * 4);
+							idxVecteursToRemove.add(idx * 4 + 1);
+							idxVecteursToRemove.add(idx * 4 + 2);
+							idxVecteursToRemove.add(idx * 4 + 3);
 							toRemove.add(efrom);
-							//eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() / efrom.getMasse(), efrom.getVel().getY() / efrom.getMasse()));
+							// eto.getVel().setVector(eto.getVel().add(efrom.getVel().getX() /
+							// efrom.getMasse(), efrom.getVel().getY() / efrom.getMasse()));
 						} else {
 
 							toRemove.add(eto);
 
 							int idx = entities.indexOf(eto);
-							idxVecteursToRemove.add(idx*4);
-							idxVecteursToRemove.add(idx*4+1);
-							idxVecteursToRemove.add(idx*4+2);
-							idxVecteursToRemove.add(idx*4+3);
-							//efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() / eto.getMasse(),eto.getVel().getY() / eto.getMasse()));
+							idxVecteursToRemove.add(idx * 4);
+							idxVecteursToRemove.add(idx * 4 + 1);
+							idxVecteursToRemove.add(idx * 4 + 2);
+							idxVecteursToRemove.add(idx * 4 + 3);
+							// efrom.getVel().setVector(efrom.getVel().add(eto.getVel().getX() /
+							// eto.getMasse(),eto.getVel().getY() / eto.getMasse()));
 
 						}
 					}
@@ -263,32 +253,57 @@ public class SpaceModel extends Observable {
 				entities.remove(entity);
 			}
 		}
-		
-		if(idxVecteursToRemove.size() > 0) {
-			for(int idx : idxVecteursToRemove) {
+
+		if (idxVecteursToRemove.size() > 0) {
+			for (int idx : idxVecteursToRemove) {
 				states.remove(idx);
 			}
 		}
-		
+
 		render();
 	}
-	
+
+	/**
+	 * Modifie la methode d'integration par celle passee en parametre.
+	 * 
+	 * @param is Nouvelle methode d'integration de la simulation.
+	 */
 	public void setIntegrationStrategy(IntegrationStrategy is) {
 		this.integrator = is;
 	}
 
+	/**
+	 * Renvoie la methode d'integration de la simulation.
+	 * 
+	 * @return la methode d'integration de la simulation.
+	 */
 	public IntegrationStrategy getIntegrationStrategy() {
 		return this.integrator;
 	}
-	
+
+	/**
+	 * Modifie le temps de la simulation par celui passe en parametre.
+	 * 
+	 * @param time Nouveau temps de la simulation.
+	 */
 	public void setTime(int time) {
 		this.time = time;
 	}
-	
+
+	/**
+	 * Renvoie le temps de la simulation.
+	 * 
+	 * @return le temps de la simulation.
+	 */
 	public int getTime() {
 		return time;
 	}
 
+	/**
+	 * Renvoie les etats de la simulation.
+	 * 
+	 * @return les etats de la simulation.
+	 */
 	public Vector<Double> getStates() {
 		return this.states;
 	}
@@ -301,10 +316,15 @@ public class SpaceModel extends Observable {
 		notifyObservers();
 	}
 
+	/**
+	 * Modifie l'objectif de la simulation par celui passe en parametre.
+	 * 
+	 * @param obj Nouvel objectif de la simulation.
+	 */
 	public void setObjectif(Objectif obj) {
 		this.obj = obj;
 	}
-	
+
 	/**
 	 * Renvoie vrai si il y a un objectif dans la simulation, faux sinon.
 	 * 

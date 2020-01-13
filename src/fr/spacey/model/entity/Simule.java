@@ -85,7 +85,7 @@ public class Simule extends Entity {
 	}
 
 	/**
-	 * Ajoute une nouvelle Position à la liste des Positions precedentes et, s'il y
+	 * Ajoute une nouvelle Position a la liste des Positions precedentes et, s'il y
 	 * en a trop, supprime la plus ancienne.
 	 */
 	protected void previousPosition() {

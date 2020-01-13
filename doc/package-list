@@ -1,1 +1,11 @@
 fr.spacey
+fr.spacey.controller
+fr.spacey.exceptions
+fr.spacey.model
+fr.spacey.model.entity
+fr.spacey.model.integration
+fr.spacey.model.integrator
+fr.spacey.model.menu
+fr.spacey.model.obj
+fr.spacey.utils
+fr.spacey.view

@@ -19,7 +19,7 @@ import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage; 
+import javafx.stage.Stage;
 
 /**
  * SpaceY - IUT A de Lille - 3e Semestre
@@ -34,21 +34,22 @@ import javafx.stage.Stage;
 public class SpaceController {
 
 	private static int spacecontrollernb = 1;
-	
+
 	private final int FPS = 60; // nb d'image par seconde de la simulation, inexact car la machine peut mettre
 								// plus ou moins de temps pour afficher une frame, ceci est donc une limite
 								// approximative
 	private final double LOOPSLOT = 1f / FPS;
 
 	private boolean isRunning = false;
-	private boolean isStopped = false;
+	public boolean isStopped = false;
 	private boolean isFrozen = false;
-	
+
 	private Thread renderThread;
 	private RenderTimer rendertimer;
 	private SpaceModel sm;
+	@SuppressWarnings("unused")
 	private boolean isZPressed;
-	
+
 	private Affichage affichage;
 	private int selected;
 	private HashMap<Entity, ShowState> showstates;
@@ -70,8 +71,10 @@ public class SpaceController {
 			showstates.put(e, ShowState.NOINFO);
 		}
 	}
-	/*
+
+	/**
 	 * Permet d'obtenir toutes les informations d'affiche
+	 * 
 	 * @return la configuration de l'affichage
 	 */
 	public Affichage getAffichage() {
@@ -90,7 +93,7 @@ public class SpaceController {
 			@Override
 			public void run() {
 				rendertimer.init();
-				while(!isStopped) {
+				while (!isStopped) {
 					ellapsedTime = rendertimer.getEllapsedTime();
 					if (!isRunning) {
 						ellapsedTime = 0;
@@ -100,7 +103,7 @@ public class SpaceController {
 
 					while (isRunning && accu >= sm.getDt() / sm.getFa()) {
 						sm.setTime(sm.getTime() + 1);
-						if(renderThread.getName().equalsIgnoreCase("SpaceController-RenderThread-1")) {
+						if (renderThread.getName().equalsIgnoreCase("SpaceController-RenderThread-1")) {
 							Platform.runLater(new Runnable() {
 								@Override
 								public void run() {
@@ -114,9 +117,9 @@ public class SpaceController {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							if(!isFrozen()) {
+							if (!isFrozen()) {
 								sm.render();
-							} 
+							}
 						}
 					});
 
@@ -150,7 +153,7 @@ public class SpaceController {
 	public void toggleRunning() {
 		this.isRunning = !this.isRunning;
 	}
-	
+
 	/**
 	 * Permet de mettre en pause, ou de reprendre la simulation.
 	 */
@@ -175,35 +178,27 @@ public class SpaceController {
 	 */
 	public void onMouseDrag(MouseEvent e) {
 		Affichage aff = getAffichage();
-		//int centerX = (int) (aff.getxOffset() - aff.getWidth() / 2),
-		//		centerY = (int) (aff.getyOffset() - aff.getHeight() / 2);
-		
-		double mouseXTransformed = e.getSceneX() /*/ aff.getZoom()*/;
-		double mouseYTransformed = e.getSceneY() /*/ aff.getZoom()*/;
-		
+		// int centerX = (int) (aff.getxOffset() - aff.getWidth() / 2),
+		// centerY = (int) (aff.getyOffset() - aff.getHeight() / 2);
+
+		double mouseXTransformed = e.getSceneX() /* / aff.getZoom() */;
+		double mouseYTransformed = e.getSceneY() /* / aff.getZoom() */;
+
 		aff.setxOffset(aff.getStartSceneX() + mouseXTransformed - aff.getStartDragX());
 		aff.setyOffset(aff.getStartSceneY() + mouseYTransformed - aff.getStartDragY());
 
-		/*double rayon = sm.getRayon();
-		if (centerX > rayon) {
-			aff.setxOffset(aff.getWidth() / 2 + rayon);
-			aff.setStartDragX(e.getSceneX());
-			aff.setStartSceneX(aff.getxOffset());
-		} else if (centerX < -rayon) {
-			aff.setxOffset(aff.getWidth() / 2 - rayon);
-			aff.setStartDragX(e.getSceneX());
-			aff.setStartSceneX(aff.getxOffset());
-		}
-
-		if (centerY > rayon) {
-			aff.setyOffset(aff.getHeight() / 2 + rayon);
-			aff.setStartDragY(e.getSceneY());
-			aff.setStartSceneY(aff.getyOffset());
-		} else if (centerY < -rayon) {
-			aff.setyOffset(aff.getHeight() / 2 - rayon);
-			aff.setStartDragY(e.getSceneY());
-			aff.setStartSceneY(aff.getyOffset());
-		}*/
+		/*
+		 * double rayon = sm.getRayon(); if (centerX > rayon) {
+		 * aff.setxOffset(aff.getWidth() / 2 + rayon); aff.setStartDragX(e.getSceneX());
+		 * aff.setStartSceneX(aff.getxOffset()); } else if (centerX < -rayon) {
+		 * aff.setxOffset(aff.getWidth() / 2 - rayon); aff.setStartDragX(e.getSceneX());
+		 * aff.setStartSceneX(aff.getxOffset()); }
+		 * 
+		 * if (centerY > rayon) { aff.setyOffset(aff.getHeight() / 2 + rayon);
+		 * aff.setStartDragY(e.getSceneY()); aff.setStartSceneY(aff.getyOffset()); }
+		 * else if (centerY < -rayon) { aff.setyOffset(aff.getHeight() / 2 - rayon);
+		 * aff.setStartDragY(e.getSceneY()); aff.setStartSceneY(aff.getyOffset()); }
+		 */
 	}
 
 	/**
@@ -232,7 +227,7 @@ public class SpaceController {
 //			} else if (en.getInfoMode().equals(ShowState.HOVERING)) {
 //				en.setInfo(ShowState.NOINFO);
 //			}
-			
+
 			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX
 					&& mouseYTransformed > minY && mouseYTransformed < maxY) {
 				showstates.put(en, ShowState.HOVERING);
@@ -253,31 +248,35 @@ public class SpaceController {
 
 		double mouseXTransformed = (e.getSceneX()) / aff.getZoom();
 		double mouseYTransformed = (e.getSceneY()) / aff.getZoom();
-		
+
 		boolean nouvelleSelection = false;
 		int idx = 0;
-		if(hasEntitySelected()) {
-			//fleche gauche
-			if(mouseXTransformed >= 855 && mouseXTransformed <= 890 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
+		if (hasEntitySelected()) {
+			// fleche gauche
+			if (mouseXTransformed >= 855 && mouseXTransformed <= 890 && mouseYTransformed >= 740
+					&& mouseYTransformed <= 820) {
 				showstates.put(getEntitySelected(), ShowState.NOINFO);
-				setEntitySelected((getEntitySelectedId()-1)<0?getModel().getEntities().size()-1:getEntitySelectedId()-1);
+				setEntitySelected((getEntitySelectedId() - 1) < 0 ? getModel().getEntities().size() - 1
+						: getEntitySelectedId() - 1);
 				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
 			}
-			//fleche droite
-			else if(mouseXTransformed >= 1510 && mouseXTransformed <= 1545 && mouseYTransformed >= 740 && mouseYTransformed <= 820) {
+			// fleche droite
+			else if (mouseXTransformed >= 1510 && mouseXTransformed <= 1545 && mouseYTransformed >= 740
+					&& mouseYTransformed <= 820) {
 				showstates.put(getEntitySelected(), ShowState.NOINFO);
-				setEntitySelected((getEntitySelectedId()+1)%getModel().getEntities().size());
+				setEntitySelected((getEntitySelectedId() + 1) % getModel().getEntities().size());
 				showstates.put(getEntitySelected(), ShowState.SHOWINFO);
 				return;
 			}
 		}
-		
-		if(sm.hasVaisseau()) {
-			if(mouseXTransformed >= 60 && mouseXTransformed <= 150 && mouseYTransformed >= 730 && mouseYTransformed <= 815) {
+
+		if (sm.hasVaisseau()) {
+			if (mouseXTransformed >= 60 && mouseXTransformed <= 150 && mouseYTransformed >= 730
+					&& mouseYTransformed <= 815) {
 				int k = 0;
 				for (Entity en : getModel().getEntities()) {
-					if(en.getType().equals(EntityType.VAISSEAU)) {
+					if (en.getType().equals(EntityType.VAISSEAU)) {
 						setEntitySelected(k);
 						showstates.put(en, ShowState.SHOWINFO);
 						return;
@@ -286,7 +285,7 @@ public class SpaceController {
 				}
 			}
 		}
-		
+
 		for (Entity en : getModel().getEntities()) {
 			double entityX = en.getPos().getX() + aff.getxOffset();
 			double entityY = en.getPos().getY() + aff.getyOffset();
@@ -294,9 +293,9 @@ public class SpaceController {
 			double minX = entityX - en.getRadius() / 2, maxX = entityX + en.getRadius() / 2;
 			double minY = entityY - en.getRadius() / 2, maxY = entityY + en.getRadius() / 2;
 
-			if(mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
+			if (mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
 					&& mouseYTransformed < maxY) {
-				if(e.getClickCount() >= 2) {
+				if (e.getClickCount() >= 2) {
 					final int focus = idx;
 					Platform.runLater(new Runnable() {
 						@Override
@@ -310,10 +309,10 @@ public class SpaceController {
 					return;
 				}
 			}
-			
-			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX && mouseYTransformed > minY
-					&& mouseYTransformed < maxY) {
-				if(e.getClickCount() < 2) {
+
+			if (!showstates.get(en).equals(ShowState.SHOWINFO) && mouseXTransformed > minX && mouseXTransformed < maxX
+					&& mouseYTransformed > minY && mouseYTransformed < maxY) {
+				if (e.getClickCount() < 2) {
 					setEntitySelected(idx);
 					showstates.put(en, ShowState.SHOWINFO);
 					e.setDragDetect(false);
@@ -380,9 +379,15 @@ public class SpaceController {
 		return sm;
 	}
 
+	/**
+	 * Evenement permettant de controler la vitesse du vaisseau de la simulation
+	 * (s'il y en a un).
+	 * 
+	 * @param e Touche du clavier pressee.
+	 */
 	public void onKeyReleased(KeyEvent e) {
-		if(isRunning && getModel().hasVaisseau()) {
-			if(e.getCode().equals(KeyCode.Z)) {
+		if (isRunning && getModel().hasVaisseau()) {
+			if (e.getCode().equals(KeyCode.Z)) {
 				this.isZPressed = false;
 			}
 			if (e.getCode().equals(KeyCode.Z)) {
@@ -398,7 +403,7 @@ public class SpaceController {
 	 * @param e Touche du clavier pressee.
 	 */
 	public void onKeyPressed(KeyEvent e) {
-		if(e.getCode().equals(KeyCode.SPACE)) {
+		if (e.getCode().equals(KeyCode.SPACE)) {
 			toggleRunning();
 		}
 		if (isRunning) {
@@ -412,78 +417,85 @@ public class SpaceController {
 				getModel().setFa(Math.max(getModel().getFa() - 10, 1));
 			}
 			if (sm.hasVaisseau()) {
-			if (e.getCode().equals(KeyCode.Z)) {
-				sm.getVaisseau().upThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.S)) {
-				sm.getVaisseau().downThrottle();
-			}
-
-			if (e.getCode().equals(KeyCode.Q)) {
-				if (e.isAltDown()) {
-					sm.getVaisseau().incAngle(-45.0);
-				} else {
-					sm.getVaisseau().incAngle(-1.0);
+				if (e.getCode().equals(KeyCode.Z)) {
+					sm.getVaisseau().upThrottle();
 				}
-			}
 
-			if (e.getCode().equals(KeyCode.D)) {
-				if (e.isAltDown()) {
-					sm.getVaisseau().incAngle(45.0);
-				} else {
-					sm.getVaisseau().incAngle(1.0);
+				if (e.getCode().equals(KeyCode.S)) {
+					sm.getVaisseau().downThrottle();
 				}
-			}
+
+				if (e.getCode().equals(KeyCode.Q)) {
+					if (e.isAltDown()) {
+						sm.getVaisseau().incAngle(-45.0);
+					} else {
+						sm.getVaisseau().incAngle(-1.0);
+					}
+				}
+
+				if (e.getCode().equals(KeyCode.D)) {
+					if (e.isAltDown()) {
+						sm.getVaisseau().incAngle(45.0);
+					} else {
+						sm.getVaisseau().incAngle(1.0);
+					}
+				}
 			}
 		}
 	}
 
 	public void saveSpace(File to) {
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
-		try(PrintWriter bf = new PrintWriter(to)) {
 
-			bf.println("# "+formatter.format(LocalDateTime.now()));
-			
-			bf.println("PARAMS G="+SpaceModel.G+" dt="+getModel().getDt()+" fa="+getModel().getFa()+" rayon="+getModel().getRayon());
-			
-			for(Entity e : getModel().getEntities()) {
-				
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		try (PrintWriter bf = new PrintWriter(to)) {
+
+			bf.println("# " + formatter.format(LocalDateTime.now()));
+
+			bf.println("PARAMS G=" + SpaceModel.G + " dt=" + getModel().getDt() + " fa=" + getModel().getFa()
+					+ " rayon=" + getModel().getRayon());
+
+			for (Entity e : getModel().getEntities()) {
+
 				StringBuilder sb = new StringBuilder();
 				sb.append(e.getName()).append(": ").append(e.getType().NOM).append(" masse=").append(e.getMasse())
-				.append(" posx=").append(e.getPos().getX()).append(" posy=").append(e.getPos().getY());
-				
-				if(!e.getType().equals(EntityType.FIXE)) {
+						.append(" posx=").append(e.getPos().getX()).append(" posy=").append(e.getPos().getY());
+
+				if (!e.getType().equals(EntityType.FIXE)) {
 					sb.append(" vitx=").append(e.getVel().getX()).append(" vity=").append(e.getVel().getY());
 				}
-				
+
 				bf.println(sb.toString());
-				
+
 			}
-			
+
 			bf.flush();
-			
-		} catch(IOException ioe) {
+
+		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Renvoie vrai si une entite est selectionnee, faux sinon.
 	 * 
 	 * @return vrai si une entite est selectionnee, faux sinon.
 	 */
 	public boolean hasEntitySelected() {
-		try { getEntitySelected(); } catch(Exception e) { this.setEntitySelected(-1); return false; };
+		try {
+			getEntitySelected();
+		} catch (Exception e) {
+			this.setEntitySelected(-1);
+			return false;
+		}
+		;
 		return selected > -1;
 	}
-	
+
 	/**
-	 * Renvoie le num�ro de l'entite selectionnee.
+	 * Renvoie le numero de l'entite selectionnee.
 	 * 
-	 * @return le num�ro de l'entite selectionnee.
+	 * @return le numero de l'entite selectionnee.
 	 */
 	public int getEntitySelectedId() {
 		return selected;
@@ -497,7 +509,7 @@ public class SpaceController {
 	public Entity getEntitySelected() {
 		return getModel().getEntities().get(selected);
 	}
-	
+
 	/**
 	 * Change l'entite selectionnee en celle positionnee en idx dans la List
 	 * entities.
@@ -511,17 +523,31 @@ public class SpaceController {
 			this.selected = -1;
 		}
 	}
-	
+
+	/**
+	 * Renvoie l'etat de l'entite passee en parametre.
+	 * 
+	 * @param e Entite dont on veut savoir l'etat.
+	 * @return l'etat de l'entite passee en parametre.
+	 */
 	public ShowState getShowStateOf(Entity e) {
 		return showstates.get(e);
 	}
-	
+
+	/**
+	 * Renvoie vrai si la cryostase est activee, faux sinon.
+	 * 
+	 * @return vrai si la cryostase est activee, faux sinon.
+	 */
 	public boolean isFrozen() {
 		return this.isFrozen;
 	}
-	
+
+	/**
+	 * Inverse l'etat de la cryostase.
+	 */
 	public void toggleFreezing() {
-		this.isFrozen=!this.isFrozen;
+		this.isFrozen = !this.isFrozen;
 	}
 
 }

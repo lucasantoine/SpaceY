@@ -12,7 +12,7 @@ import fr.spacey.exceptions.TypeUnknownException;
  */
 public enum EntityType {
 
-	FIXE("Fixe"), SIMULE("Simul\u00E9"), ELLIPSE("Ellipse"), CERCLE("Cercle"), VAISSEAU("Vaisseau");
+	FIXE("Fixe"), SIMULE("Simul\u00E9"), VAISSEAU("Vaisseau");
 
 	public final String NOM;
 
@@ -39,10 +39,6 @@ public enum EntityType {
 			return FIXE;
 		} else if (name.equals(SIMULE.NOM)) {
 			return SIMULE;
-		} else if (name.equals(ELLIPSE.NOM)) {
-			return ELLIPSE;
-		} else if (name.equals(CERCLE.NOM)) {
-			return CERCLE;
 		} else if (name.equals(VAISSEAU.NOM)) {
 			return VAISSEAU;
 		}

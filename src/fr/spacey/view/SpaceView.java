@@ -496,15 +496,17 @@ public class SpaceView implements Observer {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private final static double SELECTX = 850, SELECTY = 900 - 190;
 	private final static double SELECTWIDTH = 700, SELECTHEIGHT = 140;
 	private final static int TAILLEIMG = 100;
+	@SuppressWarnings("unused")
 	private final static double TEXTX = SELECTX + SELECTWIDTH / 6;
 
 	/**
 	 * Methode permettant de dessiner l'affichage d'une Entite selectionnee.
 	 * 
-	 * @param gc2 Contexte Graphique de la simulation.
+	 * @param gc Contexte Graphique de la simulation.
 	 */
 	private void drawSelectedEntity(GraphicsContext gc) {
 		Affichage aff = sc.getAffichage();
@@ -681,7 +683,7 @@ public class SpaceView implements Observer {
 		else this.cryo.unfreeze();
 		double alpha=gc.getGlobalAlpha();
 			gc.setGlobalAlpha(cryo.getFrostLevel());
-			gc.drawImage(cryo.SPRITE, 0, 0);
+			gc.drawImage(Cryostase.SPRITE, 0, 0);
 			gc.setGlobalAlpha(alpha);
 
 	}

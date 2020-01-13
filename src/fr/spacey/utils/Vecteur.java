@@ -23,7 +23,7 @@ public class Vecteur {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public Vecteur(Vecteur v) {
 		this(v.getX(), v.getY());
 	}
@@ -110,15 +110,16 @@ public class Vecteur {
 	}
 
 	/**
-	 * Additionne la valeur des parametres du Vecteur v passe en parametre a ceux de
-	 * ce Vecteur.
-	  * * @param v Vecteur ajoute a ce Vecteur.
-	 * @return l'addition des deux Vecteurs.
+	 * Ajoute x et y a ce vecteur.
+	 * 
+	 * @param x entier a ajouter.
+	 * @param y entier a ajouter.
+	 * @return ce vecteur ajoute a x et y.
 	 */
 	public Vecteur add(double x, double y) {
 		return new Vecteur(this.x + x, this.y + y);
 	}
-	
+
 	/**
 	 * Additionne la valeur des parametres du Vecteur v passe en parametre a ceux de
 	 * ce Vecteur.
