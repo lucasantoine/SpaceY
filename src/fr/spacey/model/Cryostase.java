@@ -1,5 +1,6 @@
 package fr.spacey.model;
 
+import fr.spacey.SpaceY;
 import fr.spacey.controller.SpaceController;
 import javafx.scene.image.Image;
 
@@ -13,7 +14,7 @@ import javafx.scene.image.Image;
  *        cryostase.
  */
 public class Cryostase {
-	public static final Image SPRITE = new Image("file:res/images/stase.png");
+	public static final Image SPRITE = new Image(SpaceY.class.getResourceAsStream("/images/stase.png"));
 	private static final double FREEZESPEED = 1.0 / (60.0 * 3.0);
 	private boolean active = false;
 	private double frostLevel = 0.0;
