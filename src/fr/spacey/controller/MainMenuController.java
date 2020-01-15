@@ -77,7 +77,7 @@ public class MainMenuController {
 							public void run() {
 								mmm.updatePositions();
 								if (mmm.isStart() && isRunning) {
-									if (wait >= 10) {
+									if (wait >= 100) {
 										try {
 											instanceY.startSimulation(mmm.getFilepath(), mmm.getStage());
 											isRunning = false;

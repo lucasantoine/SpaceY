@@ -54,6 +54,7 @@ public class SpaceModel extends Observable {
 	 * @throws Exception Exception sur le chemin vers le fichier de configuration.
 	 */
 	public SpaceModel(String filepath) throws Exception {
+
 		this.entities = AstroParser.loadAstroFile(this, filepath);
 		this.states = new Vector<Double>();
 		for (Entity e : entities) {
@@ -100,7 +101,8 @@ public class SpaceModel extends Observable {
 		}
 		this.integrator = new Rk4(new Integrator(this));
 
-		this.obj.init(this);
+		if(obj != null)
+			this.obj.init(this);
 	}
 
 	/**
@@ -191,7 +193,7 @@ public class SpaceModel extends Observable {
 	 */
 	public void updatePositions() {
 
-		if (hasVaisseau())
+		if(hasVaisseau() && obj != null)
 			this.obj.isComplete(vaisseau);
 
 		this.states = integrator.newStates(states, time, dt);
