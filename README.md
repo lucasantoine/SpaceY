@@ -7,8 +7,8 @@ Projet de simulation astrologique de semestre III de notre DUT Informatique à l
 SpaceY est une application permettant de simuler un système composé d'entités 
 présentes dans l'univers. L'univers simulé est créé à partir d'un fichier comportant 
 l'intégralité des entités souhaitant être ajoutées à la simulation. Ces entités peuvent 
-être fixes, simulés ou être un vaisseau. Les calculs des futures positions des entités 
-sont faits grâce à la méthode d'Euler explicite. Le vaisseau peut être contrôlé et ainsi 
+être fixes, simulées ou être un vaisseau. Les calculs des futures positions des entités 
+sont faits grâce à la méthode d'Euler explicite, implicite ou par Runge-Kutta 4. Le vaisseau peut être contrôlé et ainsi 
 se déplacer dans le système.
 
 ## Composition de l'archive
