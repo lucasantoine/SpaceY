@@ -50,7 +50,7 @@
 ## Team
 > Les personnes qui ont travaillé sur le projet
 
-| <a href="http://ItsPower.fr" target="_blank">**BARBIER Benoît**</a> | <a href="https://www.google.fr/" target="_blank">**ANTOINE Lucas**</a> | <a href="https://www.google.fr/" target="_blank">**POMIER Mathys**</a> | <a href="https://www.google.fr/" target="_blank">**RYCKEBUSCHE Corentin**</a> |
+| <a href="http://ItsPower.fr" target="_blank">**BARBIER Benoît**</a> | <a href="https://www.lucas-antoine.com/" target="_blank">**ANTOINE Lucas**</a> | <a href="https://www.mathys-pomier.fr/" target="_blank">**POMIER Mathys**</a> | <a href="https://www.google.fr/" target="_blank">**RYCKEBUSCHE Corentin**</a> |
 | :---: |:---:| :---:| :---:|
 |<img src="https://avatars2.githubusercontent.com/u/34723487?s=200" align="center"/>|<img src="https://git-iut.univ-lille1.fr/uploads/-/system/project/avatar/3247/spacey.png?width=160" align="center"/>|<img src="https://git-iut.univ-lille1.fr/uploads/-/system/project/avatar/3247/spacey.png?width=160" align="center"/>|<img src="https://git-iut.univ-lille1.fr/uploads/-/system/project/avatar/3247/spacey.png?width=160" align="center"/>|
-| <a href="http://github.com/ItsPower" target="_blank">`github.com/ItsPower`</a> | <a href="https://www.google.fr/" target="_blank">`Lien Lucas`</a> | <a href="https://www.google.fr/" target="_blank">`Lien mathys`</a> | <a href="https://www.google.fr/" target="_blank">`Lien corentin`</a> 
+| <a href="http://github.com/ItsPower" target="_blank">`github.com/ItsPower`</a> | <a href="https://www.github.com/lucasantoine" target="_blank">`Lien Lucas`</a> | <a href="https://www.github.com/Elkios_" target="_blank">`Lien mathys`</a> | <a href="https://www.google.fr/" target="_blank">`Lien corentin`</a> 
